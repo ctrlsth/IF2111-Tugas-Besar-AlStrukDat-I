@@ -7,7 +7,7 @@
 #include "boolean.h"
 #include "mesinkarakter.h"
 
-#define NMax 50 // Harus diubah
+#define NMax 100 // Harus diubah
 #define BLANK ' '
 
 typedef struct
@@ -25,7 +25,7 @@ void IgnoreBlanks();
    I.S. : CC sembarang
    F.S. : CC ≠ BLANK atau CC = MARK */
 
-void STARTWORD();
+void STARTWORD(char* textfile);
 /* I.S. : CC sembarang
    F.S. : EndWord = true, dan CC = MARK;
           atau EndWord = false, currentWord adalah kata yang sudah diakuisisi,
@@ -45,5 +45,21 @@ void CopyWord();
           CC = BLANK atau CC = MARK;
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+
+Word GetCWord();
+/* Mengembalikan currentWord
+   I.S.  : currentWord sembarang */
+
+Word toWord(char* someString);
+/* Mengubah type String menjadi type Kata 
+   I.S. : string masukan bisa kosong */
+
+boolean compareWord(Word kata1, char* kata2)
+/* Membandingkan sebuah word dengan sebuah sting
+   True     : Jika string dan kata sama, 
+   False    : Jika berbeda */
+
+int strLength(char *kata)
+/* Mengembalikan panjang suatu string kata */
 
 #endif
