@@ -1,33 +1,59 @@
 #include <math.h>
 #include <stdio.h>
 #include <time.h>
- 
-int frequency_of_primes(int n)
-{
-    // This function checks the number of
-    // primes less than the given parameter
-    int i, j;
-    int freq = n - 1;
-    for (i = 2; i <= n; ++i)
-        for (j = sqrt(i); j > 1; --j)
-            if (i % j == 0) {
-                --freq;
-                break;
-            }
-    return freq;
+#include "ADT MESIN KARAKTER/mesin_kar.h"
+#include "boolean.h"
+
+int acakAngka (){
+    int BilRandom;
+    srand(time(0));
+
+    BilRandom = rand()%101;//buat bilangan random dengan maksimal angka yang keluar adalah 100
+    return (BilRandom);
 }
- 
-int main()
-{
-    clock_t t;
-    int f;
-    t = clock();
-    f = frequency_of_primes(9999);
-    printf("The number of primes lower"
-           " than 10, 000 is: %d\n",
-           f);
-    t = clock() - t;
-    printf("No. of clicks %ld clicks (%f seconds).\n",
-           t, ((float)t) / CLOCKS_PER_SEC);
-    return 0;
+
+int skoring(){
+    int tebakan;
+    int jawaban;
+    int skor = 100; //skor max 100 dan skor akan berkurang (-5) setiap user melakukan satu kesalahan
+    boolean found = false;
+
+    jawaban = acakAngka();
+    printf("RNG Telah dimulai. Uji keberuntungan Anda dengan menebak X.");
+    scanf("Tebakan : %d", &tebakan);
+    if (tebakan == jawaban){
+        return skor;
+    } else{
+        while (skor >=0 && !found){
+            if (tebakan > jawaban){
+                printf("Lebih Kecil");
+                skor = skor - 5;
+                scanf("Tebakan : %d", &tebakan);
+            } else if (tebakan < jawaban){
+                printf("Lebih Besar");
+                skor = skor - 5;
+                scanf("Tebakan : %d", &tebakan);
+            } else {
+                printf("Ya, X adalah %d.", jawaban);
+                found = true;
+            }
+        } 
+        if (found){
+            return skor;
+        } else {
+            return -999;
+        }
+    }
+}
+
+void klasifikasiWInLose (int skor){
+    char resume;
+
+    if (skor==-999){
+        resume = 'Kalah';
+    } else if (skor == 0) {
+        resume = 'Hampir Banget Kalah'; //Masih menang, tapi di batas minimal skor (0)
+    } else {
+        resume = 'Menang';
+    }
 }
