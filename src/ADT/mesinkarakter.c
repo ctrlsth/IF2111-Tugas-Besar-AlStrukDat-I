@@ -9,7 +9,7 @@ boolean EOP; // EOP  : End Of Process / Pita = Ditemukan titik ("." : MARK) pada
 static FILE *pita;
 static int retval;
 
-void START()
+void START(char* textfile)
 /* Mesin siap dioperasikan. Pita disiapkan untuk dibaca.
    Karakter pertama yang ada pada pita posisinya adalah pada jendela.
    Pita baca diambil dari stdin.
@@ -18,7 +18,7 @@ void START()
           Jika CC != MARK maka EOP akan padam (false)
           Jika CC = MARK maka EOP akan menyala (true) */
 {
-    pita = stdin;
+    pita = fopen(textfile, "r");
     ADV();
 }
 
