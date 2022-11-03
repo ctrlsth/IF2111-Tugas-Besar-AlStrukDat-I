@@ -18,27 +18,28 @@ typedef struct
 
 /* State Mesin Kata */
 extern boolean EndWord;
-extern Word currentWord;
+extern Word currentWord1;
+extern Word currentWord2;
 
 void IgnoreBlanks();
 /* Mengabaikan satu atau beberapa BLANK
    I.S. : CC sembarang
    F.S. : CC ≠ BLANK atau CC = MARK */
 
-void STARTWORD(char* textfile);
+void STARTWORD(boolean PROMPT);
 /* I.S. : CC sembarang
    F.S. : EndWord = true, dan CC = MARK;
           atau EndWord = false, currentWord adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 
-void ADVWORD();
+void ADVWORD(boolean PROMPT);
 /* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
    F.S. : currentWord adalah kata terakhir yang sudah diakuisisi,
           CC adalah karakter pertama dari kata berikutnya, mungkin MARK
           Jika CC = MARK, EndWord = true.
    Proses : Akuisisi kata menggunakan procedure SalinWord */
 
-void CopyWord();
+void COPYWORD();
 /* Mengakuisisi kata, menyimpan dalam currentWord
    I.S. : CC adalah karakter pertama dari kata
    F.S. : currentWord berisi kata yang sudah diakuisisi;
@@ -46,20 +47,26 @@ void CopyWord();
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 
-Word GetCWord();
+void COPYPROMPT();
+
+Word GetCWord1();
 /* Mengembalikan currentWord
    I.S.  : currentWord sembarang */
+
+Word GetCWord2();
+
+Word addtxt(Word filename);
 
 Word toWord(char* someString);
 /* Mengubah type String menjadi type Kata 
    I.S. : string masukan bisa kosong */
 
-boolean compareWord(Word kata1, char* kata2)
+boolean compareWord(Word kata1, char* kata2);
 /* Membandingkan sebuah word dengan sebuah sting
    True     : Jika string dan kata sama, 
    False    : Jika berbeda */
 
-int strLength(char *kata)
+int strLength(char *kata);
 /* Mengembalikan panjang suatu string kata */
 
 #endif
