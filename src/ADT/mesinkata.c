@@ -16,7 +16,8 @@ typedef struct
 
 /* State Mesin Kata */
 boolean EndWord;
-Word currentWord;
+Word currentWord1;
+Word currentWord2;
 
 void IgnoreBlanks()
 /* Mengabaikan satu atau beberapa BLANK
@@ -29,13 +30,18 @@ void IgnoreBlanks()
     }
 }
 
-void STARTWORD(char *textfile)
+void PROMPT()
+{
+    
+}
+
+void STARTWORD(boolean PROMPT)
 /* I.S. : CC sembarang
    F.S. : EndWord = true, dan CC = MARK;
-          atau EndWord = false, currentWord adalah kata yang sudah diakuisisi,
+          atau EndWord = false, currentWord1 adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 {
-    START(textfile);
+    START();
     IgnoreBlanks();
     if (CC == MARK)
     {
@@ -44,13 +50,13 @@ void STARTWORD(char *textfile)
     else
     {
         EndWord = false;
-        ADVWORD();
+        ADVWORD(PROMPT);
     }
 }
 
-void ADVWORD()
+void ADVWORD(boolean PROMPT)
 /* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
-   F.S. : currentWord adalah kata terakhir yang sudah diakuisisi,
+   F.S. : currentWord1 adalah kata terakhir yang sudah diakuisisi,
           CC adalah karakter pertama dari kata berikutnya, mungkin MARK
           Jika CC = MARK, EndWord = true.
    Proses : Akuisisi kata menggunakan procedure SalinWord */
@@ -61,15 +67,22 @@ void ADVWORD()
     }
     else
     {
-        CopyWord();
+        if (PROMPT)
+        {
+            COPYPROMPT();
+        }
+        else
+        {
+            COPYWORD();
+        }
         IgnoreBlanks();
     }
 }
 
-void CopyWord()
-/* Mengakuisisi kata, menyimpan dalam currentWord
+void COPYWORD()
+/* Mengakuisisi kata, menyimpan dalam currentWord1
    I.S. : CC adalah karakter pertama dari kata
-   F.S. : currentWord berisi kata yang sudah diakuisisi;
+   F.S. : currentWord1 berisi kata yang sudah diakuisisi;
           CC = BLANK atau CC = MARK;
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
@@ -77,18 +90,63 @@ void CopyWord()
     int i = 0;
     while ((CC != MARK) && (CC != BLANK) && (i < NMax))
     {
-        currentWord.TabWord[i] = CC;
+        currentWord1.TabWord[i] = CC;
         ADV();
         i++;
     }
-    currentWord.Length = i;
+    currentWord1.Length = i;
 }
 
-Word GetCWord()
-/* Mengembalikan currentWord
-   I.S.  : currentWord sembarang */
+void COPYPROMPT()
 {
-    return currentWord;
+    int i = 0, j = 0;
+    boolean passedBLANK = false;
+    while ((CC != MARK) && (i+j+1 < NMax))
+    {
+        if (passedBLANK)
+        {
+            currentWord2.TabWord[j] = CC;
+            ADV();
+            j++;
+        }
+        else
+        {
+            if (CC == BLANK)
+            {
+                passedBLANK = true;
+            }
+            else
+            {
+                currentWord1.TabWord[i] = CC;
+                ADV();
+            }
+            i++;
+        }
+    }
+}
+
+Word GetCWord1()
+/* Mengembalikan currentWord1
+   I.S.  : currentWord1 sembarang */
+{
+    return currentWord1;
+}
+
+Word GetCWord2()
+{
+    return currentWord2;
+}
+
+Word addtxt(Word filename)
+/* Menambahkan extension .txt pada namafile */
+{
+    int i = filename.Length;
+    filename.TabWord[i] = '.';
+    filename.TabWord[i+1] = 't';
+    filename.TabWord[i+2] = 'x';
+    filename.TabWord[i+3] = 't';
+
+    return filename;
 }
 
 Word toWord(char *someString)
