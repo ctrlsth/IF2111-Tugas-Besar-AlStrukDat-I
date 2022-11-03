@@ -6,4 +6,5 @@
 
 void CodeGenerator ();
 //membuat sebuat tabint yang berisi daftar pemesan yang datang. No pesanan mereka akan disimpan
-void Cook (char KodePesanan);
+char tabel (char antrian, int durasi, int harga, int ketahanan);
+// membuat sebuah fungsi printf tabel dengan value yang telah ditentukan  
