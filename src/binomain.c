@@ -3,34 +3,36 @@
 #include <time.h>
 #include "ADT/mesinkarakter.h"
 #include "ADT/mesinkata.h"
-#include "ADT/array.h"
-#include "ADT/queue.h"
+// #include "ADT/array.h"
+// #include "ADT/queue.h"
 #include "boolean.h"
 
 int main()
 {
+    /* Initialize */
     boolean prompt = true;
-    boolean bootloop = true;
-    boolean mainloop = false;
+    boolean mainmenu = false;
+    boolean recognizedCMD = true;
     Word currArg;
     Word currCommand;
-    BOOTUP(); // Isinya welcome dsb ama enter command
+
+    /* Algorithm */
+    // BOOTUP(); // Isinya welcome dsb ama enter command
     do
     {
         printf("ENTER COMMAND: ");
-        STARTWORD(prompt);
-        currCommand = GetCWord();
+        STARTCMD();
+        currCommand = GetCWord1();
 
+        /* FIRST MENU / BOOT MENU */
         if (compareWord(currCommand, "START"))
         {
-            // mainloop = START("config.txt");       // START jadi fungsi yang mengembalikan true, kalo file config bisa dibuka
-            bootloop = false;                        // ataupun false, kalo file config gabisa dibuka (NULL).
+            // mainmenu = START("./data/config.txt");       // START jadi fungsi yang mengembalikan true, kalo file config bisa dibuka
         }
         else if (compareWord(currCommand, "LOAD"))
         {
             currArg = addtxt(GetCWord2());
-            // mainloop = LOAD(currArg);             // LOAD jadi fungsi yang ngembaliin true, kalo file save bisa dibuka
-            bootloop = false;                        // ataupun false, kalo file save gabisa dibuka (NULL).
+            // mainmenu = LOAD(currArg);             // LOAD jadi fungsi yang ngembaliin true, kalo file save bisa dibuka
         }
         else if (compareWord(currCommand, "CMDLIST"))
         {
@@ -39,14 +41,36 @@ int main()
         else if (compareWord(currCommand, "EXIT"))
         {
             // EXIT();
-            bootloop = false;
         }
         else
         {
-            printf("BMO doesn't get what you say, but BMO hopes that you have a GREAT DAY!");
-            printf("In any case that you're confused, just say \"CMDLIST\" okayy? ^^");
+            if (!mainmenu)
+            {
+                recognizedCMD = false;
+            }
         }
-    } while (bootloop);
+
+        if (mainmenu)
+        {
+            if (compareWord(currCommand, "SAVE"))
+            {
+                currArg = addtxt(GetCWord2());
+                // SAVE(currArg);
+            }
+            else
+            {
+                recognizedCMD = false;
+            }
+        }
+
+        if (!recognizedCMD)
+        {
+            printf("BMO doesn't get what you say, but BMO hopes that you have a GREAT DAY!\n");
+            printf("In any case that you're confused, just say \"CMDLIST\" okayy? ^^\n");
+            recognizedCMD = true;
+        }
+
+    } while (prompt);
 
     return 0;
 }

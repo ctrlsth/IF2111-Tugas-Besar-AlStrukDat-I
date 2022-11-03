@@ -1,48 +1,41 @@
 #include "mesinkata.h"
-#include "boolean.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 // #define NMax 50
 // #define BLANK ' '
 
-/*
-typedef struct
-{
-   char TabWord[NMax]; // container penyimpan kata, indeks yang dipakai [0..NMax-1]
-   int Length;
-} Word;
-*/
-
 /* State Mesin Kata */
 boolean EndWord;
 Word currentWord1;
 Word currentWord2;
 
-void IgnoreBlanks()
+void IgnoreBlanks(boolean CMD)
 /* Mengabaikan satu atau beberapa BLANK
    I.S. : CC sembarang
    F.S. : CC ≠ BLANK atau CC = MARK */
 {
     while (CC == BLANK)
     {
-        ADV();
+        if (CMD)
+        {
+            ADVCMD();
+        }
+        else
+        {
+            ADV();
+        }
     }
 }
 
-void PROMPT()
-{
-    
-}
-
-void STARTWORD(boolean PROMPT)
+void STARTWORD()
 /* I.S. : CC sembarang
    F.S. : EndWord = true, dan CC = MARK;
           atau EndWord = false, currentWord1 adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 {
     START();
-    IgnoreBlanks();
+    IgnoreBlanks(false);
     if (CC == MARK)
     {
         EndWord = true;
@@ -50,11 +43,11 @@ void STARTWORD(boolean PROMPT)
     else
     {
         EndWord = false;
-        ADVWORD(PROMPT);
+        ADVWORD();
     }
 }
 
-void ADVWORD(boolean PROMPT)
+void ADVWORD()
 /* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
    F.S. : currentWord1 adalah kata terakhir yang sudah diakuisisi,
           CC adalah karakter pertama dari kata berikutnya, mungkin MARK
@@ -67,15 +60,8 @@ void ADVWORD(boolean PROMPT)
     }
     else
     {
-        if (PROMPT)
-        {
-            COPYPROMPT();
-        }
-        else
-        {
-            COPYWORD();
-        }
-        IgnoreBlanks();
+        COPYWORD();
+        IgnoreBlanks(false);
     }
 }
 
@@ -97,31 +83,65 @@ void COPYWORD()
     currentWord1.Length = i;
 }
 
-void COPYPROMPT()
+void STARTCMD()
+/* I.S. : CC sembarang
+   F.S. : EndWord = true, dan CC = MARK;
+          atau EndWord = false, currentWord1 adalah kata yang sudah diakuisisi,
+          CC karakter pertama sesudah karakter terakhir kata */
 {
-    int i = 0, j = 0;
-    boolean passedBLANK = false;
-    while ((CC != MARK) && (i+j+1 < NMax))
+    START();
+    IgnoreBlanks(true);
+    if (CC == MARKCMD)
     {
-        if (passedBLANK)
+        EndWord = true;
+    }
+    else
+    {
+        EndWord = false;
+        ADVCMD();
+    }
+}
+
+void ADVCMD()
+/* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
+   F.S. : currentWord1 adalah kata terakhir yang sudah diakuisisi,
+          CC adalah karakter pertama dari kata berikutnya, mungkin MARK
+          Jika CC = MARK, EndWord = true.
+   Proses : Akuisisi kata menggunakan procedure SalinWord */
+{
+    if (CC == MARKCMD)
+    {
+        EndWord = true;
+    }
+    else
+    {
+        COPYCMD();
+        IgnoreBlanks(true);
+    }
+}
+
+void COPYCMD()
+{
+    int i = 0;
+    while ((CC != MARKCMD) && (CC != BLANK) && (i < NMax))
+    {
+        currentWord1.TabWord[i] = CC;
+        ADV();
+        i++;
+    }
+    currentWord1.Length = i;
+
+    if (CC == BLANK)
+    {
+        i = 0;
+        ADV();
+        while ((CC != MARKCMD) && (CC != BLANK) && (i < NMax))
         {
-            currentWord2.TabWord[j] = CC;
+            currentWord2.TabWord[i] = CC;
             ADV();
-            j++;
-        }
-        else
-        {
-            if (CC == BLANK)
-            {
-                passedBLANK = true;
-            }
-            else
-            {
-                currentWord1.TabWord[i] = CC;
-                ADV();
-            }
             i++;
         }
+        currentWord2.Length = i;
     }
 }
 
@@ -142,9 +162,9 @@ Word addtxt(Word filename)
 {
     int i = filename.Length;
     filename.TabWord[i] = '.';
-    filename.TabWord[i+1] = 't';
-    filename.TabWord[i+2] = 'x';
-    filename.TabWord[i+3] = 't';
+    filename.TabWord[i + 1] = 't';
+    filename.TabWord[i + 2] = 'x';
+    filename.TabWord[i + 3] = 't';
 
     return filename;
 }
@@ -195,3 +215,21 @@ int strLength(char *kata)
     }
     return i;
 }
+
+void printWord(Word Kata)
+{
+    int i;
+    for (i = 0; i < Kata.Length; i++)
+    {
+        printf("%c", Kata.TabWord[i]);
+    }
+}
+
+// int main()
+// {
+//     STARTCMD();
+//     printWord(GetCWord1());
+//     printf("\n");
+//     printWord(GetCWord2());
+//     return 0;
+// }

@@ -4,7 +4,7 @@
 #ifndef __MESINKATA_H__
 #define __MESINKATA_H__
 
-#include "boolean.h"
+#include "../boolean.h"
 #include "mesinkarakter.h"
 
 #define NMax 100 // Harus diubah
@@ -21,18 +21,18 @@ extern boolean EndWord;
 extern Word currentWord1;
 extern Word currentWord2;
 
-void IgnoreBlanks();
+void IgnoreBlanks(boolean CMD);
 /* Mengabaikan satu atau beberapa BLANK
    I.S. : CC sembarang
    F.S. : CC ≠ BLANK atau CC = MARK */
 
-void STARTWORD(boolean PROMPT);
+void STARTWORD();
 /* I.S. : CC sembarang
    F.S. : EndWord = true, dan CC = MARK;
           atau EndWord = false, currentWord adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 
-void ADVWORD(boolean PROMPT);
+void ADVWORD();
 /* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
    F.S. : currentWord adalah kata terakhir yang sudah diakuisisi,
           CC adalah karakter pertama dari kata berikutnya, mungkin MARK
@@ -47,7 +47,9 @@ void COPYWORD();
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 
-void COPYPROMPT();
+void STARTCMD();
+void ADVCMD();
+void COPYCMD();
 
 Word GetCWord1();
 /* Mengembalikan currentWord
@@ -68,5 +70,7 @@ boolean compareWord(Word kata1, char* kata2);
 
 int strLength(char *kata);
 /* Mengembalikan panjang suatu string kata */
+
+void printWord(Word Kata);
 
 #endif
