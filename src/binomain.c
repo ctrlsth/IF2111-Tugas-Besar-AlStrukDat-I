@@ -7,75 +7,46 @@
 #include "ADT/queue.h"
 #include "boolean.h"
 
-char* readTXTinput (char* command)
-{
-    char filename[50];
-    int i = 0, j = 0;
-    boolean passedSpace = false;
-    while (i < strLength(command))
-    {
-        if (command[i] == ' ')
-        {
-            passedSpace = true;
-        }
-        if (passedSpace)
-        {
-            filename[j] = command[i];
-            j++;
-        }
-    }
-
-    return filename;
-}
-
 int main()
 {
-    char user_input[100];
-    char filename[50];
-    Word inputW;
-    boolean bootloop = true, mainloop = true;
-    printf("Who wants to play video games?\n");
-    // BOOTCMD(); // { Print Command yang bisa dijalankan: START, LOAD namafile.txt, QUIT }
+    boolean prompt = true;
+    boolean bootloop = true;
+    boolean mainloop = false;
+    Word currArg;
+    Word currCommand;
+    BOOTUP(); // Isinya welcome dsb ama enter command
     do
     {
         printf("ENTER COMMAND: ");
-        fgets(user_input, 100, stdin);
-        inputW = toWord(user_input);
+        STARTWORD(prompt);
+        currCommand = GetCWord();
 
-        if (cmpWordStr(user_input, "START"))
+        if (compareWord(currCommand, "START"))
         {
-            // START(filename);
-            bootloop = false;
+            // mainloop = START("config.txt");       // START jadi fungsi yang mengembalikan true, kalo file config bisa dibuka
+            bootloop = false;                        // ataupun false, kalo file config gabisa dibuka (NULL).
         }
-        else if (cmpWordStr(user_input, "LOAD"))
-        {            
-            // LOAD(readTXTinput(user_input));
-            bootloop = false;
+        else if (compareWord(currCommand, "LOAD"))
+        {
+            currArg = addtxt(GetCWord2());
+            // mainloop = LOAD(currArg);             // LOAD jadi fungsi yang ngembaliin true, kalo file save bisa dibuka
+            bootloop = false;                        // ataupun false, kalo file save gabisa dibuka (NULL).
         }
-        else if (cmpWordStr(user_input, "EXIT"))
+        else if (compareWord(currCommand, "CMDLIST"))
+        {
+            // CMDLIST();                            // Ngeprint command list untuk main menu / interface awal
+        }
+        else if (compareWord(currCommand, "EXIT"))
         {
             // EXIT();
             bootloop = false;
-            mainloop = false;
-        }
-        else if (cmpWordStr(user_input, "CMDLIST"))
-        {
-            // BOOTCMD();
         }
         else
         {
-            printf("BMO doesn't get what you say.. but BMO hopes you have a Great Day! ^^\n");
-            printf("Oh, and if you need some guide, just give me a 'CMDLIST' ^^\n");
+            printf("BMO doesn't get what you say, but BMO hopes that you have a GREAT DAY!");
+            printf("In any case that you're confused, just say \"CMDLIST\" okayy? ^^");
         }
     } while (bootloop);
-
-    while (mainloop)
-    {
-        printf("ENTER COMMAND: ");
-        fgets(user_input, 100, stdin);
-        
-
-    }
 
     return 0;
 }
