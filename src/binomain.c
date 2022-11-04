@@ -3,9 +3,10 @@
 #include <time.h>
 #include "ADT/mesinkarakter.h"
 #include "ADT/mesinkata.h"
-// #include "ADT/array.h"
-// #include "ADT/queue.h"
+#include "ADT/array.h"
+#include "ADT/queue.h"
 #include "boolean.h"
+#include "console.h"
 
 int main()
 {
@@ -15,6 +16,8 @@ int main()
     boolean recognizedCMD = true;
     Word currArg;
     Word currCommand;
+    TabWord listgame;
+    TabWord listhistory;
 
     /* Algorithm */
     // BOOTUP(); // Isinya welcome dsb ama enter command
@@ -55,7 +58,7 @@ int main()
             if (compareWord(currCommand, "SAVE"))
             {
                 currArg = addtxt(GetCWord2());
-                // SAVE(currArg);
+                SAVE(currArg, listgame, listhistory);
             }
             else
             {
