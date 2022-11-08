@@ -1,41 +1,7 @@
-// UNMODIFIED //
-// UNMODIFIED //
-// UNMODIFIED //
 
 #include "../boolean.h"
 #include "array.h"
 #include <stdio.h>
-
-// #ifndef ARRAY_H
-// #define ARRAY_H
-
-// /* Kamus Umum */
-
-// #define IdxMax 100
-// #define IdxMin 1
-// #define IdxUndef -999 /* indeks tak terdefinisi*/
-
-// /* Definisi elemen dan koleksi objek */
-// typedef int IdxType;
-// typedef int ElType;
-
-// typedef struct
-// 	{
-// 		ElType TI [IdxMax-IdxMin+1]; /* memori tempat penyimpan elemen (container) */
-// 		int Neff; /* banyaknya elemen efektif */
-// 	} TabWord;
-
-/* Indeks yang digunakan [IdxMin..IdxMax] */
-/* Jika T adalah TabWord, cara deklarasi dan akses: */
-/* Deklarasi : T : TabWord */
-/* Maka cara akses:
- * T.Neff untuk mengetahui banyaknya elemen
- * T.TI untuk mengakses seluruh nilai elemen tabel
- * T.TI[i] untuk mengakses elemen ke-i */
-/* Definisi :
- * Tabel kosong: T.Neff = 0
- * Definisi elemen pertama : T.TI[i] dengan i=1
- * Definisi elemen terakhir yang terdefinisi: T.TI[i] dengan i=T.Neff */
 
 /* ********** KONSTRUKTOR ********** */
 /* Konstruktor : create tabel kosong */
@@ -45,7 +11,6 @@ void MakeEmpty(TabWord *T)
 {
     // printf("Start MakeEmpty\n");
     (*T).Neff = 0;
-    (*T).TI[IdxMax - IdxMin + 1];
 }
 
 /* ********** SELEKTOR ********** */
@@ -151,22 +116,18 @@ void TulisIsi(TabWord T)
 /* Proses : Menuliskan isi tabel dengan traversal */
 /* I.S. T boleh kosong */
 /* F.S. Jika T tidak kosong : indeks dan elemen tabel ditulis berderet ke bawah */
-/* Jika isi tabel [1,2,3] maka akan diprint
-0:1
-1:2
-2:3
-*/
-/* Jika T kosong : Hanya menulis "Tabel kosong" */
+/* Contoh hasil print isi
+   1. lmao pisan
+   2. sussy amogus */
+
 {
-    if (IsEmpty(T))
-    {
-        printf("Tabel kosong\n");
-    }
-    else
-    {
-        for (int i = GetFirstIdx(T); i <= GetLastIdx(T); i++)
-        {
-            printf("%d:%d\n", i, GetElmt(T, i));
-        }
-    }
+    printf("@ Felisa Edit this Part for List Game");
+    // if (IsEmpty(T))
+    // {
+
+    // }
+    // else
+    // {
+
+    // }
 }
