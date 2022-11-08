@@ -1,6 +1,3 @@
-// UNMODIFIED //
-// UNMODIFIED //
-// UNMODIFIED //
 
 #include "mesinkata.h"
 #include "../boolean.h"
@@ -10,8 +7,8 @@
 
 /* Kamus Umum */
 
-#define IdxMax 100
-#define IdxMin 1
+#define IdxMax 50
+#define IdxMin 0
 #define IdxUndef -999 /* indeks tak terdefinisi*/
 
 /* Definisi elemen dan koleksi objek */
@@ -20,17 +17,19 @@ typedef Word ElType;
 
 typedef struct
 	{
-		ElType TI [IdxMax-IdxMin+1]; /* memori tempat penyimpan elemen (container) */
-		int Neff; /* banyaknya elemen efektif */
+		ElType TI [IdxMax-IdxMin]; 		/* memori tempat penyimpan elemen (container) */
+		int Neff; 						/* banyaknya elemen efektif */
 	} TabWord;
 
-/* Indeks yang digunakan [IdxMin..IdxMax] */
+/* Indeks yang digunakan [IdxMin..IdxMax-1] */
 /* Jika T adalah TabWord, cara deklarasi dan akses: */
 /* Deklarasi : T : TabWord */
+
 /* Maka cara akses:
  * T.Neff untuk mengetahui banyaknya elemen
  * T.TI untuk mengakses seluruh nilai elemen tabel
  * T.TI[i] untuk mengakses elemen ke-i */
+ 
 /* Definisi :
  * Tabel kosong: T.Neff = 0
  * Definisi elemen pertama : T.TI[i] dengan i=1
@@ -100,39 +99,5 @@ void TulisIsi (TabWord T);
 /* Proses : Menuliskan isi tabel dengan traversal */
 /* I.S. T boleh kosong */
 /* F.S. Jika T tidak kosong : indeks dan elemen tabel ditulis berderet ke bawah */
-/* Jika isi tabel [1,2,3] maka akan diprint
-0:1
-1:2
-2:3
-*/
-/* Jika T kosong : Hanya menulis "Tabel kosong" */
-
-/* ********** OPERATOR ARITMATIKA ********** */
-/* *** Aritmatika tabel : Penjumlahan, pengurangan, perkalian, ... *** */
-TabWord PlusTab (TabWord T1, TabWord T2);
-/* Prekondisi : T1 dan T2 berukuran sama dan tidak kosong */
-/* Mengirimkan T1 + T2 */
-TabWord MinusTab (TabWord T1, TabWord T2);
-/* Prekondisi : T1 dan T2 berukuran sama dan tidak kosong */
-/* Mengirimkan T1 - T2 */
-
-/* ********** NILAI EKSTREM ********** */
-ElType ValMax (TabWord T);
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan nilai maksimum tabel */
-
-ElType ValMin (TabWord T);
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan nilai minimum tabel */
-
-/* *** Mengirimkan indeks elemen bernilai ekstrem *** */
-IdxType IdxMaxTab (TabWord T);
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan indeks i dengan elemen ke-i adalah nilai maksimum pada tabel */
-
-IdxType IdxMinTab (TabWord T);
-/* Prekondisi : Tabel tidak kosong */
-/* Mengirimkan indeks i */
-/* dengan elemen ke-i nilai minimum pada tabel */
 
 #endif
