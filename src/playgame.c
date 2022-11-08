@@ -7,12 +7,26 @@
 
 void PlayGame(Queue queuegame)
 {
-    printf("Berikut adalah daftar antrian game-mu :\n");
-    //displayQueueGame();
-    ElType game;
-    dequeue(&queuegame, &game);
+    displayQueue(queuegame);
+    ElType *game;
+    dequeue(&queuegame, game);
     printf("Loading ");
-    printWord(game);
+    printWord(*game);
     print("..\n");
-    //Panggil fungsi dari game itu
+    // if(game == "RNG")
+    // {
+
+    // }
+    // else if(game == "Diner Dash" )
+    // {
+
+    // }
+    // else if(game == "")
+    // {
+
+    // }
+    // else
+    // {
+    //     printf("Total score = ");
+    // }
 }

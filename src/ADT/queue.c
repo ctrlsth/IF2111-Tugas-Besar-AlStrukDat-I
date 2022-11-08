@@ -70,23 +70,19 @@ void dequeue(Queue *q, ElType *val)
 
 void displayQueue(Queue q)
 {
-    printf("@ Kayleen Edit This Part");
-    // if (isEmpty(q))
-    // {
-    //     printf("[]\n");
-    // }
-    // else
-    // {
-    //     int i;
-    //     printf("[");
-    //     for (i = IDX_HEAD(q); i != IDX_TAIL(q); i = (i + 1) % CAPACITY)
-    //     {
-    //         Word game_name = q.buffer[i];
-    //         printWord(game_name);
-    //         printf("\n");
-    //     }
-    //     printf("%d]\n", TAIL(q));
-    // }
+    printf("Berikut adalah antrian game Anda :\n");
+    if (isEmpty(q))
+    {
+        printf("Antrian game Anda kosong.\n");
+    }
+    else
+    {
+        int i;
+        for (i = IDX_HEAD(q); i <= IDX_TAIL(q); i = (i + 1) % CAPACITY)
+        {
+            Word game_name = q.buffer[i];
+            printWord(game_name);
+            printf("\n");
+        }
+    }
 }
-
-

@@ -5,9 +5,32 @@
 #include <time.h>
 #include <math.h>
 
-void SkipGame(queuegame)
+void SkipGame(Queue queuegame, int num)
 {
-    printf("Berikut adalah daftar antrian game-mu :\n");
-    //displayQueueGame();
-    
+    displayQueue(queuegame);
+    int i;
+    ElType game;
+    for(i = 0; i <= num; i++)
+    {
+        dequeue(&queuegame, &game);
+    }
+    printf("Loading ");
+    printWord(game);
+    print("..\n");
+    // if(game == "RNG")
+    // {
+
+    // }
+    // else if(game == "Diner Dash" )
+    // {
+
+    // }
+    // else if(game == "")
+    // {
+
+    // }
+    // else
+    // {
+    //     printf("Total score = ");
+    // }
 }
