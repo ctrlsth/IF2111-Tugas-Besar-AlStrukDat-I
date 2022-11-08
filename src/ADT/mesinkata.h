@@ -7,24 +7,19 @@
 #include "../boolean.h"
 #include "mesinkarakter.h"
 
-#define NMax 100 // Harus diubah
+#define NMax 200
 #define BLANK ' '
 
 typedef struct
 {
-   char TabWord[NMax]; /* container penyimpan kata, indeks yang dipakai [0..NMax-1] */
+   char TabChar[NMax];
    int Length;
 } Word;
 
 /* State Mesin Kata */
 extern boolean EndWord;
-extern Word currentWord1;
-extern Word currentWord2;
-
-void IgnoreBlanks(boolean CMD);
-/* Mengabaikan satu atau beberapa BLANK
-   I.S. : CC sembarang
-   F.S. : CC ≠ BLANK atau CC = MARK */
+extern Word currentWord;
+extern Word currentCommand;
 
 void STARTWORD();
 /* I.S. : CC sembarang
@@ -47,30 +42,50 @@ void COPYWORD();
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 
+void IgnoreBlanks();
+/* Mengabaikan satu atau beberapa BLANK
+   I.S. : CC sembarang
+   F.S. : CC ≠ BLANK atau CC = EOF */
+
 void STARTCMD();
+/* I.S. : CC sembarang
+   F.S. : EndWord = true, dan CC = MARK;
+          atau EndWord = false, currentCommand adalah kata yang sudah diakuisisi,
+          CC karakter pertama sesudah karakter terakhir kata */
+
 void ADVCMD();
+/* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
+   F.S. : currentCommand adalah kata terakhir yang sudah diakuisisi,
+          CC adalah karakter pertama dari kata berikutnya, mungkin MARK
+          Jika CC = MARK, EndWord = true.
+   Proses : Akuisisi kata menggunakan procedure COPYCMD */
+
 void COPYCMD();
+/* Mengakuisisi command, menyimpan dalam currentCommand
+   I.S. : CC adalah karakter pertama dari kata
+   F.S. : currentCommand berisi kata yang sudah diakuisisi;
+          CC = BLANK atau CC = MARK;
+          CC adalah karakter sesudah karakter terakhir yang diakuisisi.
+          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 
-Word GetCWord1();
-/* Mengembalikan currentWord
-   I.S.  : currentWord sembarang */
+void IgnoreBlanksCMD();
+/* Mengabaikan satu atau beberapa BLANK
+   I.S. : CC sembarang
+   F.S. : CC ≠ BLANK atau CC = MARK */
 
-Word GetCWord2();
-
-Word addtxt(Word filename);
-
-Word toWord(char* someString);
-/* Mengubah type String menjadi type Kata 
+Word toWord(char *someString);
+/* Mengubah type String menjadi type Kata
    I.S. : string masukan bisa kosong */
 
-boolean compareWord(Word kata1, char* kata2);
+boolean compareWord(Word kata1, char *kata2);
 /* Membandingkan sebuah word dengan sebuah sting
-   True     : Jika string dan kata sama, 
+   True     : Jika string dan kata sama,
    False    : Jika berbeda */
 
 int strLength(char *kata);
 /* Mengembalikan panjang suatu string kata */
 
 void printWord(Word Kata);
+/* Menampilkan isi kata pada layar */
 
 #endif
