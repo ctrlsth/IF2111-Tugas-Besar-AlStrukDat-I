@@ -23,15 +23,6 @@ void displayQueue(Queue q)
 }
 
 void TulisIsi(TabWord T)
-/* Proses : Menuliskan isi tabel dengan traversal */
-/* I.S. T boleh kosong */
-/* F.S. Jika T tidak kosong : indeks dan elemen tabel ditulis berderet ke bawah */
-/* Jika isi tabel [1,2,3] maka akan diprint
-0:1
-1:2
-2:3
-*/
-/* Jika T kosong : Hanya menulis "Tabel kosong" */
 {
     if (IsEmpty(T))
     {
@@ -52,14 +43,4 @@ void QueueGame(Queue queuegame, TabWord listgame)
     displayQueue(queuegame);
     printf("Berikut adalah daftar game yang tersedia :\n");
     TulisIsi(listgame);
-}
-
-int main()
-{
-    Queue q1;
-    CreateQueue(&q1);
-/*     enqueuez(&q1,"satu");
-    enqueuez(&q1,"dua");
-    enqueuez(&q1,"tiga");
- */    displayQueue(q1);
 }
