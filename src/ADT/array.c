@@ -122,12 +122,15 @@ void TulisIsi(TabWord T)
 
 {
     printf("@ Felisa Edit this Part for List Game");
-    // if (IsEmpty(T))
-    // {
-
-    // }
-    // else
-    // {
-
-    // }
+    if (IsEmpty(T)){
+        printf("T kosong");
+    }
+    else{
+        for (int i=0; i< NbElmt(T); i++){
+            printf("%d", i+1);
+            for (int j=0; j<T.TI[i].length; j++){
+                printf("%c", T.TI[i].TabWord[j]);
+            }
+        }
+    }
 }
