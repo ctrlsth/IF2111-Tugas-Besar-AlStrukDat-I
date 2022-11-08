@@ -132,5 +132,6 @@ void TulisIsi(TabWord T)
                 printf("%c", T.TI[i].TabWord[j]);
             }
         }
+        printf();
     }
 }
