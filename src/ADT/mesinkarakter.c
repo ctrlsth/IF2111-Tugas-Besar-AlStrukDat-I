@@ -18,7 +18,7 @@ void loadstart(char* txtfile)
           Jika CC = MARK maka EOP akan menyala (true) */
 {
     load = fopen(txtfile, "r");
-    ADV(true);
+    adv(true);
 }
 
 void cmdstart()
@@ -31,7 +31,7 @@ void cmdstart()
           Jika CC = MARK maka EOP akan menyala (true) */
 {
     pita = stdin;
-    ADV(false);
+    adv(false);
 }
 
 void adv(boolean loadtxt)

@@ -8,9 +8,9 @@ Word currentWord;
 Word currentCommand;
 
 // ** Mengakuisisi kata dari file.txt ** //
-void STARTWORD()
+void STARTWORD(char* txtfile)
 {
-    loadstart();
+    loadstart(txtfile);
     IgnoreBlanks();
     if (CC == EOF)
     {
@@ -58,7 +58,7 @@ void IgnoreBlanks()
 {
     while (CC == BLANK)
     {
-		adv(true);
+        adv(true);
     }
 }
 
@@ -125,7 +125,7 @@ void IgnoreBlanksCMD()
 {
     while (CC == BLANK)
     {
-		adv(false);
+        adv(false);
     }
 }
 
@@ -144,6 +144,20 @@ Word toWord(char *someString)
     converted.Length = i;
 
     return converted;
+}
+
+char *toString(Word kata)
+{
+    char *str = (char *)malloc(kata.Length * sizeof(char));
+    int i;
+
+    for (i = 0; i < kata.Length; i++)
+    {
+        str[i] = kata.TabChar[i];
+    }
+    str[i] = '\0';
+
+    return str;
 }
 
 boolean compareWord(Word kata1, char *kata2)
