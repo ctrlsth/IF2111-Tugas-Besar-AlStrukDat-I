@@ -181,6 +181,27 @@ boolean compareWord(Word kata1, char *kata2)
     return false;
 }
 
+boolean compare2Word(Word kata1, Word kata2)
+/* Membandingkan 2 buah word
+   True     : Jika kedua word sama,
+   False    : Jika berbeda */
+{
+    if (kata1.Length == kata2.Length)
+    {
+        int i = 0;
+        while (i < kata1.Length)
+        {
+            if (kata1.TabChar[i] != kata2.TabChar[i])
+            {
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
+    return false;
+}
+
 int strLength(char *strings)
 /* Mengembalikan panjang suatu string */
 {
