@@ -18,6 +18,8 @@ void START();
           Jika cc != MARK maka eop bernilai false 
           Jika cc = MARK maka eop bernilai true */
 
+void STARTFILE(char *c);
+
 void ADV();
 /* Pita dimajukan satu karakter.
    I.S. : Karakter pada jendela = cc, cc != MARK 
@@ -40,6 +42,8 @@ void ADVC();
    F.S. : CC adalah karakter berikutnya dari CC yang lama,
           CC mungkin = MARKCMD
           Jika  CC = MARKCMD maka EOP akan menyala (true) */
+
+void ADVFILE();
 
 char GetCC();
 /* Mengirimkan CC */

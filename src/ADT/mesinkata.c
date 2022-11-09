@@ -9,6 +9,7 @@
 boolean EndWord;
 Word currentWord1;
 Word currentWord2;
+Word currentWordFile;
 
 void IgnoreBlanks(boolean CMD)
 /* Mengabaikan satu atau beberapa BLANK
@@ -25,6 +26,61 @@ void IgnoreBlanks(boolean CMD)
         {
             ADV();
         }
+    }
+}
+
+void IgnoreBlank()
+{
+    while ((CC == BLANK) && (CC != MARKCMD))
+    {
+        ADV();
+    }
+}
+
+void CMD_STARTKATA(){
+    STARTC();
+    IgnoreBlank();
+    if (CC == MARKCMD)
+    {
+        EndWord = true;
+    }
+    else
+    {
+        EndWord = false;
+        CMD_COPYWORD();
+    }
+}
+
+void CMD_ADVKATA()
+{
+    IgnoreBlank();
+    if (CC == MARKCMD)
+    {
+        EndWord = true;
+    }
+    else
+    {
+        CMD_COPYWORD();
+    }
+}
+
+void CMD_COPYWORD()
+{
+    int i = 0;
+    while ((CC != MARKCMD) && (CC != BLANK))
+    {
+        currentWord1.TabWord[i] = CC;
+        ADVC();
+        i++;
+    }
+    currentWord1.Length = i;
+}
+
+void C_IgnoreBlank()
+{
+    while ((CC == BLANK) || (CC == MARKCMD))
+    {
+        ADVFILE();
     }
 }
 
@@ -145,6 +201,54 @@ void COPYCMD()
     }
 }
 
+void STARTWORDFILE(char *c)
+{
+    STARTFILE(c);
+    C_IgnoreBlank();
+    if (CC == EOF) {
+        EndWord = true;
+    } else /* cc != MARK */ {
+        EndWord = false;
+        ADVWORDFILE();
+    }
+    C_IgnoreBlank();
+}
+
+void ADVWORDFILE()
+{
+    C_IgnoreBlank();
+    if (CC == EOF) {
+        EndWord = true;
+    } else /* cc != MARK */ {
+        COPYWORDFILE();   
+    }
+    C_IgnoreBlank();
+}
+
+void COPYWORDFILE()
+{
+    int i = 0;
+    while ((CC != MARKCMD) && (CC != EOF))
+    {
+        currentWord1.TabWord[i] = CC;
+        ADVFILE();
+        i++;
+    }
+    currentWord1.Length = i;
+}
+
+int KataInt(Word k)
+{
+    int i;
+    char huruf;
+    int value = 0;
+    for (i=0;i<k.Length;i++){
+        huruf = k.TabWord[i];
+        value = (value*10) + (huruf - '0');
+    }
+    return value;
+}
+
 Word GetCWord1()
 /* Mengembalikan currentWord1
    I.S.  : currentWord1 sembarang */
@@ -223,6 +327,32 @@ void printWord(Word Kata)
     {
         printf("%c", Kata.TabWord[i]);
     }
+}
+
+char* toString(Word Kata){
+    int i;
+    char* word;
+    word = (char*) malloc ((Kata.Length+1) * sizeof(char*));
+    for(i=0;i<Kata.Length;i++){
+        word[i] = Kata.TabWord[i];
+    }
+    word[i] = '\0';
+    return word;
+}
+
+char* strConcat(char* s1, char* s2){
+    int i,j;
+    char* s3;
+    s3 = (char*) malloc ((strLength(s1)+strLength(s2)+1) * sizeof(char*));
+    for(i=0;i<strLength(s1);i++){
+        s3[i] = s1[i];
+    }
+    for(j=0;j<strLength(s2);j++){
+        s3[i] = s2[j];
+        i++;
+    }
+    s3[i] = '\0';
+    return s3;
 }
 
 // int main()

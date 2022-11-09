@@ -13,11 +13,7 @@
 #define charsize 1
 
 typedef int IdxType;
-typedef struct
-{
-    char buffer[N_MAX];
-    int length;
-} ElType;
+typedef Kata ElType;
 
 typedef struct {
     ElType *A;
@@ -65,7 +61,7 @@ ElType Get(ArrayDin array, IdxType i);
  * Prekondisi: array terdefinisi
  */
 
-ElType toEltype(Kata kata);
+// ElType toEltype(Kata kata);
 
 boolean compareWord(ElType kata1, char *kata2);
 
@@ -137,5 +133,7 @@ ArrayDin CopyArrayDin(ArrayDin array);
  * Prekondisi: array terdefinisi
  */
 IdxType SearchArrayDin(ArrayDin array, ElType el);
+
+boolean COMMAND_START_LOAD_ETC(boolean mainmenu, ArrayDin array);
 
 #endif

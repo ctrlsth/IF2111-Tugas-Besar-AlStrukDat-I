@@ -3,6 +3,7 @@
 
 #include "mesinkar.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 char CC;
 boolean EOP;
@@ -43,11 +44,18 @@ void ADV()
 }
 
 /*###### Config Start ######*/
-void C_START(char *c)
+void C_START(char *c, boolean *fileopen)
 {
     config = fopen(c, "r");
-    C_ADV();
+    if (config == NULL){
+        *fileopen = false;
+    }
+    else{
+        *fileopen = true;
+        C_ADV();
+    }
 }
+
 void C_ADV()
 {
     /* Pita dimajukan satu karakter.

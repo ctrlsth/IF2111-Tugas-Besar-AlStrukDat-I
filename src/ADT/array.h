@@ -1,138 +1,132 @@
-// UNMODIFIED //
-// UNMODIFIED //
-// UNMODIFIED //
+#ifndef __ARRAY_DINAMIK__
+#define __ARRAY_DINAMIK__
 
 #include "mesinkata.h"
 #include "../boolean.h"
 
-#ifndef ARRAY_H
-#define ARRAY_H
+#define InitialSize 50
+// #define charsize 1
 
-/* Kamus Umum */
-
-#define IdxMax 100
-#define IdxMin 1
-#define IdxUndef -999 /* indeks tak terdefinisi*/
-
-/* Definisi elemen dan koleksi objek */
 typedef int IdxType;
 typedef Word ElType;
 
-typedef struct
-	{
-		ElType TI [IdxMax-IdxMin+1]; /* memori tempat penyimpan elemen (container) */
-		int Neff; /* banyaknya elemen efektif */
-	} TabWord;
+typedef struct {
+    ElType *A;
+    int Capacity;
+    int Neff;
+} ArrayDin;
 
-/* Indeks yang digunakan [IdxMin..IdxMax] */
-/* Jika T adalah TabWord, cara deklarasi dan akses: */
-/* Deklarasi : T : TabWord */
-/* Maka cara akses:
- * T.Neff untuk mengetahui banyaknya elemen
- * T.TI untuk mengakses seluruh nilai elemen tabel
- * T.TI[i] untuk mengakses elemen ke-i */
-/* Definisi :
- * Tabel kosong: T.Neff = 0
- * Definisi elemen pertama : T.TI[i] dengan i=1
- * Definisi elemen terakhir yang terdefinisi: T.TI[i] dengan i=T.Neff */
+// typedef char* chardin;
+// void MakeArrayChar(chardin * kata);
 
-/* ********** KONSTRUKTOR ********** */
-/* Konstruktor : create tabel kosong */
-void MakeEmpty (TabWord *T);
-/* I.S. sembarang */
-/* F.S. Terbentuk tabel T kosong dengan kapasitas IdxMax-IdxMin+1 */
+/**
+ * Konstruktor
+ * I.S. sembarang
+ * F.S. Terbentuk ArrayDin kosong dengan ukuran InitialSize
+ */
+void MakeArrayDin(ArrayDin *array);
 
-/* ********** SELEKTOR ********** */
-/* *** Banyaknya elemen *** */
-int NbElmt (TabWord T);
-/* Mengirimkan banyaknya elemen efektif tabel */
-/* Mengirimkan nol jika tabel kosong */
-/* *** Daya tampung container *** */
-int MaxNbEl (TabWord T);
-/* Mengirimkan maksimum elemen yang dapat ditampung oleh tabel */
-/* *** Selektor INDEKS *** */
-IdxType GetFirstIdx (TabWord T);
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan indeks elemen pertama */
-IdxType GetLastIdx (TabWord T);
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan indeks elemen terakhir */
-/* *** Menghasilkan sebuah elemen *** */
-ElType GetElmt (TabWord T, IdxType i);
-/* Prekondisi : Tabel tidak kosong, i antara FirstIdx(T)..LastIdx(T) */
-/* Mengirimkan elemen tabel yang ke-i */
+/**
+ * Destruktor
+ * I.S. ArrayDin terdefinisi
+ * F.S. array->A terdealokasi
+ */
+void DeallocateArrayDin(ArrayDin *array);
 
-/* *** Selektor SET : Mengubah nilai TABEL dan elemen tabel *** */
-/* Untuk type private/limited private pada bahasa tertentu */
-void SetTab (TabWord Tin, TabWord *Tout);
-/* I.S. Tin terdefinisi, sembarang */
-/* F.S. Tout berisi salinan Tin */
-/* Assignment THsl -> Tin */
-void SetEl (TabWord *T, IdxType i, ElType v);
-/* I.S. T terdefinisi, sembarang */
-/* F.S. Elemen T yang ke-i bernilai v */
-/* Mengeset nilai elemen tabel yang ke-i sehingga bernilai v */
-void SetNeff (TabWord *T, IdxType N);
-/* I.S. T terdefinisi, sembarang */
-/* F.S. Nilai indeks efektif T bernilai N */
-/* Mengeset nilai indeks elemen efektif sehingga bernilai N */
+/**
+ * Fungsi untuk mengetahui apakah suatu array kosong.
+ * Prekondisi: array terdefinisi
+ */
+boolean IsEmpty(ArrayDin array);
 
-/* ********** Test Indeks yang valid ********** */
-boolean IsIdxValid (TabWord T, IdxType i);
-/* Prekondisi : i sembarang */
-/* Mengirimkan true jika i adalah indeks yang valid utk ukuran tabel */
-/* yaitu antara indeks yang terdefinisi utk container*/
-boolean IsIdxEff (TabWord T, IdxType i);
-/* Prekondisi : i sembarang*/
-/* Mengirimkan true jika i adalah indeks yang terdefinisi utk tabel */
-/* yaitu antara FirstIdx(T)..LastIdx(T) */
+/**
+ * Fungsi untuk mendapatkan banyaknya elemen efektif array, 0 jika tabel kosong.
+ * Prekondisi: array terdefinisi
+ */
+int Length(ArrayDin array);
 
-/* ********** TEST KOSONG/PENUH ********** */
-/* *** Test tabel kosong *** */
-boolean IsEmpty (TabWord T);
-/* Mengirimkan true jika tabel T kosong, mengirimkan false jika tidak */
-/* *** Test tabel penuh *** */
-boolean IsFull (TabWord T);
-/* Mengirimkan true jika tabel T penuh, mengirimkan false jika tidak */
+/**
+ * Mengembalikan elemen array L yang ke-I (indeks lojik).
+ * Prekondisi: array tidak kosong, i di antara 0..Length(array).
+ */
+ElType Get(ArrayDin array, IdxType i);
 
-/* ********** BACA dan TULIS dengan INPUT/OUTPUT device ********** */
-void TulisIsi (TabWord T);
-/* Proses : Menuliskan isi tabel dengan traversal */
-/* I.S. T boleh kosong */
-/* F.S. Jika T tidak kosong : indeks dan elemen tabel ditulis berderet ke bawah */
-/* Jika isi tabel [1,2,3] maka akan diprint
-0:1
-1:2
-2:3
-*/
-/* Jika T kosong : Hanya menulis "Tabel kosong" */
+/**
+ * Fungsi untuk mendapatkan kapasitas yang tersedia.
+ * Prekondisi: array terdefinisi
+ */
 
-/* ********** OPERATOR ARITMATIKA ********** */
-/* *** Aritmatika tabel : Penjumlahan, pengurangan, perkalian, ... *** */
-TabWord PlusTab (TabWord T1, TabWord T2);
-/* Prekondisi : T1 dan T2 berukuran sama dan tidak kosong */
-/* Mengirimkan T1 + T2 */
-TabWord MinusTab (TabWord T1, TabWord T2);
-/* Prekondisi : T1 dan T2 berukuran sama dan tidak kosong */
-/* Mengirimkan T1 - T2 */
+// ElType toEltype(Kata kata);
 
-/* ********** NILAI EKSTREM ********** */
-ElType ValMax (TabWord T);
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan nilai maksimum tabel */
+// boolean compareWord(ElType kata1, char *kata2);
 
-ElType ValMin (TabWord T);
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan nilai minimum tabel */
+int GetCapacity(ArrayDin array);
 
-/* *** Mengirimkan indeks elemen bernilai ekstrem *** */
-IdxType IdxMaxTab (TabWord T);
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan indeks i dengan elemen ke-i adalah nilai maksimum pada tabel */
+/**
+ * Fungsi untuk menambahkan elemen baru di index ke-i
+ * Prekondisi: array terdefinisi, i di antara 0..Length(array).
+ */
 
-IdxType IdxMinTab (TabWord T);
-/* Prekondisi : Tabel tidak kosong */
-/* Mengirimkan indeks i */
-/* dengan elemen ke-i nilai minimum pada tabel */
+void increaseCapacity(ArrayDin* array);
+
+void InsertAt(ArrayDin *array, ElType el, IdxType i);
+
+/**
+ * Fungsi untuk menambahkan elemen baru di akhir array.
+ * Prekondisi: array terdefinisi
+ */
+void InsertLast(ArrayDin *array, ElType el);
+
+/**
+ * Fungsi untuk menambahkan elemen baru di awal array.
+ * Prekondisi: array terdefinisi
+ */
+void InsertFirst(ArrayDin *array, ElType el);
+
+/**
+ * Fungsi untuk menghapus elemen di index ke-i ArrayDin
+ * Prekondisi: array terdefinisi, i di antara 0..Length(array).
+ */
+void DeleteAt(ArrayDin *array, IdxType i);
+
+/**
+ * Fungsi untuk menghapus elemen terakhir ArrayDin
+ * Prekondisi: array tidak kosong
+ */
+void DeleteLast(ArrayDin *array);
+
+/**
+ * Fungsi untuk menghapus elemen pertama ArrayDin
+ * Prekondisi: array tidak kosong
+ */
+void DeleteFirst(ArrayDin *array);
+
+/**
+ * Fungsi untuk melakukan print suatu ArrayDin.
+ * Print dilakukan dengan format: [elemen-1, elemen-2, ..., elemen-n]
+ * dan diakhiri newline.
+ * Prekondisi: array terdefinisi
+ */
+void PrintArrayDin(ArrayDin array);
+
+/**
+ * Fungsi untuk melakukan reverse suatu ArrayDin.
+ * Prekondisi: array terdefinisi
+ */
+void ReverseArrayDin(ArrayDin *array);
+
+/**
+ * Fungsi untuk melakukan copy suatu ArrayDin.
+ * Prekondisi: array terdefinisi
+ */
+ArrayDin CopyArrayDin(ArrayDin array);
+
+/**
+ * Fungsi untuk melakukan search suatu ArrayDin.
+ * Index pertama yang ditemukan akan dikembalikan.
+ * Jika tidak ditemukan, akan mengembalikan -1.
+ * Prekondisi: array terdefinisi
+ */
+IdxType SearchArrayDin(ArrayDin array, ElType el);
 
 #endif

@@ -1,14 +1,15 @@
 #include <stdio.h>
-#include <string.h>
+#include <stdlib.h>
+// #include <string.h>
 #include "mesinkata.h"
 
 boolean EndKata;
 Kata CKata;
 
 /*###### Config Start ######*/
-void C_STARTKATA(char *c)
+void C_STARTKATA(char *c,boolean * fileopen) //membaca file
 {
-    C_START(c);
+    C_START(c,fileopen);
     C_IgnoreBlank();
     if (CC == EOF) {
         EndKata = true;
@@ -48,6 +49,7 @@ void C_SalinKata()
     }
     CKata.Length = i;
 }
+
 void C_IgnoreBlank()
 {
     while ((CC == BLANK) || (CC == MARK))
@@ -77,7 +79,31 @@ void SalinKata()
     CKata.Length = i;
 }
 
-void STARTKATA()
+void SalinKataGame(){
+    int i = 0;
+    while ((CC != MARK))
+    {
+        CKata.TabKata[i] = CC;
+        ADV();
+        i++;
+    }
+    CKata.Length = i;
+}
+
+void STARTKATAGAME(){ //Memasukkan nama game
+    START();
+    IgnoreBlank();
+    if (CC == MARK)
+    {
+        EndKata = true;
+    }
+    else
+    {
+        EndKata = false;
+        SalinKataGame();
+    }
+}
+void STARTKATA() // memasukkan command
 {
     START();
     IgnoreBlank();
@@ -150,47 +176,20 @@ boolean STRCOMP(Kata k1, char* k2)
 
 boolean IsNumber(Kata k)
 {
-    int i;
-    if (CKata.TabKata[0] == '-')
-    {
-        i = 1;
-    }
-    else
-    {
-        i = 0;
-    }
-    boolean number = true;
-    while (number && i <= k.Length)
-    {
-        switch (k.TabKata[i])
-        {
-        case '0':
-            break;
-        case '1':
-            break;
-        case '2':
-            break;
-        case '3':
-            break;
-        case '4':
-            break;
-        case '5':
-            break;
-        case '6':
-            break;
-        case '7':
-            break;
-        case '8':
-            break;
-        case '9':
-            break;
-        default:
-            number = false;
-        };
-        i++;
+    int i = 0;
+    boolean number = false;
+    if(k.Length > 0){
+        number = true; 
+        while(i<k.Length && number){
+            if (!(k.TabKata[i] > '0' && k.TabKata[i] < '9')){
+                number = false;
+            }
+            i++;
+        }
     }
     return number;
 }
+
 int KataInt(Kata k)
 {
     int i;
@@ -202,20 +201,7 @@ int KataInt(Kata k)
     }
     return value;
 }
-// void KataMap(Kata k, char importMap[100])
-// {
-//     for (int i = 1; i <= k.Length; i++)
-//     {
-//         importMap[i - 1] = k.TabKata[i];
-//     }
-// }
-// void KataPlayer(Kata k, char namaPlayer[20])
-// {
-//     for (int i = 1; i <= k.Length; i++)
-//     {
-//         namaPlayer[i - 1] = k.TabKata[i];
-//     }
-// }
+
 void printKata(Kata kata)
 {
     for (int i = 1; i <= kata.Length; i++)
@@ -228,16 +214,25 @@ void printKata(Kata kata)
 char* toString(Kata kata){
     char* str;
     int i;
-    // char temp[kata.Length + 1];
+    str = (char*) malloc((kata.Length + 1)*sizeof(char*));
     for(i=0;i<kata.Length;i++){
         str[i] = kata.TabKata[i];
     }
     str[i] = '\0';
-    // printf("%s\n",temp);
-    // str = temp;
-    // str[kata.Length + 1] = '\0';
-    // for(i=0;i<kata.Length;i++){
-    //     printf("%c",str[i]);
-    // }
     return str;
+}
+
+char* strConcat(char* s1, char* s2){
+    int i,j;
+    char* s3;
+    s3 = (char*) malloc ((strLength(s1)+strLength(s2)+1) * sizeof(char*));
+    for(i=0;i<strLength(s1);i++){
+        s3[i] = s1[i];
+    }
+    for(j=0;j<strLength(s2);j++){
+        s3[i] = s2[j];
+        i++;
+    }
+    s3[i] = '\0';
+    return s3;
 }

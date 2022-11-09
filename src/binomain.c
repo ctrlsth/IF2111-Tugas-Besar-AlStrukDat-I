@@ -16,64 +16,74 @@ int main()
     boolean recognizedCMD = true;
     Word currArg;
     Word currCommand;
-    TabWord listgame;
-    TabWord listhistory;
+    ArrayDin listgame;
+    ArrayDin Command;
+    MakeArrayDin(&Command);
+    MakeArrayDin(&listgame);
+    Queue qgame;
+    CreateQueue(&qgame);
+    ArrayDin listhistory;
+    MakeArrayDin(&listhistory);
+    int i,j;
 
-    /* Algorithm */
-    // BOOTUP(); // Isinya welcome dsb ama enter command
-    do
-    {
+    while(!(mainmenu) && (prompt)){
+        printf("ENTER COMMAND: ");
+        CMD_STARTKATA();
+        while(!EndWord){
+            // for(i=0;i<currCom.length;i++){
+            //     printf("%c",currCom.buffer[i]);
+            // }
+            InsertLast(&Command,currentWord1);
+            CMD_ADVKATA();
+        }
+        if (compareWord(Command.A[0], "START"))
+        {
+            LOAD("config.txt",&listgame);
+            mainmenu = true;
+            // mainmenu = START("./data/config.txt");       // START jadi fungsi yang mengembalikan true, kalo file config bisa dibuka
+        }
+        else if (compareWord(Command.A[0], "LOAD"))
+        {
+            // CMD_ADVKATA();
+            // currArg = currentWord1;
+            char *filename = toString(Command.A[1]);
+            printf("%s",filename);
+            // LOAD(filename,&listgame);
+            mainmenu = true;
+        }
+
+        else if (compareWord(currCommand,"EXIT")){
+            prompt = false;
+            printf("SAMPAI JUMPA!");
+    }
+    }
+
+    while(prompt){
         printf("ENTER COMMAND: ");
         STARTCMD();
         currCommand = GetCWord1();
-
-        /* FIRST MENU / BOOT MENU */
-        if (compareWord(currCommand, "START"))
-        {
-            // mainmenu = START("./data/config.txt");       // START jadi fungsi yang mengembalikan true, kalo file config bisa dibuka
-        }
-        else if (compareWord(currCommand, "LOAD"))
-        {
-            currArg = addtxt(GetCWord2());
-            // mainmenu = LOAD(currArg);             // LOAD jadi fungsi yang ngembaliin true, kalo file save bisa dibuka
-        }
-        else if (compareWord(currCommand, "CMDLIST"))
-        {
-            // CMDLIST();                            // Ngeprint command list untuk main menu / interface awal
-        }
-        else if (compareWord(currCommand, "EXIT"))
-        {
-            // EXIT();
-        }
-        else
-        {
-            if (!mainmenu)
-            {
-                recognizedCMD = false;
+        if(compareWord(currCommand, "LIST")){
+            currArg = GetCWord2();
+            if (compareWord(currArg,"GAME")){
+                printf("list game anda:\n");
+                for (i=0;i<listgame.Neff;i++){
+                        printf("%d. ",i + 1);
+                        for(j=0;j<listgame.A[i].Length;j++){
+                            printf("%c",listgame.A[i].TabWord[j]);
+                        }
+                        printf("\n");
+                    }
             }
         }
 
-        if (mainmenu)
-        {
-            if (compareWord(currCommand, "SAVE"))
-            {
-                currArg = addtxt(GetCWord2());
-                SAVE(currArg, listgame, listhistory);
-            }
-            else
-            {
-                recognizedCMD = false;
-            }
+        else if (compareWord(currCommand,"EXIT")){
+            prompt = false;
+            printf("SAMPAI JUMPA!");
         }
-
-        if (!recognizedCMD)
-        {
-            printf("BMO doesn't get what you say, but BMO hopes that you have a GREAT DAY!\n");
-            printf("In any case that you're confused, just say \"CMDLIST\" okayy? ^^\n");
-            recognizedCMD = true;
-        }
-
-    } while (prompt);
+    }
+    /* Algorithm */
+    // BOOTUP(); // Isinya welcome dsb ama enter command
+    
 
     return 0;
 }

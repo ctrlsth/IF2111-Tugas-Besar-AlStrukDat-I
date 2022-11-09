@@ -20,11 +20,14 @@ typedef struct
 extern boolean EndWord;
 extern Word currentWord1;
 extern Word currentWord2;
+extern Word currentWordFile;
 
 void IgnoreBlanks(boolean CMD);
 /* Mengabaikan satu atau beberapa BLANK
    I.S. : CC sembarang
    F.S. : CC ≠ BLANK atau CC = MARK */
+
+void C_IgnoreBlank();
 
 void STARTWORD();
 /* I.S. : CC sembarang
@@ -51,6 +54,12 @@ void STARTCMD();
 void ADVCMD();
 void COPYCMD();
 
+void STARTWORDFILE(char *c);
+void ADVWORDFILE();
+void COPYWORDFILE();
+
+int KataInt(Word k);
+
 Word GetCWord1();
 /* Mengembalikan currentWord
    I.S.  : currentWord sembarang */
@@ -72,5 +81,15 @@ int strLength(char *kata);
 /* Mengembalikan panjang suatu string kata */
 
 void printWord(Word Kata);
+
+char* toString(Word Kata);
+
+char* strConcat(char* s1, char* s2);
+
+void IgnoreBlank();
+void CMD_STARTKATA();
+void CMD_ADVKATA();
+void CMD_COPYWORD();
+
 
 #endif

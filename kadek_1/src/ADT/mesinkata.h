@@ -1,7 +1,7 @@
 #ifndef __MESINKATA_H__
 #define __MESINKATA_H__
 
-#include "boolean.h"
+#include "../boolean.h"
 #include "mesinkar.h"
 
 #define NMax 500
@@ -18,7 +18,7 @@ typedef struct
 extern boolean EndKata;
 extern Kata CKata;
 
-void C_STARTKATA(char *c);
+void C_STARTKATA(char *c, boolean *fileopen);
 void C_ADVKATA();
 void C_SalinKata();
 void C_IgnoreBlank();
@@ -47,6 +47,9 @@ void ADVKATA();
           CC adalah karakter pertama dari kata berikutnya, mungkin MARK
           Jika CC = MARK, EndKata = true.
    Proses : Akuisisi kata menggunakan procedure SalinKata */
+
+void SalinKataGame();
+void STARTKATAGAME();
 Kata AskCommand();
 boolean STRCOMP(Kata k1, char* k2);
 boolean IsNumber(Kata k);
@@ -57,4 +60,5 @@ void printKata(Kata kata);
 int strLength(char *kata);
 
 char* toString(Kata kata);
+char* strConcat(char* s1, char* s2);
 #endif

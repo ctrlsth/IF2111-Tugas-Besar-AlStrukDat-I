@@ -63,15 +63,15 @@ ElType Get(ArrayDin array, IdxType i){
     return(array.A[i]);
 }
 
-ElType toEltype(Kata kata){
-    ElType eltype;
-    int i;
-    for(i=0;i<kata.Length;i++){
-        eltype.buffer[i] = kata.TabKata[i];
-    }
-    eltype.length = kata.Length;
-    return eltype;
-}
+// ElType toEltype(Kata kata){
+//     ElType eltype;
+//     int i;
+//     for(i=0;i<kata.Length;i++){
+//         eltype.buffer[i] = kata.TabKata[i];
+//     }
+//     eltype.length = kata.Length;
+//     return eltype;
+// }
 
 boolean compareWord(ElType kata1, char *kata2)
 /* Membandingkan sebuah word dengan sebuah sting
@@ -79,13 +79,13 @@ boolean compareWord(ElType kata1, char *kata2)
    False    : Jika berbeda */
 {
     boolean same = false;
-    if (kata1.length == strLength(kata2))
+    if (kata1.Length == strLength(kata2))
     {
         int i = 0;
         same = true;
-        while (i < kata1.length && (same))
+        while (i < kata1.Length && (same))
         {
-            if (kata1.buffer[i] != kata2[i])
+            if (kata1.TabKata[i] != kata2[i])
             {
                 same = false;
             }
@@ -192,18 +192,18 @@ void DeleteFirst(ArrayDin *array){
  * Prekondisi: array terdefinisi
  */
 void PrintArrayDin(ArrayDin array){
+    int i,j;
     if (IsEmpty(array)){
-        printf("[]\n");
+        printf("\n");
     }
     else{
-        printf("[");
-        for(int i = 0; i < array.Neff;i++){
-            printf("%d",array.A[i]);
-            if (i<array.Neff - 1) {
-                printf(",");
+        for (i=0;i<array.Neff;i++){
+            printf("%d. ",i + 1);
+            for(j=0;j<array.A[i].Length;j++){
+                printf("%c",array.A[i].TabKata[j]);
             }
+            printf("\n");
         }
-        printf("]\n");
     }
 }
 
@@ -254,3 +254,45 @@ ArrayDin CopyArrayDin(ArrayDin array){
 //     }
 //     return indeks;
 // }
+
+boolean COMMAND_START_LOAD_ETC(boolean mainmenu, ArrayDin array){
+    boolean bool = false;
+    if (!mainmenu){ //belum masuk mainmenu tapi ingin menjalankan command selain start load quit help
+        if (array.Neff == 2){
+            if (compareWord(array.A[0],"LIST") && compareWord(array.A[1],"GAME")){
+                bool = true;
+            }
+            else if (compareWord(array.A[0],"CREATE") && compareWord(array.A[1],"GAME")){
+                bool = true;
+            }
+            else if (compareWord(array.A[0],"DELETE") && compareWord(array.A[1],"GAME")){
+                bool = true;
+            }
+            else if (compareWord(array.A[0],"QUEUE") && compareWord(array.A[1],"GAME")){
+                bool = true;
+            }
+            else if (compareWord(array.A[0],"PLAY") && compareWord(array.A[1],"GAME")){
+                bool = true;
+            }
+            else if (compareWord(array.A[0], "SKIPGAME")){
+                bool = true;
+            }
+            else if (compareWord(array.A[0],"SAVE")){
+                bool = true;
+            }
+        }
+    }
+    else{
+        if (array.Neff == 1){
+            if(compareWord(array.A[0],"START")){
+                bool = true;
+            }
+        }
+        else if (array.Neff == 2){
+            if(compareWord(array.A[0],"LOAD")){
+                bool = true;
+            }
+        }    
+    }
+    return bool;
+}

@@ -7,6 +7,7 @@ boolean EOP;    // EOP  : End Of Process / Pita     = Ditemukan MARK pada pita
 boolean EOPC;   // EOPC : End Of Process Command    = Ditemukan MARKCMD pada pita
 
 static FILE *pita;
+static FILE *config;
 static int retval;
 
 void START()
@@ -62,6 +63,21 @@ void ADVC()
     if (EOPC)
     {
         fclose(pita);
+    }
+}
+
+void STARTFILE(char *c)
+{
+    config = fopen(c, "r");
+    ADVFILE(); 
+}
+
+void ADVFILE()
+{
+    CC = fgetc(config);
+    //eop = (cc == MARK);
+    if (CC == EOF) {
+        fclose(config);
     }
 }
 

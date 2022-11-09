@@ -1,172 +1,235 @@
-// UNMODIFIED //
-// UNMODIFIED //
-// UNMODIFIED //
+// NIM      : 18221047
+// Nama     : I Dewa Made Manu Pradnyana
+// Tanggal  : 19 Oktober 2022
+// Topik praktikum  : PraPraktikum 03 - arraydin.c
+// Deskripsi : Realisasi fungsi arraydin.h
 
-#include "../boolean.h"
 #include "array.h"
+#include <stdlib.h>
 #include <stdio.h>
 
-// #ifndef ARRAY_H
-// #define ARRAY_H
-
-// /* Kamus Umum */
-
-// #define IdxMax 100
-// #define IdxMin 1
-// #define IdxUndef -999 /* indeks tak terdefinisi*/
-
-// /* Definisi elemen dan koleksi objek */
-// typedef int IdxType;
-// typedef int ElType;
-
-// typedef struct
-// 	{
-// 		ElType TI [IdxMax-IdxMin+1]; /* memori tempat penyimpan elemen (container) */
-// 		int Neff; /* banyaknya elemen efektif */
-// 	} TabWord;
-
-/* Indeks yang digunakan [IdxMin..IdxMax] */
-/* Jika T adalah TabWord, cara deklarasi dan akses: */
-/* Deklarasi : T : TabWord */
-/* Maka cara akses:
- * T.Neff untuk mengetahui banyaknya elemen
- * T.TI untuk mengakses seluruh nilai elemen tabel
- * T.TI[i] untuk mengakses elemen ke-i */
-/* Definisi :
- * Tabel kosong: T.Neff = 0
- * Definisi elemen pertama : T.TI[i] dengan i=1
- * Definisi elemen terakhir yang terdefinisi: T.TI[i] dengan i=T.Neff */
-
-/* ********** KONSTRUKTOR ********** */
-/* Konstruktor : create tabel kosong */
-void MakeEmpty(TabWord *T)
-/* I.S. sembarang */
-/* F.S. Terbentuk tabel T kosong dengan kapasitas IdxMax-IdxMin+1 */
-{
-    // printf("Start MakeEmpty\n");
-    (*T).Neff = 0;
-    (*T).TI[IdxMax - IdxMin + 1];
+/**
+ * Konstruktor
+ * I.S. sembarang
+ * F.S. Terbentuk ArrayDin kosong dengan ukuran InitialSize
+ */
+void MakeArrayDin(ArrayDin *array){
+    array->A = (ElType*) malloc (InitialSize * (sizeof(ElType)));
+    array->Capacity = InitialSize;
+    array->Neff = 0;
 }
 
-/* ********** SELEKTOR ********** */
-/* *** Banyaknya elemen *** */
-int NbElmt(TabWord T)
-/* Mengirimkan banyaknya elemen efektif tabel */
-/* Mengirimkan nol jika tabel kosong */
-{
-    return T.Neff;
+/**
+ * Destruktor
+ * I.S. ArrayDin terdefinisi
+ * F.S. array->A terdealokasi
+ */
+void DeallocateArrayDin(ArrayDin *array){
+    free(array->A);
 }
 
-/* *** Daya tampung container *** */
-int MaxNbEl(TabWord T)
-/* Mengirimkan maksimum elemen yang dapat ditampung oleh tabel */
-{
-    return IdxMax;
+/**
+ * Fungsi untuk mengetahui apakah suatu array kosong.
+ * Prekondisi: array terdefinisi
+ */
+boolean IsEmpty(ArrayDin array){
+    return (array.Neff == 0);
 }
 
-/* *** Selektor INDEKS *** */
-IdxType GetFirstIdx(TabWord T)
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan indeks elemen pertama */
-{
-    return IdxMin;
+/**
+ * Fungsi untuk mendapatkan banyaknya elemen efektif array, 0 jika tabel kosong.
+ * Prekondisi: array terdefinisi
+ */
+int Length(ArrayDin array){
+    return array.Neff;
 }
 
-IdxType GetLastIdx(TabWord T)
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan indeks elemen terakhir */
-{
-    return NbElmt(T);
+/**
+ * Mengembalikan elemen array L yang ke-I (indeks lojik).
+ * Prekondisi: array tidak kosong, i di antara 0..Length(array).
+ */
+ElType Get(ArrayDin array, IdxType i){
+    return(array.A[i]);
 }
 
-/* *** Menghasilkan sebuah elemen *** */
-ElType GetElmt(TabWord T, IdxType i)
-/* Prekondisi : Tabel tidak kosong, i antara FirstIdx(T)..LastIdx(T) */
-/* Mengirimkan elemen tabel yang ke-i */
-{
-    return T.TI[i];
+// boolean compareWord(ElType kata1, char *kata2)
+// /* Membandingkan sebuah word dengan sebuah sting
+//    True     : Jika string dan kata sama,
+//    False    : Jika berbeda */
+// {
+//     boolean same = false;
+//     if (kata1.Length == strLength(kata2))
+//     {
+//         int i = 0;
+//         same = true;
+//         while (i < kata1.Length && (same))
+//         {
+//             if (kata1.TabWord[i] != kata2[i])
+//             {
+//                 same = false;
+//             }
+//             i++;
+//         }
+//     }
+//     return same;
+// }
+
+/**
+ * Fungsi untuk mendapatkan kapasitas yang tersedia.
+ * Prekondisi: array terdefinisi
+ */
+int GetCapacity(ArrayDin array){
+    return array.Capacity;
 }
 
-/* *** Selektor SET : Mengubah nilai TABEL dan elemen tabel *** */
-/* Untuk type private/limited private pada bahasa tertentu */
-void SetTab(TabWord Tin, TabWord *Tout)
-/* I.S. Tin terdefinisi, sembarang */
-/* F.S. Tout berisi salinan Tin */
-/* Assignment THsl -> Tin */
-{
-    (*Tout) = Tin;
-}
+/**
+ * Fungsi untuk menambahkan elemen baru di index ke-i
+ * Prekondisi: array terdefinisi, i di antara 0..Length(array).
+ */
 
-void SetEl(TabWord *T, IdxType i, ElType v)
-/* I.S. T terdefinisi, sembarang */
-/* F.S. Elemen T yang ke-i bernilai v */
-/* Mengeset nilai elemen tabel yang ke-i sehingga bernilai v */
-{
-    T->TI[i] = v;
-    T->Neff++;
-}
 
-void SetNeff(TabWord *T, IdxType N)
-/* I.S. T terdefinisi, sembarang */
-/* F.S. Nilai indeks efektif T bernilai N */
-/* Mengeset nilai indeks elemen efektif sehingga bernilai N */
-{
-    T->Neff = N;
-}
-
-/* ********** Test Indeks yang valid ********** */
-boolean IsIdxValid(TabWord T, IdxType i)
-/* Prekondisi : i sembarang */
-/* Mengirimkan true jika i adalah indeks yang valid utk ukuran tabel */
-/* yaitu antara indeks yang terdefinisi utk container*/
-{
-    return (i >= IdxMin) && (i <= IdxMax);
-}
-
-boolean IsIdxEff(TabWord T, IdxType i)
-/* Prekondisi : i sembarang*/
-/* Mengirimkan true jika i adalah indeks yang terdefinisi utk tabel */
-/* yaitu antara FirstIdx(T)..LastIdx(T) */
-{
-    return (i >= GetFirstIdx(T)) && (i <= GetLastIdx(T));
-}
-
-/* ********** TEST KOSONG/PENUH ********** */
-/* *** Test tabel kosong *** */
-boolean IsEmpty(TabWord T)
-/* Mengirimkan true jika tabel T kosong, mengirimkan false jika tidak */
-{
-    return (NbElmt(T) == 0);
-}
-
-/* *** Test tabel penuh *** */
-boolean IsFull(TabWord T)
-/* Mengirimkan true jika tabel T penuh, mengirimkan false jika tidak */
-{
-    return (NbElmt(T) == MaxNbEl(T));
-}
-
-/* ********** BACA dan TULIS dengan INPUT/OUTPUT device ********** */
-void TulisIsi(TabWord T)
-/* Proses : Menuliskan isi tabel dengan traversal */
-/* I.S. T boleh kosong */
-/* F.S. Jika T tidak kosong : indeks dan elemen tabel ditulis berderet ke bawah */
-/* Jika isi tabel [1,2,3] maka akan diprint
-0:1
-1:2
-2:3
-*/
-/* Jika T kosong : Hanya menulis "Tabel kosong" */
-{
-    if (IsEmpty(T))
-    {
-        printf("Tabel kosong\n");
-    }
-    else
-    {
-        for (int i = GetFirstIdx(T); i <= GetLastIdx(T); i++)
-        {
-            printf("%d:%d\n", i, GetElmt(T, i));
+void InsertAt(ArrayDin *array, ElType el, IdxType i){
+    int length = Length(*array);
+    int capacity = GetCapacity(*array);
+    if (length == capacity){
+        int desiredCapacity = capacity + InitialSize; 
+        ElType *arr = (ElType*) malloc(desiredCapacity * (sizeof(ElType)));
+        for (int j = 0;j < length; j++){
+            arr[j] = Get(*array,j);
         }
+        free(array->A);
+        array->A = arr;
+        array->Capacity = desiredCapacity;
+    }   
+    for (int j=length -1; j >= i;j--){
+        (*array).A[j+1] = (*array).A[j];
+    }
+    array->A[i] = el;
+    array->Neff+=1;
+}
+
+void increaseCapacity(ArrayDin* array){
+    if (array->Neff == array->Capacity){
+        int desiredCapacity = array->Neff + InitialSize; 
+        ElType *arr = (ElType*) malloc(desiredCapacity * (sizeof(ElType)));
+        for (int j = 0;j < array->Neff; j++){
+            arr[j] = Get(*array,j);
+        }
+        free(array->A);
+        array->A = arr;
+        array->Capacity = desiredCapacity;
+    }   
+}
+/**
+ * Fungsi untuk menambahkan elemen baru di akhir array.
+ * Prekondisi: array terdefinisi
+ */
+void InsertLast(ArrayDin *array, ElType el){
+    InsertAt(array, el, Length(*array));
+}
+
+/**
+ * Fungsi untuk menambahkan elemen baru di awal array.
+ * Prekondisi: array terdefinisi
+ */
+void InsertFirst(ArrayDin *array, ElType el){
+    InsertAt(array, el, 0);
+}
+
+/**
+ * Fungsi untuk menghapus elemen di index ke-i ArrayDin
+ * Prekondisi: array terdefinisi, i di antara 0..Length(array).
+ */
+void DeleteAt(ArrayDin *array, IdxType i){
+    int length = Length(*array);
+    for (int j = i; j < length - 1;j++){
+        array->A[j]=array->A[j+1];
+    }
+    array->Neff -=1;
+}
+
+/**
+ * Fungsi untuk menghapus elemen terakhir ArrayDin
+ * Prekondisi: array tidak kosong
+ */
+void DeleteLast(ArrayDin *array){
+    DeleteAt(array, Length(*array)-1);
+}
+
+/**
+ * Fungsi untuk menghapus elemen pertama ArrayDin
+ * Prekondisi: array tidak kosong
+ */
+void DeleteFirst(ArrayDin *array){
+    DeleteAt(array, 0);
+}
+
+/**
+ * Fungsi untuk melakukan print suatu ArrayDin.
+ * Print dilakukan dengan format: [elemen-1, elemen-2, ..., elemen-n]
+ * dan diakhiri newline.
+ * Prekondisi: array terdefinisi
+ */
+void PrintArrayDin(ArrayDin array){
+    if (IsEmpty(array)){
+        printf("[]\n");
+    }
+    else{
+        printf("[");
+        for(int i = 0; i < array.Neff;i++){
+            printf("%d",array.A[i]);
+            if (i<array.Neff - 1) {
+                printf(",");
+            }
+        }
+        printf("]\n");
     }
 }
+
+/**
+ * Fungsi untuk melakukan reverse suatu ArrayDin.
+ * Prekondisi: array terdefinisi
+ */
+void ReverseArrayDin(ArrayDin *array){
+    int length = Length(*array);
+    ElType temp;
+    for (int i=0;i<(length/2);i++){
+        temp = array->A[i];
+        array->A[i] = array->A[length-1-i];
+        array->A[length-1-i] = temp;
+    }
+}
+
+/**
+ * Fungsi untuk melakukan copy suatu ArrayDin.
+ * Prekondisi: array terdefinisi
+ */
+ArrayDin CopyArrayDin(ArrayDin array){
+    ArrayDin copy;
+    MakeArrayDin(&copy);
+    for (int i = 0; i < array.Neff;i++){
+        InsertLast(&copy, array.A[i]);
+    }
+    return copy;
+}
+
+/**
+ * Fungsi untuk melakukan search suatu ArrayDin.
+ * Index pertama yang ditemukan akan dikembalikan.
+ * Jika tidak ditemukan, akan mengembalikan -1.
+ * Prekondisi: array terdefinisi
+ */
+// IdxType SearchArrayDin(ArrayDin array, ElType el){
+//     int i = 0;
+//     IdxType indeks;
+//     while((array.A[i] != el) && (i<Length(array)-1)){
+//         i +=1;
+//     }
+//     if (array.A[i] == el){
+//         indeks = i;
+//     }
+//     else{
+//         indeks = -1;
+//     }
+//     return indeks;
+// }

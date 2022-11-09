@@ -4,7 +4,7 @@
 #ifndef __MESIN_KAR_H_
 #define __MESIN_KAR_H_
 
-#include "boolean.h"
+#include "../boolean.h"
 
 /* State Mesin */
 extern char CC;
@@ -28,6 +28,6 @@ void ADV();
           Jika  CC = MARK maka EOP akan menyala (true) */
 
 /* Config file */
-void C_START(char *c);
+void C_START(char *c, boolean *fileopen);
 void C_ADV();
 #endif

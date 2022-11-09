@@ -1,7 +1,3 @@
-// UNMODIFIED //
-// UNMODIFIED //
-// UNMODIFIED //
-
 #include <stdio.h>
 #include "queue.h"
 
@@ -75,26 +71,28 @@ void displayQueue(Queue q)
 {
     if (isEmpty(q))
     {
-        printf("[]\n");
+        printf("\n");
     }
     else
     {
         int i,j;
-        printf("[");
+        int count = 1;
         for (i = IDX_HEAD(q); i != IDX_TAIL(q); i = (i + 1) % CAPACITY)
         {
+            printf("%d. ",count);
             for(j=0;j<q.buffer[i].Length;j++)
             {
-                printf("%c", q.buffer[i].TabWord[j]);
+                printf("%c", q.buffer[i].TabKata[j]);
             }
             printf("\n");
+            count +=1;
         }
+        printf("%d. ", count);
         for(j=0;j<q.buffer[i].Length;j++)
             {
-                printf("%c", q.buffer[i].TabWord[j]);
+                printf("%c", q.buffer[i].TabKata[j]);
             }
-            printf("\n");
+            printf("\n\n");
         // printf("%d]\n", TAIL(q));
     }
 }
-

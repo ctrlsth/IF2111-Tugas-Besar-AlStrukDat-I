@@ -6,8 +6,12 @@
 #include "ADT/mesinkata.h"
 #include "ADT/array.h"
 
-boolean SAVE(Word filename, TabWord listgame, TabWord listhistory);
+boolean SAVE(Word filename, ArrayDin listgame, ArrayDin listhistory);
 
-void QUIT(TabWord listgame, TabWord listhistory);
+// void QUIT(ArrayDin listgame, ArrayDin listhistory);
+
+void LOAD(char * filename, ArrayDin *arraygame);
+
+// boolean compareStr()
 
 #endif
