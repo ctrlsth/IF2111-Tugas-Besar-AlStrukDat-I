@@ -119,7 +119,7 @@ int AcakDurasi(){
 void Inisialisasi(Queue *qPesanan){
     int i = 0;
     for (i; i<3; i++){
-        Pesanan p = MakeRanPesanan(i);
+        Pesanan p = MakeRandomPesanan(i);
         enqueue(qPesanan, p);
     }
 }
@@ -224,7 +224,7 @@ void Berkurang(Queue *qDiMasak){
 }
 
 void Cook(Queue qPesanan, Queue *qDiMasak, char FoodId[]){
-    if ((*qDimasak).Count < 6){
+    if ((*qDiMasak).Count < 6){
         enqueue(qDiMasak, qPesanan.buffer[GetIdx(qPesanan, FoodId)]);
         if (GetIdx(qPesanan, FoodId) != IDX_UNDEF){
             printf("Berhasil memasak M%d", GetId(FoodId));
