@@ -12,4 +12,9 @@ void LOAD(char * filename, ArrayDin *arrayGame, boolean *fileopen);
 void help(boolean mainmenu);
 
 void QUEUEGAME(ArrayDin listgame, Queue* queuegame);
+
+void PLAYGAME(Queue* queuegame);
+
+void SKIPGAME(Queue* queuegame, int num);
+
 #endif

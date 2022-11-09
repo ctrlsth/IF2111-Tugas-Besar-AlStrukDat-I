@@ -91,3 +91,99 @@ void QUEUEGAME(ArrayDin listgame, Queue* queuegame){
         printf("Input tidak valid\n");
     }
 }
+
+void PLAYGAME(Queue* queuegame)
+{
+    displayQueue(*queuegame);
+    ElType game;
+    if (isEmpty(*queuegame)){
+        printf("Antrian game anda kosong!\n");
+    }
+    else{
+        dequeue(queuegame, &game);
+        printf("Loading ");
+        printKata(game);
+        printf("..\n");
+        boolean game1 = compareWord(game, "RNG");
+        boolean game2 = compareWord(game, "Diner DASH");
+        boolean game3 = compareWord(game, "DINOSAUR IN EARTH");
+        boolean game4 = compareWord(game, "RISEWOMAN");
+        boolean game5 = compareWord(game, "EIFFEL TOWER");
+        if(game1)
+        {
+            printf("MAIN RNG\n");
+        }
+        else if(game2)
+        {
+            printf("MAIN Diner DASH\n");
+        }
+        else if(game3)
+        {
+            printf("MAIN DINOSAUR IN EARTH\n");
+        }
+        else if(game4)
+        {
+            printf("MAIN RISEWOMAN\n");
+        }
+        else if(game5)
+        {
+            printf("EIFFEL TOWER\n");
+        }
+        else
+        {
+            printf("Total score = 10\n");
+        }
+    }
+}
+
+void SKIPGAME(Queue* queuegame, int num)
+{
+    displayQueue(*queuegame);
+    int i = 0;
+    ElType game;
+
+    while(i<num && !(isEmpty(*queuegame))){
+        dequeue(queuegame,&game);
+        i++;
+    }
+
+    if(isEmpty(*queuegame)){
+        printf("Antrian game anda kosong!\n");
+    }
+
+    else{
+        dequeue(queuegame, &game);
+        printf("Loading ");
+        printKata(game);
+        printf("..\n");
+        boolean game1 = compareWord(game, "RNG");
+        boolean game2 = compareWord(game, "Diner DASH");
+        boolean game3 = compareWord(game, "DINOSAUR IN EARTH");
+        boolean game4 = compareWord(game, "RISEWOMAN");
+        boolean game5 = compareWord(game, "EIFFEL TOWER");
+        if(game1)
+        {
+            printf("MAIN RNG\n");
+        }
+        else if(game2)
+        {
+            printf("MAIN Diner DASH\n");
+        }
+        else if(game3)
+        {
+            printf("MAIN DINOSAUR IN EARTH\n");
+        }
+        else if(game4)
+        {
+            printf("MAIN RISEWOMAN\n");
+        }
+        else if(game5)
+        {
+            printf("EIFFEL TOWER\n");
+        }
+        else
+        {
+            printf("Total score = 10\n");
+        }
+    }
+}

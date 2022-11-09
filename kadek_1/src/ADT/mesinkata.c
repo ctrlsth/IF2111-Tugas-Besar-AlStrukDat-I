@@ -204,11 +204,10 @@ int KataInt(Kata k)
 
 void printKata(Kata kata)
 {
-    for (int i = 1; i <= kata.Length; i++)
+    for (int i = 0; i < kata.Length; i++)
     {
         printf("%c", kata.TabKata[i]);
     }
-    puts("");
 }
 
 char* toString(Kata kata){

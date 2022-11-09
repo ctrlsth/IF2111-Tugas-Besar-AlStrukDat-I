@@ -29,7 +29,7 @@ int main(){
             recognizedCMD = false;
         }
 
-        else if (COMMAND_START_LOAD_ETC(mainmenu,Command)){
+        else if (COMMAND_START_LOAD_ETC(mainmenu,Command)){ //Ingin melakukan command LIST GAME, CREATE GAME, dsb tapi belum melakukan START atau LOAD
             printf("Anda harus melakukan start atau load untuk melakukan command tersebut!\n");
         }
 
@@ -114,6 +114,20 @@ int main(){
             else if(compareWord(Command.A[0],"QUEUE") && (compareWord(Command.A[1],"GAME"))){
                 QUEUEGAME(listgame,&queuegame);
             }
+            
+            else if (compareWord(Command.A[0],"PLAY") && (compareWord(Command.A[1],"GAME"))){
+                PLAYGAME(&queuegame);
+            }
+
+            else if(compareWord(Command.A[0],"SKIPGAME")){
+                if(IsNumber(Command.A[1])){
+                    int number = KataInt(Command.A[1]);
+                    SKIPGAME(&queuegame,number);
+                }
+                else{
+                    printf("Input tidak valid!\n");
+                }
+            }
 
             else{
                 recognizedCMD = false;
@@ -127,7 +141,7 @@ int main(){
             }
 
             else{
-                recognizedCMD = true;
+                recognizedCMD = false;
             }
         }
         // if (compareWord(Command.A[0],"START")){
@@ -141,5 +155,6 @@ int main(){
         }
         DeallocateArrayDin(&Command);
     }
+
     return 0;
 }
