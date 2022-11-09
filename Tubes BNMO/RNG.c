@@ -1,18 +1,20 @@
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 #include "ADT MESIN KARAKTER/mesin_kar.h"
 #include "boolean.h"
 
 int acakAngka (){
+    time_t waktu;
     int BilRandom;
-    srand(time(0));
+    srand(time(&waktu));
 
     BilRandom = rand()%101;//buat bilangan random dengan maksimal angka yang keluar adalah 100
     return (BilRandom);
 }
 
-int skoring(){
+int main(){
     int tebakan;
     int jawaban;
     int skor = 100; //skor max 100 dan skor akan berkurang (-5) setiap user melakukan satu kesalahan
@@ -22,7 +24,7 @@ int skoring(){
     printf("RNG Telah dimulai. Uji keberuntungan Anda dengan menebak X.");
     scanf("Tebakan : %d", &tebakan);
     if (tebakan == jawaban){
-        return skor;
+        printf("Ya, X adalah %d", jawaban);
     } else{
         while (skor >=0 && !found){
             if (tebakan > jawaban){
@@ -34,7 +36,7 @@ int skoring(){
                 skor = skor - 5;
                 scanf("Tebakan : %d", &tebakan);
             } else {
-                printf("Ya, X adalah %d.", jawaban);
+                printf("Ya, X adalah %d", jawaban);
                 found = true;
             }
         } 
@@ -47,13 +49,13 @@ int skoring(){
 }
 
 void klasifikasiWInLose (int skor){
-    char resume;
+    char* resume;
 
     if (skor==-999){
-        resume = 'Kalah';
+        resume = "Kalah";
     } else if (skor == 0) {
-        resume = 'Hampir Banget Kalah'; //Masih menang, tapi di batas minimal skor (0)
+        resume = "Hampir Banget Kalah";
     } else {
-        resume = 'Menang';
+        resume = "Menang";
     }
 }
