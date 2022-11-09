@@ -13,20 +13,33 @@ void PlayGame(Queue queuegame)
     printf("Loading ");
     printWord(*game);
     print("..\n");
-    // if(game == "RNG")
-    // {
+    boolean game1 = compareWord(*game, "RNG");
+    boolean game2 = compareWord(*game, "Diner DASH");
+    boolean game3 = compareWord(*game, "DINOSAUR IN EARTH");
+    boolean game4 = compareWord(*game, "RISEWOMAN");
+    boolean game5 = compareWord(*game, "EIFFEL TOWER");
+    if(game1)
+    {
 
-    // }
-    // else if(game == "Diner Dash" )
-    // {
+    }
+    else if(game2)
+    {
 
-    // }
-    // else if(game == "")
-    // {
+    }
+    else if(game3)
+    {
 
-    // }
-    // else
-    // {
-    //     printf("Total score = ");
-    // }
+    }
+    else if(game4)
+    {
+
+    }
+    else if(game5)
+    {
+
+    }
+    else
+    {
+        printf("Total score = 10\n");
+    }
 }
