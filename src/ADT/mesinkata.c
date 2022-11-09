@@ -148,7 +148,7 @@ Word toWord(char *someString)
 
 char *toString(Word kata)
 {
-    char *str = (char *)malloc((kata.Length+4) * sizeof(char));
+    char *str = (char *)malloc((kata.Length) * sizeof(char));
     int i;
 
     for (i = 0; i < kata.Length; i++)
