@@ -36,7 +36,7 @@ void deletegame(TabWord *listgame){
     STARTCMD();
     int number = atoi(&currentCommand);
     number = number-1;
-    if (!(number >=1 && number <=5)){
+    if (!(number >=0 && number <=4)){
         DeleteAt(listgame, number);
         printf("Game berhasil dihapus");
     }
