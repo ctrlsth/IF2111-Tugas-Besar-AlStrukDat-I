@@ -13,12 +13,19 @@
 #define InitialSize 3
 #define charsize 1
 
+typedef struct {
+    char name[50];
+    boolean deletable;
+} Games;
+
+typedef Games data;
 typedef int IdxType;
 typedef Word ElType;
 
 typedef struct
 {
     ElType *TW;
+    data *GM;
     int Capacity;
     int Neff;
 } TabWord;
