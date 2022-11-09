@@ -128,10 +128,10 @@ void TulisIsi(TabWord T)
     else{
         for (int i=0; i< NbElmt(T); i++){
             printf("%d", i+1);
-            for (int j=0; j<T.TI[i].length; j++){
-                printf("%c", T.TI[i].TabWord[j]);
+            for (int j=0; j<T.TI[i].Length; j++){
+                printf("%c", T.TI[i].TabChar[j]);
             }
         }
-        printf();
+        printf("");
     }
 }

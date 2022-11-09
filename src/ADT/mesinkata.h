@@ -21,7 +21,7 @@ extern boolean EndWord;
 extern Word currentWord;
 extern Word currentCommand;
 
-void STARTWORD();
+void STARTWORD(char* txtfile);
 /* I.S. : CC sembarang
    F.S. : EndWord = true, dan CC = MARK;
           atau EndWord = false, currentWord adalah kata yang sudah diakuisisi,
@@ -76,6 +76,9 @@ void IgnoreBlanksCMD();
 Word toWord(char *someString);
 /* Mengubah type String menjadi type Kata
    I.S. : string masukan bisa kosong */
+
+char* toString(Word kata);
+/* Mengubah type Word menjadi String */
 
 boolean compareWord(Word kata1, char *kata2);
 /* Membandingkan sebuah word dengan sebuah sting
