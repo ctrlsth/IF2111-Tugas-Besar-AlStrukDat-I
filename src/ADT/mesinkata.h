@@ -85,6 +85,11 @@ boolean compareWord(Word kata1, char *kata2);
    True     : Jika string dan kata sama,
    False    : Jika berbeda */
 
+boolean compare2Word(Word kata1, Word kata2);
+/* Membandingkan 2 buah word
+   True     : Jika kedua word sama,
+   False    : Jika berbeda */
+
 int strLength(char *kata);
 /* Mengembalikan panjang suatu string kata */
 
