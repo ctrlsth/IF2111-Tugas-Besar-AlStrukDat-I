@@ -96,3 +96,35 @@ void displayQueue(Queue q)
         // printf("%d]\n", TAIL(q));
     }
 }
+
+boolean isMemberQueue(Kata word, Queue queue){
+    int i = queue.idxHead;
+    int j;
+    boolean sama = false;
+    if (!isEmpty(queue)){
+        while (i != queue.idxTail && !sama){
+            if(word.Length == queue.buffer[i].Length){
+                sama = true;
+                for(j=0;j<word.Length;j++){
+                    if (word.TabKata[j] != queue.buffer[i].TabKata[j]){
+                        sama = false; //jika benar semua maka sama = true (tidak berubah)
+                    }
+                }
+            }
+            i = (i+1) % CAPACITY;
+        }
+    
+        // i == queue.IdxTail
+        if(!sama){
+            if(word.Length == queue.buffer[i].Length){
+                sama = true;
+                for(j=0;j<word.Length;j++){
+                    if (word.TabKata[j] != queue.buffer[i].TabKata[j]){
+                        sama = false; //jika benar semua maka sama = true (tidak berubah)
+                    }
+                }
+            }
+        }
+    }
+    return sama;
+}

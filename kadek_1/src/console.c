@@ -1,4 +1,5 @@
 #include "console.h"
+#include "RNG.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -50,7 +51,7 @@ void LOAD(char * filename, ArrayDin *arraygame, boolean *fileopen){
         }
     }
     else{
-        printf("LOAD FILE GAGAL!\n");
+        printf("file %s tidak ditemukan \n",filename);
     }
 }
 
@@ -66,6 +67,56 @@ void help(boolean mainmenu){
     }
 }
 
+void CREATEGAME(ArrayDin *listgame){
+    printf("Masukkan nama game yang akan ditambahkan: ");
+    STARTKATAGAME();
+    if(isMemberArray(CKata,*listgame)){
+        printf("Game ");
+        printKata(CKata);
+        printf(" sudah ada di dalam list\n");
+    }
+    else{
+        InsertLast(listgame,CKata);
+        printf("Game berhasil ditambahkan\n");
+    }
+}
+
+void DELETEGAME(ArrayDin *listgame, Queue queuegame){
+    int n;
+    printf("Berikut adalah daftar game yang tersedia\n");
+    PrintArrayDin(*listgame);
+    printf("Masukkan nomor game yang akan dihapus: ");
+    STARTKATAGAME();
+    if (IsNumber(CKata)){
+        n = KataInt(CKata);
+        if (n > 0 && n <= listgame->Neff){
+            if(n <= 5 || isMemberQueue(listgame->A[n-1], queuegame)){ //game ada di queue atau n <= 5
+                if (n<=5){
+                    printf("Game gagal dihapus (nomor game %d terdapat pada file konfigurasi)\n",n);
+                }
+                else{
+                    printf("Game gagal dihapus (nomor game %d terdapat pada queue game)\n",n);
+                }
+            }
+            else{
+                DeleteAt(listgame,n-1);
+                printf("Game berhasil dihapus\n");
+            }
+        }
+        else{
+            printf("Game gagal dihapus (nomor game %d tidak ditemukan)\n", n);
+        }
+    }
+    else{
+        printf("Input tidak valid\n");
+    }
+}
+
+void LISTGAME(ArrayDin listgame){
+    printf("list game anda:\n");
+    PrintArrayDin(listgame);
+}
+
 void QUEUEGAME(ArrayDin listgame, Queue* queuegame){
     int n;
     ElType game;
@@ -77,7 +128,7 @@ void QUEUEGAME(ArrayDin listgame, Queue* queuegame){
     STARTKATAGAME();
     if (IsNumber(CKata)){
         n = KataInt(CKata);
-        if (n <= listgame.Neff){
+        if (n <= listgame.Neff && n>0){
             game = listgame.A[n-1];
             enqueue(queuegame,game);
             printf("Game berhasil ditambahkan ke antrian\n");
@@ -94,6 +145,7 @@ void QUEUEGAME(ArrayDin listgame, Queue* queuegame){
 
 void PLAYGAME(Queue* queuegame)
 {
+    printf("Berikut adalah daftar Game-mu\n");
     displayQueue(*queuegame);
     ElType game;
     if (isEmpty(*queuegame)){
@@ -111,7 +163,7 @@ void PLAYGAME(Queue* queuegame)
         boolean game5 = compareWord(game, "EIFFEL TOWER");
         if(game1)
         {
-            printf("MAIN RNG\n");
+            RNG();
         }
         else if(game2)
         {
@@ -119,25 +171,28 @@ void PLAYGAME(Queue* queuegame)
         }
         else if(game3)
         {
-            printf("MAIN DINOSAUR IN EARTH\n");
+            printf("Game DINOSAUR IN EARTH masih dalam maintenance, belum dapat dimainkan. Silahkan pilih game lain.\n");
         }
         else if(game4)
         {
-            printf("MAIN RISEWOMAN\n");
+            printf("Game RISEWOMAN masih dalam maintenance, belum dapat dimainkan. Silahkan pilih game lain.\n");
         }
         else if(game5)
         {
-            printf("EIFFEL TOWER\n");
+            printf("Game EIFFEL TOWER masih dalam maintenance, belum dapat dimainkan. Silahkan pilih game lain.\n");
         }
         else
         {
-            printf("Total score = 10\n");
+            int skor = acakAngka();
+            printf("GAME OVER\n");
+            printf("Total score = %d\n",skor);
         }
     }
 }
 
 void SKIPGAME(Queue* queuegame, int num)
 {
+    printf("Berikut adalah daftar Game-mu\n");
     displayQueue(*queuegame);
     int i = 0;
     ElType game;
@@ -148,7 +203,7 @@ void SKIPGAME(Queue* queuegame, int num)
     }
 
     if(isEmpty(*queuegame)){
-        printf("Antrian game anda kosong!\n");
+        printf("Antrian game anda kosong! (%d < %d) \n",i,num);
     }
 
     else{
@@ -163,7 +218,11 @@ void SKIPGAME(Queue* queuegame, int num)
         boolean game5 = compareWord(game, "EIFFEL TOWER");
         if(game1)
         {
-            printf("MAIN RNG\n");
+            RNG();
+        }
+        else if(game2)
+        {
+            printf("MAIN Diner DASH\n");
         }
         else if(game2)
         {
@@ -171,19 +230,102 @@ void SKIPGAME(Queue* queuegame, int num)
         }
         else if(game3)
         {
-            printf("MAIN DINOSAUR IN EARTH\n");
+            printf("Game DINOSAUR IN EARTH masih dalam maintenance, belum dapat dimainkan. Silahkan pilih game lain.\n");
         }
         else if(game4)
         {
-            printf("MAIN RISEWOMAN\n");
+            printf("Game RISEWOMAN masih dalam maintenance, belum dapat dimainkan. Silahkan pilih game lain.\n");
         }
         else if(game5)
         {
-            printf("EIFFEL TOWER\n");
+            printf("Game EIFFEL TOWER masih dalam maintenance, belum dapat dimainkan. Silahkan pilih game lain.\n");
         }
         else
         {
-            printf("Total score = 10\n");
+            int skor = acakAngka();
+            printf("GAME OVER\n");
+            printf("Total score = %d\n",skor);
         }
     }
 }
+
+void SAVE(Kata file, ArrayDin listGame)
+{
+
+    int i;
+    FILE *savefile;
+    char* path = "data/";
+    char *filename = toString(file);
+    char * fileloc = strConcat(path,filename);
+
+    // for (i = 7; i < strLength(filename) + 7; i++)
+    // {
+    //     path[i] = filename[i-7];
+    // }
+    savefile = fopen(fileloc, "w+");
+    if (savefile == NULL)
+    {
+        printf("\n----------------------------\n");
+        printf("Error opening the file %s\n", filename);
+        printf("----------------------------\n\n");
+    }
+    else
+    {
+        char num[3];
+        sprintf(num, "%d", listGame.Neff);
+        fputs(num, savefile);
+        fputs("\n", savefile);
+        for (i = 0; i < listGame.Neff; i++)
+        {
+            char *gamename = toString(listGame.A[i]);
+            fputs(gamename, savefile);
+            if (i != listGame.Neff -1){
+                fputs("\n", savefile);
+            }
+        }
+
+        fclose(savefile);
+
+        printf("\n---------------------------------------\n");
+        printf("Your progress is saved successfully. ^^\n");
+        printf("---------------------------------------\n\n");
+    }
+}
+
+void QUIT(ArrayDin listGame)
+{
+    boolean invalid_input;
+    if (!IsEmpty(listGame))
+    {
+        printf("BMO: Do you wish to save your current progress?\n");
+        do
+        {
+            invalid_input = false;
+            printf("** Hint: Type 'Yes' to save; Type 'No' to discard **\n");
+            printf("You: ");
+            STARTKATAGAME();
+            if (compareWord(CKata, "Yes"))
+            {
+                printf("\nBMO: Please name your save file!\n");
+                printf("File Name: ");
+                STARTKATAGAME();
+                SAVE(CKata, listGame);
+            }
+            else if (compareWord(CKata, "No"))
+            {
+                printf("\nBMO: Your progress is discarded.\n");
+            }
+            else
+            {
+                invalid_input = true;
+                printf("BMO: Unrecognized input. Please use the correct format!\n");
+            }
+
+        } while (invalid_input);
+    }
+
+    printf("BMO: It's been a fun journey playing with You. ^^\n");
+    printf("BMO: But I think i- it's be --en t- t-- too f-- unn\n");
+    printf("BMO: Battery low. Shutdown.\n");
+}
+

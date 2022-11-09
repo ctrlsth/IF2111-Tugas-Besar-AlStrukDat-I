@@ -37,6 +37,8 @@ void MakeArrayDin(ArrayDin *array){
  */
 void DeallocateArrayDin(ArrayDin *array){
     free(array->A);
+    array->Neff = 0;
+    array->Capacity = 0;
 }
 
 /**
@@ -254,6 +256,24 @@ ArrayDin CopyArrayDin(ArrayDin array){
 //     }
 //     return indeks;
 // }
+
+boolean isMemberArray(Kata word, ArrayDin array){
+    int i = 0;
+    int j;
+    boolean sama = false;
+    while(i < array.Neff && !sama){
+        if(word.Length == array.A[i].Length){
+            sama = true;
+            for(j=0;j<word.Length;j++){
+                if (word.TabKata[j] != array.A[i].TabKata[j]){
+                    sama = false; //jika benar semua maka sama = true (tidak berubah)
+                }
+            }
+        }
+        i++;
+    }
+    return sama;
+}
 
 boolean COMMAND_START_LOAD_ETC(boolean mainmenu, ArrayDin array){
     boolean bool = false;

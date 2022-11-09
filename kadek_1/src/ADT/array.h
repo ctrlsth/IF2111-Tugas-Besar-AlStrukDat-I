@@ -65,6 +65,8 @@ ElType Get(ArrayDin array, IdxType i);
 
 boolean compareWord(ElType kata1, char *kata2);
 
+boolean isMemberArray(Kata word, ArrayDin array);
+
 int GetCapacity(ArrayDin array);
 
 /**

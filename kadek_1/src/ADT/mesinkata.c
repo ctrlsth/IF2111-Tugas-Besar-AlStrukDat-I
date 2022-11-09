@@ -181,7 +181,7 @@ boolean IsNumber(Kata k)
     if(k.Length > 0){
         number = true; 
         while(i<k.Length && number){
-            if (!(k.TabKata[i] > '0' && k.TabKata[i] < '9')){
+            if (!(k.TabKata[i] >= '0' && k.TabKata[i] <= '9')){
                 number = false;
             }
             i++;
