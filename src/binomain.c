@@ -17,10 +17,9 @@ void unknownCommand()
 int main()
 {
     /* *** INISIALISASI *** */
-    Queue queueGame;
-    CreateQueue(&queueGame);
-    TabWord listGame;
-    MakeEmpty(&listGame);
+    Queue queueGame; CreateQueue(&queueGame);
+    TabWord listGame; MakeTabWord(&listGame);
+    TabWord listCommand; MakeTabWord(&listCommand);
 
     boolean active = true;
     boolean loaded = false;
@@ -30,53 +29,80 @@ int main()
     {
         printf("ENTER COMMAND: ");
         STARTCMD();
-        if (compareWord(currentCommand, "START"))
+
+        while (!EndWord)
+        {
+            InsertLast(&listCommand, currentCommand);
+            ADVCMD();
+        }
+
+        if (compareWord(Get(listCommand, 0), "START"))
         {
             // START();
             loaded = true;
         }
-        else if (compareWord(currentCommand, "LOAD"))
+        else if (compareWord(Get(listCommand, 0), "LOAD"))
         {
             // LOAD();
             loaded = true;
         }
-        else if (compareWord(currentCommand, "HELP"))
+        else if (compareWord(Get(listCommand, 0), "HELP"))
         {
             HELP();
         }
-        else if (compareWord(currentCommand, "EXIT"))
+        else if (compareWord(Get(listCommand, 0), "QUIT"))
         {
-            EXIT();
+            QUIT(listGame);
             active = false;
         }
-        else if (compareWord(currentCommand, "CREATE"))
+        else if (compareWord(Get(listCommand, 0), "CREATE") && compareWord(Get(listCommand, 1), "GAME"))
         {
             (loaded) ? CREATE() : unknownCommand();
         }
-        else if (compareWord(currentCommand, "LIST"))
+        else if (compareWord(Get(listCommand, 0), "SAVE"))
+        {
+            if (loaded) 
+            {
+                SAVE(Get(listCommand, 1), listGame);
+            }
+            else
+            {
+                unknownCommand();
+            }
+        }
+        else if (compareWord(Get(listCommand, 0), "LIST") && compareWord(Get(listCommand, 1), "GAME"))
         {
             (loaded) ? LIST() : unknownCommand();
         }
-        else if (compareWord(currentCommand, "DELETE"))
+        else if (compareWord(Get(listCommand, 0), "DELETE") && compareWord(Get(listCommand, 1), "GAME"))
         {
             (loaded) ? DELETE() : unknownCommand();
         }
-        else if (compareWord(currentCommand, "QUEUE"))
+        else if (compareWord(Get(listCommand, 0), "QUEUE") && compareWord(Get(listCommand, 1), "GAME"))
         {
             (loaded) ? QUEUE() : unknownCommand();
         }
-        else if (compareWord(currentCommand, "PLAY"))
+        else if (compareWord(Get(listCommand, 0), "PLAY") && compareWord(Get(listCommand, 1), "GAME"))
         {
             (loaded) ? PLAY() : unknownCommand();
         }
-        else if (compareWord(currentCommand, "SKIPGAME"))
+        else if (compareWord(Get(listCommand, 0), "SKIPGAME"))
         {
-            (loaded) ? SKIPGAME() : unknownCommand();
+            if (loaded)
+            {
+                SKIPGAME(Get(listCommand, 1));
+            }
+            else
+            {
+                unknownCommand();
+            }
         }
         else
         {
             unknownCommand();
         }
+
+        listCommand.Neff = 0;
 
     } while (active);
 

@@ -16,7 +16,8 @@
 typedef int IdxType;
 typedef Word ElType;
 
-typedef struct {
+typedef struct
+{
     ElType *TW;
     int Capacity;
     int Neff;
@@ -62,19 +63,12 @@ ElType Get(TabWord array, IdxType i);
  * Prekondisi: array terdefinisi
  */
 
-// ElType toEltype(Kata kata);
-
-boolean compareWord(ElType kata1, char *kata2);
-
 int GetCapacity(TabWord array);
 
 /**
  * Fungsi untuk menambahkan elemen baru di index ke-i
  * Prekondisi: array terdefinisi, i di antara 0..Length(array).
  */
-
-void increaseCapacity(TabWord* array);
-
 void InsertAt(TabWord *array, ElType el, IdxType i);
 
 /**
@@ -116,12 +110,6 @@ void DeleteFirst(TabWord *array);
 void PrintTabWord(TabWord array);
 
 /**
- * Fungsi untuk melakukan reverse suatu TabWord.
- * Prekondisi: array terdefinisi
- */
-void ReverseTabWord(TabWord *array);
-
-/**
  * Fungsi untuk melakukan copy suatu TabWord.
  * Prekondisi: array terdefinisi
  */
@@ -134,7 +122,5 @@ TabWord CopyTabWord(TabWord array);
  * Prekondisi: array terdefinisi
  */
 IdxType SearchTabWord(TabWord array, ElType el);
-
-boolean COMMAND_START_LOAD_ETC(boolean mainmenu, TabWord array);
 
 #endif
