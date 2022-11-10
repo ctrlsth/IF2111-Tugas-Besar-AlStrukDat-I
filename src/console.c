@@ -100,7 +100,7 @@ void HELP(boolean loaded)
         printDelay("5.  SAVE <namafile.txt> - Melakukan penyimpanan konfigurasi pada file tertentu\n", 1);
         printDelay("6.  CREATE GAME - Membuat dan menambahkan game baru ke dalam daftar\n", 1);
         printDelay("7.  LIST GAME - Menampilkan daftar game yang dapat dimainkan\n", 1);
-        printDelay("8.  DELETE GAME - Mengahpus suatu game dari dalam daftar\n", 1);
+        printDelay("8.  DELETE GAME - Menghapus suatu game dari dalam daftar\n", 1);
         printDelay("9.  QUEUE GAME - Menambahkan game tertentu ke dalam antrian permainan\n", 1);
         printDelay("10. PLAY GAME - Memulai permainan berdasarkan antrian teratas\n", 1);
         printDelay("11. SKIPGAME n - Melewati n banyak game dari dalam antrian dan memainkan game berikutnya.\n", 1);
