@@ -6,10 +6,10 @@
 #include "ADT/mesinkata.h"
 #include "ADT/array.h"
 
-void delay_hundredth_sec(int lamaDelay);
+void delay(int milli_seconds);
 /* Memberikan delay pada program selama (lamaDelay * 1/100) detik */
 
-void printDelay(char *daString);
+void printDelay(char *daString, int lamaDelay);
 /* Menampilkan output secara perlahan */
 
 void START(char *inputCommand, TabWord *listGame, boolean *loaded);

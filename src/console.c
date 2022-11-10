@@ -4,20 +4,19 @@
 #include "boolean.h"
 #include "console.h"
 
-void delay_hundredth_sec(int lamaDelay)
+void delay(int milli_seconds)
 {
-    int milli_seconds = 10 * lamaDelay;
     clock_t start_time = clock();
     while (clock() < start_time + milli_seconds)
         ;
 }
 
-void printDelay(char *daString)
+void printDelay(char *daString, int lamaDelay)
 {
     for (int i = 0; i < strLength(daString); i++)
     {
         printf("%c", daString[i]);
-        delay_hundredth_sec(5);
+        delay(lamaDelay);
     }
 }
 
@@ -92,19 +91,19 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded)
 void HELP(boolean loaded)
 {
     printf("DAFTAR COMMAND:\n");
-    printf("1. START - Melakukan konfigurasi sistem baru\n");
-    printf("2. LOAD <namafile.txt> - Memuat konfigurasi pada SAVEFILE yang dipilih\n");
-    printf("3. HELP - Menampilkan daftar command (perintah) yang dapat dipanggil\n");
-    printf("4. EXIT - Mengakhiri dan keluar dari sistem\n");
+    printDelay("1.  START - Melakukan konfigurasi sistem baru\n", 1);
+    printDelay("2.  LOAD <namafile.txt> - Memuat konfigurasi pada SAVEFILE yang dipilih\n", 1);
+    printDelay("3.  HELP - Menampilkan daftar command (perintah) yang dapat dipanggil\n", 1);
+    printDelay("4.  QUIT - Mengakhiri dan keluar dari sistem\n", 1);
     if (loaded)
     {
-        printf("5. SAVE <namafile.txt> - Melakukan penyimpanan konfigurasi pada file tertentu\n");
-        printf("6. CREATE GAME - Membuat dan menambahkan game baru ke dalam daftar\n");
-        printf("7. LIST GAME - Menampilkan daftar game yang dapat dimainkan\n");
-        printf("8. DELETE GAME - Mengahpus suatu game dari dalam daftar\n");
-        printf("9. QUEUE GAME - Menambahkan game tertentu ke dalam antrian permainan\n");
-        printf("10. PLAY GAME - Memulai permainan berdasarkan antrian teratas\n");
-        printf("11. SKIPGAME <banyak-skip> - Melewati <banyak-skip> game dari dalam antrian dan memainkan game berikutnya.\n");
+        printDelay("5.  SAVE <namafile.txt> - Melakukan penyimpanan konfigurasi pada file tertentu\n", 1);
+        printDelay("6.  CREATE GAME - Membuat dan menambahkan game baru ke dalam daftar\n", 1);
+        printDelay("7.  LIST GAME - Menampilkan daftar game yang dapat dimainkan\n", 1);
+        printDelay("8.  DELETE GAME - Mengahpus suatu game dari dalam daftar\n", 1);
+        printDelay("9.  QUEUE GAME - Menambahkan game tertentu ke dalam antrian permainan\n", 1);
+        printDelay("10. PLAY GAME - Memulai permainan berdasarkan antrian teratas\n", 1);
+        printDelay("11. SKIPGAME n - Melewati n banyak game dari dalam antrian dan memainkan game berikutnya.\n", 1);
     }
 }
 
@@ -114,27 +113,27 @@ void LISTGAME(TabWord listGame)
 }
 void CREATEGAME(TabWord *listGame)
 {
-    printf("Masukkan nama game yang akan ditambahkan: ");
+    printDelay("Masukkan nama game yang akan ditambahkan: ", 50);
     STARTCMD();
     InsertLast(listGame, currentCommand);
-    printf("Game berhasil ditambahkan\n");
+    printDelay("Game berhasil ditambahkan\n", 50);
 }
 
 void DELETEGAME(TabWord *listGame)
 {
     LISTGAME(*listGame);
-    printf("Masukkan nomor game yang akan dihapus: ");
+    printDelay("Masukkan nomor game yang akan dihapus: ", 50);
     STARTCMD();
     int number = toInt(currentCommand);
     number--;
     if (!(number >= 0 && number <= 4) && number <= listGame->Neff)
     {
         DeleteAt(listGame, number);
-        printf("Game berhasil dihapus!\n");
+        printDelay("Game berhasil dihapus!\n", 50);
     }
     else
     {
-        printf("Game gagal dihapus!\n");
+        printDelay("Game gagal dihapus!\n", 50);
     }
 }
 
@@ -151,23 +150,24 @@ void SAVE(char *filename, TabWord listGame)
     path[i] = '\0';
 
     savefile = fopen(path, "w+");
-    printf("Passed\n");
+    // printf("Passed\n");
     if (savefile == NULL)
     {
-        printf("\n------------------------------\n");
-        printf("Error opening the file %s\n", filename);
-        printf("------------------------------\n\n");
+        printf("\n------------------------------------------------\n");
+        printf("Gagal membuka / membuat file. Silahkan coba lagi!\n");
+        printf("-------------------------------------------------\n");
+        delay(50);
     }
     else
     {
-        printf("Passed\n");
-        char num[2];
+        // printf("Passed\n");
+        char num[3];
         sprintf(num, "%d", Length(listGame));
-        printf("PassedX\n");
+        // printf("PassedX\n");
         fputs(num, savefile);
-        printf("PassedY\n");
+        // printf("PassedY\n");
         fputs("\n", savefile);
-        printf("PassedZ\n");
+        // printf("PassedZ\n");
         for (i = 0; i < listGame.Neff; i++)
         {
             char *gamename = toString(Get(listGame, i));
@@ -177,9 +177,9 @@ void SAVE(char *filename, TabWord listGame)
 
         fclose(savefile);
 
-        printf("\n---------------------------------------\n");
-        printf("Your progress is saved successfully. ^^\n");
-        printf("---------------------------------------\n\n");
+        printf("\n-------------------------------\n");
+        printf("Berhasil menyimpan progress. ^^\n");
+        printf("--------------------------------\n");
     }
 }
 
@@ -188,34 +188,43 @@ void QUIT(TabWord listGame)
     boolean invalid_input;
     if (!IsEmpty(listGame))
     {
-        printDelay("BMO: Do you wish to save your current progress?\n");
+        printDelay("BMO: Apakah anda ingin menyimpan progress anda?\n", 20);
         do
         {
             invalid_input = false;
-            printf("** Hint: Type 'Yes' to save; Type 'No' to discard **\n");
+            printf("** Hint: Ketika 'Ya' jika ingin menyimpan atau 'Tidak' jika ingin membuang **\n");
             printf("You: ");
             STARTCMD();
-            if (compareWord(currentCommand, "Yes"))
+            if (compareWord(currentCommand, "Ya"))
             {
-                printDelay("\nBMO: Please name your save file!\n");
-                printf("File Name: ");
+                printDelay("\nBMO: Masukkan nama save file anda!\n", 20);
+                printf("Nama file: ");
                 STARTCMD();
                 SAVE(currentCommand.TabChar, listGame);
             }
-            else if (compareWord(currentCommand, "No"))
+            else if (compareWord(currentCommand, "Tidak"))
             {
-                printDelay("\nBMO: Your progress is discarded.\n");
+                printDelay("\nBMO: Progress anda tidak disimpan.\n", 20);
             }
             else
             {
                 invalid_input = true;
-                printDelay("BMO: Unrecognized input. Please use the correct format!\n");
+                printDelay("BMO: Masukkan tidak dikenali. Mohon masukkan dengan format yang benar!\n", 10);
             }
 
         } while (invalid_input);
     }
 
-    char byeline[] = "BMO: It's been a fun journey playing with You. ^^\nBMO: But I think it's been t- t-too fu --n\nBMO: Battery low. Shutdown.\n";
-    printDelay(byeline);
-    delay_hundredth_sec(150);
+    printDelay("BMO: BMO sangat senang bisa bermain denganmu! ^^\n", 20);
+    printDelay("BMO: Let's play again so- ", 20);
+    delay(200);
+    printf("sometimes");
+    delay(500);
+    printDelay(", okay? ^^\n", 20);
+    printDelay("BMO: Battery ", 20);
+    delay(500);
+    printf("low. ");
+    printDelay("Shutdown", 20);
+    printDelay("...\n", 200);
+    delay(1500);
 }
