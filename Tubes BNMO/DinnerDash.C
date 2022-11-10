@@ -2,6 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include "boolean.h"
+#include "DinnerDash.h"
 
 const int IDX_UNDEF = -1;
 const int CAPACITY = 15;
@@ -209,8 +210,8 @@ int GetId(char str[]){
     }
 }
 
-boolean IsFinish(Queue *qPesanan, Queue *qSelesai){
-    return ((*qPesanan).Count==8 || (*qSelesai).Count==15); //count == 8 biar lebih dari 7
+boolean IsFinish(Queue qPesanan, Queue qSelesai){
+    return ((qPesanan).Count==8 || (qSelesai).Count==15); //count == 8 biar lebih dari 7
 }
 
 void Berkurang(Queue *qDiMasak){
@@ -235,11 +236,11 @@ void Cook(Queue qPesanan, Queue *qDiMasak, char FoodId[]){
 }
 
 void Serve(Queue *qPesanan, Queue *qDiMasak, Queue *qSelesai, char FoodId[]){
-    if ((*qDiMasak).buffer[GetIdx(*qDiMasak, FoodId)] == IDX_UNDEF){
-        printf("Pesanan M%d belum dimasak", GetId(FoodId));
+    if (GetIdx(*qDiMasak, FoodId) == IDX_UNDEF){
+        printf("Pesanan M%d belum dimasak\n", GetId(FoodId));
     } else {
         if ((*qDiMasak).buffer[GetIdx(*qDiMasak, FoodId)].DurasiMasak > 0){
-            printf("Pesanan M%d belum selesai dimasak", GetId(FoodId));
+            printf("Pesanan M%d belum selesai dimasak\n", GetId(FoodId));
         } else {
             Pesanan p;
             int idx = 0;
@@ -249,7 +250,7 @@ void Serve(Queue *qPesanan, Queue *qDiMasak, Queue *qSelesai, char FoodId[]){
             }
             int idxsec = GetIdx(*qDiMasak, FoodId);
             if (idxsec>0){
-                printf("M%d belum bisa disediakan, karena %s belum selesai\n", GetId(*qDiMasak), (*qDiMasak).buffer[0].Makanan);
+                printf("M%d belum bisa disediakan, karena %s belum selesai\n", (*qDiMasak).buffer[idxsec].Makanan, (*qDiMasak).buffer[0].Makanan);
             }else{
                 dequeue(qDiMasak, &p);
                 enqueue(qDiMasak, p);
@@ -308,8 +309,52 @@ boolean IsSkip(char command[]){
     return (lengkap);
 }
 
-boolean IsCommandValid(char command[], char foodId[], Queue qPesanan, Queue qDiproses){
-    
+boolean IsCommandValid(char command[], char FoodId[], Queue qPesanan, Queue qDiMasak){
+    boolean benar = false;
+    if (IsCook(command)){
+        int idx = GetIdx(qPesanan, FoodId);
+        if (idx != IDX_UNDEF){
+            int jumlahMasak = 0;
+            for (int i = 0; idx<qDiMasak.Count; i++){
+                if (qDiMasak.buffer[i].DurasiMasak>0){
+                    jumlahMasak ++;
+                }
+            }
+            if (jumlahMasak <= 5){
+                benar = true;
+            } else {
+                printf("Tidak bisa masak lebih dari 5 makanan\n");
+            }
+        } else {
+            printf("Tidak ada pesanan M%d\n", GetId(FoodId));
+        }  
+    } else if (IsServe(command)){
+        int val = GetIdx(qDiMasak, FoodId);
+        if (val != IDX_UNDEF){
+            if (qDiMasak.buffer[val].DurasiMasak <= 0){
+                Pesanan p;
+                int idx = 0;
+                while(qDiMasak.buffer[idx].Ketahanan <= 0){
+                    dequeue (&qDiMasak, &p);
+                    idx ++;
+                }
+                int val0 = GetIdx(qDiMasak, FoodId);
+                if (val0 == 0){
+                    benar = true;
+                } else {
+                    printf("%s belum bisa disajikan sebab %s belum selesai dimasak\n", (qDiMasak).buffer[val0].Makanan, (qDiMasak).buffer[0].Makanan);
+                }
+            } else {
+                printf("M%d belum selesai dimasak\n", GetId(FoodId));
+            }
+        } else{
+            printf("M%d tidak sedang dimasak\n", GetId(FoodId));
+        }   
+    } else if (IsSkip(command)){
+        benar = true;
+    } else {
+        printf("Command tidak sesuai\n");
+    }
 }
 
 void Komando(char command[], char FoodId[], Queue *qPesanan, Queue *qDiMasak, Queue *qSelesai){
@@ -332,8 +377,8 @@ int main (){
     int saldo = 0;
     int antrian = 2;
 
-    Inisialisasi(*qPesanan);
-    while(!IsFinish(*qPesanan, *qSelesai)){
+    Inisialisasi(&qPesanan);
+    while(!IsFinish(qPesanan, qSelesai)){
         TabelPesanan(qPesanan);
         printf("\n");
         TabelMasakan(qDiMasak);
@@ -345,8 +390,47 @@ int main (){
         printf("MASUKKAN COMMAND: ");
         char command[5];
         char FoodId[3];
+        scanf("%s", command);
+        if (IsSkip(command)) {
+            
+        } else {
+            scanf("%s", FoodId);
+        }
+        while (!IsCommandValid(command, FoodId, qPesanan, qDiMasak)) {
+            printf("\nMasukkan Invalid\n");
+            printf("MASUKKAN COMMAND: ");
+            scanf("%s", command);
+            scanf("%s", FoodId);
+        }
+
+        printf("\n"); 
+
+        Komando(command, FoodId, &qPesanan, &qDiMasak, &qSelesai);
+        antrian++;
+        Pesanan p;
+        p = MakeRandomPesanan(antrian);
+        enqueue(&qPesanan, p);
+
+        printf("\n");
+        saldo = 0;
+        for (int i = 0; i <= qSelesai.IdxTail; i++){
+            saldo += qSelesai.buffer[i].Harga;
+        }
+        printf("\n");
 
 
+
+    } while (!IsFinish(qPesanan, qSelesai));
+
+    printf("\nPermainan Selesai\n");
+    printf("qSelesai : %d\n", qSelesai.Count);
+    if (qSelesai.Count >= 15) {
+        printf("Anda Menang\n");
+    } else {
+        printf("Anda Kalah\n");
     }
-    
+
+
+
 }
+    
