@@ -9,7 +9,7 @@
 #define false 0
 #define N_MAX 50
 
-#define InitialSize 3
+#define InitialSize 10
 #define charsize 1
 
 typedef int IdxType;

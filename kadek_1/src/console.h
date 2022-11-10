@@ -1,9 +1,13 @@
-#ifndef __START__
-#define __START__
+#ifndef __CONSOLE__
+#define __CONSOLE__
 
 #include "../src/ADT/mesinkata.h"
 #include "../src/ADT/array.h"
 #include "../src/ADT/queue.h"
+
+void delay(int milli_seconds);
+
+void printDelay(char *daString, int lamaDelay);
 
 void start(char * inputcommand, ArrayDin *arrayGame, boolean *fileopen);
 

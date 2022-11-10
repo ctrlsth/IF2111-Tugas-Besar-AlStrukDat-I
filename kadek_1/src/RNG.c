@@ -7,9 +7,9 @@
 
 int acakAngka()
 {
-    time_t waktu;
+    // time_t waktu;
     int BilRandom;
-    srand(time(&waktu));
+    srand(time(0));
 
     BilRandom = rand() % 101;//buat bilangan random dengan maksimal angka yang keluar adalah 100
     return (BilRandom);
@@ -21,7 +21,7 @@ void RNG()
     int jawaban;
     int skor = 100; //skor max 100 dan skor akan berkurang (-5) setiap user melakukan satu kesalahan
     boolean found = false;
-
+    
     jawaban = acakAngka();
     printf("RNG Telah dimulai. Uji keberuntungan Anda dengan menebak X.\n");
     while(!found && skor >0)

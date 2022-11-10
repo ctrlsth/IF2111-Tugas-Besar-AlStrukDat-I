@@ -61,4 +61,6 @@ int strLength(char *kata);
 
 char* toString(Kata kata);
 char* strConcat(char* s1, char* s2);
+
+Kata toWord(char* kata);
 #endif

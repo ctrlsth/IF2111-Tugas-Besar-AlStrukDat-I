@@ -235,3 +235,13 @@ char* strConcat(char* s1, char* s2){
     s3[i] = '\0';
     return s3;
 }
+
+Kata toWord(char* kata){
+    Kata word;
+    int i;
+    for(i=0;i<strLength(kata);i++){
+        word.TabKata[i] = kata[i];
+    }
+    word.Length = i;
+    return word;
+}

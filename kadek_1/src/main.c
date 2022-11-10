@@ -3,8 +3,15 @@
 #include <stdlib.h>
 #include <time.h>
 
+void unknownCommand()
+{
+    printf("BMO: Perintah tidak dikenali! Tolong masukan perintah yang valid!\n");
+    printf("** Hint: Ketik \"HELP\" untuk melihat perintah **\n");
+}
+
 int main()
 {
+    system("cls");
     int i,j;
     ArrayDin listgame;              //berisi kumpulan game yang dimiliki oleh user
     ArrayDin Command;               // berisi command yang diinput oleh user
@@ -21,9 +28,12 @@ int main()
     while (prompt)
     { 
         MakeArrayDin(&Command);     //Membuat Command kosong
-        printf("Masukkan Command:");
+        printf("\nMasukkan Command:");
         STARTKATA();
         system("cls");
+        printDelay("BMO: Mengenali perintah",20);
+        printDelay("...\n", 200);
+        system("cls");        
         while(!EndKata)
         //memasukkan command kedalam array of kata             
         {           
@@ -189,8 +199,7 @@ int main()
         if (!recognizedCMD)
         //input tidak valid
         {
-            printf("BMO doesn't get what you say, but BMO hopes that you have a GREAT DAY!\n");
-            printf("In any case that you're confused, just say \"CMDLIST\" okayy? ^^\n");
+            unknownCommand();
             recognizedCMD = true;
         }
         DeallocateArrayDin(&Command); //Dealokasi array command
