@@ -10,8 +10,8 @@
 
 void unknownCommand()
 {
-    printf("BMO doesn't get what you say, but BMO hopes that you have a GREAT DAY!\n");
-    printf("In any case that you're confused, just say if you need \"HELP\" okayy? ^^\n");
+    printf("BMO: Perintah tidak dikenali! Tolong masukan perintah yang valid!\n");
+    printf("** Hint: Ketik \"HELP\" untuk melihat perintah **\n");
 }
 
 int main()
@@ -24,11 +24,16 @@ int main()
     boolean active = true;
     boolean loaded = false;
 
+    system("cls");
+
     /* *** MAIN LOOP *** */
     do
     {
-        printf("ENTER COMMAND: ");
+        printf("\nENTER COMMAND: ");
         STARTCMD();
+
+        printf("BMO: Mengenali perintah");
+        printDelay("...\n", 200);
 
         while (!EndWord)
         {
@@ -44,7 +49,8 @@ int main()
             }
             else
             {
-                printf("Sistem sudah terkonfigurasi.\n");
+                printf("BMO: Sistem sudah terkonfigurasi.\n");
+                printf("** Hint: Untuk memulai konfigurasi baru, silahkan \"EXIT\" terlebih dahulu **\n");
             }
         }
         else if (compareWord(Get(listCommand, 0), "LOAD"))
@@ -56,7 +62,7 @@ int main()
             }
             else
             {
-                printf("Sistem sudah terkonfigurasi.\n");
+                printf("BMO: Sistem sudah terkonfigurasi. Silahkan \"EXIT\" terlebih dahulu untuk memulai konfigurasi baru.\n");
             }
         }
         else if (compareWord(Get(listCommand, 0), "HELP"))
@@ -119,7 +125,8 @@ int main()
             unknownCommand();
         }
 
-        listCommand.Neff = 0;
+        DeallocateTabWord(&listCommand);
+        MakeTabWord(&listCommand);
 
     } while (active);
 
