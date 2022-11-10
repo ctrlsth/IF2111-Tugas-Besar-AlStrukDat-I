@@ -155,6 +155,7 @@ void PrintTabWord(TabWord array)
 	int i;
 	if (Length(array) != 0)
 	{
+		printf("Berikut adalah daftar game yang tersedia\n");
 		for (i = 0; i < Length(array); i++)
 		{
 			printf("%d. ", i + 1);

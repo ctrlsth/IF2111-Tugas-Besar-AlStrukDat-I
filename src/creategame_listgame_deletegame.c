@@ -31,7 +31,7 @@ void creategame(TabWord *listgame){
 // };
 
 void deletegame(TabWord *listgame){
-    listgame(*listgame);
+    // listgame(*listgame);
     printf("Masukkan nomor game yang akan dihapus: ");
     STARTCMD();
     int number = atoi(&currentCommand);

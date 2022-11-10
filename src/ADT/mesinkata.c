@@ -8,9 +8,9 @@ Word currentWord;
 Word currentCommand;
 
 // ** Mengakuisisi kata dari file.txt ** //
-void STARTWORD(char *txtfile)
+void STARTWORD(char *txtfile, boolean *openSuccess)
 {
-    loadstart(txtfile);
+    loadstart(txtfile, openSuccess);
     IgnoreBlanks();
     if (CC == EOF)
     {
@@ -25,6 +25,7 @@ void STARTWORD(char *txtfile)
 
 void ADVWORD()
 {
+    IgnoreBlanks();
     if (CC == EOF)
     {
         EndWord = true;
@@ -56,7 +57,7 @@ void COPYWORD()
 
 void IgnoreBlanks()
 {
-    while (CC == BLANK)
+    while (CC == BLANK || CC == MARK)
     {
         adv(true);
     }
@@ -70,7 +71,7 @@ void STARTCMD()
           CC karakter pertama sesudah karakter terakhir kata */
 {
     cmdstart();
-    IgnoreBlanks();
+    IgnoreBlanksCMD();
     if (CC == MARK)
     {
         EndWord = true;
@@ -96,7 +97,7 @@ void ADVCMD()
     else
     {
         COPYCMD();
-        IgnoreBlanks();
+        IgnoreBlanksCMD();
     }
 }
 
@@ -160,6 +161,18 @@ char *toString(Word kata)
     return str;
 }
 
+int toInt(Word kata)
+{
+    int i, X = 0;
+    for (i = 0; i < kata.Length; i++)
+    {
+        // printf("Huruf ke-%d = %c", i, kata.TabChar[i]);
+        X = X * 10 + (kata.TabChar[i] - '0');
+        // printf("X ke-%d = %d\n", i, X);
+    }
+    return X;
+}
+
 boolean compareWord(Word kata1, char *kata2)
 /* Membandingkan sebuah word dengan sebuah sting
    True     : Jika string dan kata sama,
@@ -221,4 +234,22 @@ void printWord(Word Kata)
     {
         printf("%c", Kata.TabChar[i]);
     }
+    // printf("\n");
 }
+
+// int main()
+// {
+//     boolean apa;
+//     STARTWORD("src/ADT/config.txt", &apa);
+//     printf("apa: %d\n", apa);
+//     printWord(currentWord);
+//     printf("Passed\n");
+//     int n = toInt(currentWord);
+//     printf("n = %d\n", n);
+
+//     ADVWORD();
+//     printWord(currentWord);
+//     ADVWORD();
+//     printWord(currentWord);
+//     return 0;
+// }
