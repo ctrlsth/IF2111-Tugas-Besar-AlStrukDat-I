@@ -88,7 +88,7 @@ void TabelSajian(Queue qDiMasak){
     }
 }
 
-Pesanan MakeRandomPesanan(int noAntrian){
+Pesanan RandomPesanan(int noAntrian){
     Pesanan p;
     int x = AcakDurasi();
     int y = AcakDurasi();
@@ -120,7 +120,7 @@ int AcakDurasi(){
 void Inisialisasi(Queue *qPesanan){
     int i = 0;
     for (i; i<3; i++){
-        Pesanan p = MakeRandomPesanan(i);
+        Pesanan p = RandomPesanan(i);
         enqueue(qPesanan, p);
     }
 }
@@ -408,7 +408,7 @@ int main (){
         Komando(command, FoodId, &qPesanan, &qDiMasak, &qSelesai);
         antrian++;
         Pesanan p;
-        p = MakeRandomPesanan(antrian);
+        p = RandomPesanan(antrian);
         enqueue(&qPesanan, p);
 
         printf("\n");
