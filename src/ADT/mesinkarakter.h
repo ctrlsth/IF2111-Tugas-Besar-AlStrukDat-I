@@ -10,7 +10,7 @@
 extern char CC;
 extern boolean EOP;
 
-void loadstart(char* txtfile);
+void loadstart(char* txtfile, boolean *openSuccess);
 /* Mesin siap dioperasikan. Pita disiapkan untuk dibaca. 
    I.S. : sembarang
    F.S. : cc adalah karakter pertama pada pita

@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "ADT/mesinkarakter.h"
-#include "ADT/mesinkata.h"
-#include "ADT/array.h"
-#include "ADT/queue.h"
-#include "boolean.h"
-#include "console.h"
+#include "src/ADT/mesinkarakter.h"
+#include "src/ADT/mesinkata.h"
+#include "src/ADT/array.h"
+#include "src/ADT/queue.h"
+#include "src/boolean.h"
+#include "src/console.h"
 
 void unknownCommand()
 {
@@ -38,17 +38,30 @@ int main()
 
         if (compareWord(Get(listCommand, 0), "START"))
         {
-            // START();
-            loaded = true;
+            if (!loaded)
+            {
+                START("data/config.txt", &listGame, &loaded);
+            }
+            else
+            {
+                printf("Sistem sudah terkonfigurasi.\n");
+            }
         }
         else if (compareWord(Get(listCommand, 0), "LOAD"))
         {
-            // LOAD();
-            loaded = true;
+            if (!loaded)
+            {
+                char* loadfile = toString(Get(listCommand, 1));
+                LOAD(loadfile, &listGame, &loaded);
+            }
+            else
+            {
+                printf("Sistem sudah terkonfigurasi.\n");
+            }
         }
         else if (compareWord(Get(listCommand, 0), "HELP"))
         {
-            HELP();
+            HELP(loaded);
         }
         else if (compareWord(Get(listCommand, 0), "QUIT"))
         {
@@ -57,13 +70,14 @@ int main()
         }
         else if (compareWord(Get(listCommand, 0), "CREATE") && compareWord(Get(listCommand, 1), "GAME"))
         {
-            (loaded) ? CREATE() : unknownCommand();
+            (loaded) ? CREATEGAME(&listGame) : unknownCommand();
         }
         else if (compareWord(Get(listCommand, 0), "SAVE"))
         {
-            if (loaded) 
+            if (loaded)
             {
-                SAVE(Get(listCommand, 1), listGame);
+                char* savefile = toString(Get(listCommand, 1));
+                SAVE(savefile, listGame);
             }
             else
             {
@@ -72,25 +86,28 @@ int main()
         }
         else if (compareWord(Get(listCommand, 0), "LIST") && compareWord(Get(listCommand, 1), "GAME"))
         {
-            (loaded) ? LIST() : unknownCommand();
+            (loaded) ? LISTGAME(listGame) : unknownCommand();
         }
         else if (compareWord(Get(listCommand, 0), "DELETE") && compareWord(Get(listCommand, 1), "GAME"))
         {
-            (loaded) ? DELETE() : unknownCommand();
+            (loaded) ? DELETEGAME(&listGame) : unknownCommand();
         }
         else if (compareWord(Get(listCommand, 0), "QUEUE") && compareWord(Get(listCommand, 1), "GAME"))
         {
-            (loaded) ? QUEUE() : unknownCommand();
+            // (loaded) ? QUEUE() : unknownCommand();
+            printf("Passed QueueGame.\n");
         }
         else if (compareWord(Get(listCommand, 0), "PLAY") && compareWord(Get(listCommand, 1), "GAME"))
         {
-            (loaded) ? PLAY() : unknownCommand();
+            // (loaded) ? PLAY() : unknownCommand();
+            printf("Passed PlayGame.\n");
         }
         else if (compareWord(Get(listCommand, 0), "SKIPGAME"))
         {
             if (loaded)
             {
-                SKIPGAME(Get(listCommand, 1));
+                // SKIPGAME(Get(listCommand, 1));
+                printf("Passed Skip Game.\n");
             }
             else
             {
