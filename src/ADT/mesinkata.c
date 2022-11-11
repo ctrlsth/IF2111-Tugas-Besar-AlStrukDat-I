@@ -64,7 +64,7 @@ void IgnoreBlanks()
 }
 
 // ** Mengakuisisi COMMAND dari MAIN.C ** //
-void STARTCMD()
+void STARTCMD(boolean inputGame)
 /* I.S. : CC sembarang
    F.S. : EndWord = true, dan CC = MARK;
           atau EndWord = false, currentCommand adalah kata yang sudah diakuisisi,
@@ -79,11 +79,11 @@ void STARTCMD()
     else
     {
         EndWord = false;
-        ADVCMD();
+        ADVCMD(inputGame);
     }
 }
 
-void ADVCMD()
+void ADVCMD(boolean inputGame)
 /* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
    F.S. : currentCommand adalah kata terakhir yang sudah diakuisisi,
           CC adalah karakter pertama dari kata berikutnya, mungkin MARK
@@ -96,7 +96,7 @@ void ADVCMD()
     }
     else
     {
-        COPYCMD();
+        (inputGame) ? COPYGAME() : COPYCMD();
         IgnoreBlanksCMD();
     }
 }
@@ -111,6 +111,24 @@ void COPYCMD()
 {
     int i = 0;
     while ((CC != BLANK) && (CC != MARK) && (i < NMax))
+    {
+        currentCommand.TabChar[i] = CC;
+        adv(false);
+        i++;
+    }
+    currentCommand.Length = i;
+}
+
+void COPYGAME()
+/* Mengakuisisi nama game, menyimpan dalam currentCommand
+   I.S. : CC adalah karakter pertama dari kata
+   F.S. : currentCommand berisi kata yang sudah diakuisisi;
+          CC = BLANK atau CC = MARK;
+          CC adalah karakter sesudah karakter terakhir yang diakuisisi.
+          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+{
+    int i = 0;
+    while ((CC != MARK) && (i < NMax))
     {
         currentCommand.TabChar[i] = CC;
         adv(false);
@@ -171,6 +189,22 @@ int toInt(Word kata)
         // printf("X ke-%d = %d\n", i, X);
     }
     return X;
+}
+
+boolean isNumber(Word kata)
+{
+    int i = 0;
+    boolean number = true;
+    while (i < kata.Length && number)
+    {
+        if (kata.TabChar[i] < '0' || kata.TabChar[i] > '9')
+        {
+            number = false;
+        }
+        i++;
+    }
+    
+    return number;
 }
 
 boolean compareWord(Word kata1, char *kata2)
