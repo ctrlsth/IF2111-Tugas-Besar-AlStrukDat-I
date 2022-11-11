@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "mesinkarakter.h"
 
 /* State Mesin */
@@ -9,7 +10,7 @@ static FILE *pita;
 static FILE *load;
 static int retval;
 
-void loadstart(char* txtfile)
+void loadstart(char* txtfile, boolean *openSuccess)
 /* Mesin siap dioperasikan. Pita disiapkan untuk dibaca.
    Karakter pertama yang ada pada pita posisinya adalah pada jendela.
    I.S. : sembarang
@@ -18,7 +19,16 @@ void loadstart(char* txtfile)
           Jika CC = MARK maka EOP akan menyala (true) */
 {
     load = fopen(txtfile, "r");
-    ADV(true);
+    if (load != NULL)
+    {
+        *openSuccess = true;
+        adv(true);
+    }
+    else
+    {
+        *openSuccess = false;
+    }
+    
 }
 
 void cmdstart()
@@ -31,7 +41,7 @@ void cmdstart()
           Jika CC = MARK maka EOP akan menyala (true) */
 {
     pita = stdin;
-    ADV(false);
+    adv(false);
 }
 
 void adv(boolean loadtxt)
@@ -43,15 +53,20 @@ void adv(boolean loadtxt)
 {
 	if (loadtxt)
 	{
-		retval = fscanf(pita, "%c", &CC);
+		CC = fgetc(load);
+    	EOP = (CC == EOF);
+	    if (EOP)
+	    {
+		    fclose(load);
+	    }
 	}
 	else
 	{
 		retval = fscanf(pita, "%c", &CC);
-	}
-	EOP = (CC == EOF);
-	if (EOP)
-	{
-		fclose(pita);
+        EOP = (CC == EOF);
+	    if (EOP)
+	    {
+		    fclose(pita);
+	    }
 	}
 }

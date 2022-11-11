@@ -1,137 +1,206 @@
 
-#include "../boolean.h"
-#include "array.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include "array.h"
 
-/* ********** KONSTRUKTOR ********** */
-/* Konstruktor : create tabel kosong */
-void MakeEmpty(TabWord *T)
-/* I.S. sembarang */
-/* F.S. Terbentuk tabel T kosong dengan kapasitas IdxMax-IdxMin+1 */
+/**
+ * Konstruktor
+ * I.S. sembarang
+ * F.S. Terbentuk TabWord kosong dengan ukuran InitialSize
+ */
+void MakeTabWord(TabWord *Array)
 {
-    // printf("Start MakeEmpty\n");
-    (*T).Neff = 0;
+	Array->TW = (ElType *)malloc(InitialSize * sizeof(ElType));
+	Array->Capacity = InitialSize;
+	Array->Neff = 0;
 }
 
-/* ********** SELEKTOR ********** */
-/* *** Banyaknya elemen *** */
-int NbElmt(TabWord T)
-/* Mengirimkan banyaknya elemen efektif tabel */
-/* Mengirimkan nol jika tabel kosong */
+/**
+ * Destruktor
+ * I.S. TabWord terdefinisi
+ * F.S. array->TW terdealokasi
+ */
+void DeallocateTabWord(TabWord *array)
 {
-    return T.Neff;
+	free(array->TW);
+	array->Neff = 0;
+	array->Capacity = 0;
 }
 
-/* *** Daya tampung container *** */
-int MaxNbEl(TabWord T)
-/* Mengirimkan maksimum elemen yang dapat ditampung oleh tabel */
+/**
+ * Fungsi untuk mengetahui apakah suatu array kosong.
+ * Prekondisi: array terdefinisi
+ */
+boolean IsEmpty(TabWord array)
 {
-    return IdxMax;
+	return (array.Neff == 0);
 }
 
-/* *** Selektor INDEKS *** */
-IdxType GetFirstIdx(TabWord T)
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan indeks elemen pertama */
+/**
+ * Fungsi untuk mendapatkan banyaknya elemen efektif array, 0 jika tabel kosong.
+ * Prekondisi: array terdefinisi
+ */
+int Length(TabWord array)
 {
-    return IdxMin;
+	return (array.Neff);
 }
 
-IdxType GetLastIdx(TabWord T)
-/* Prekondisi : Tabel T tidak kosong */
-/* Mengirimkan indeks elemen terakhir */
+/**
+ * Mengembalikan elemen array L yang ke-I (indeks lojik).
+ * Prekondisi: array tidak kosong, i di antara 0..Length(array).
+ */
+ElType Get(TabWord array, IdxType i)
 {
-    return NbElmt(T);
+	return (array.TW[i]);
 }
 
-/* *** Menghasilkan sebuah elemen *** */
-ElType GetElmt(TabWord T, IdxType i)
-/* Prekondisi : Tabel tidak kosong, i antara FirstIdx(T)..LastIdx(T) */
-/* Mengirimkan elemen tabel yang ke-i */
+/**
+ * Fungsi untuk mendapatkan kapasitas yang tersedia.
+ * Prekondisi: array terdefinisi
+ */
+int GetCapacity(TabWord array)
 {
-    return T.TI[i];
+	return (array.Capacity);
 }
 
-/* *** Selektor SET : Mengubah nilai TABEL dan elemen tabel *** */
-/* Untuk type private/limited private pada bahasa tertentu */
-void SetTab(TabWord Tin, TabWord *Tout)
-/* I.S. Tin terdefinisi, sembarang */
-/* F.S. Tout berisi salinan Tin */
-/* Assignment THsl -> Tin */
+/**
+ * Fungsi untuk menambahkan elemen baru di index ke-i
+ * Prekondisi: array terdefinisi, i di antara 0..Length(array).
+ */
+void InsertAt(TabWord *array, ElType el, IdxType i)
 {
-    (*Tout) = Tin;
+	int j;
+
+	/* Penambahan ukuran array, jika array sudah penuh */
+	if (Length((*array)) == GetCapacity(*array))
+	{
+		/* Inisialisasi Temporary */
+		int newCap, susNeff;
+		ElType *sus;
+
+		/* Pemindahan isi array ke Temporary: sus */
+		newCap = GetCapacity((*array)) + InitialSize;
+		sus = (ElType *)malloc(newCap * sizeof(ElType));
+		for (j = 0; j < Length((*array)); j++)
+		{
+			sus[j] = array->TW[j];
+		}
+		susNeff = Length((*array));
+
+		/* Relokasi array */
+		DeallocateTabWord(array);
+		array->TW = (ElType *)malloc(newCap * sizeof(ElType));
+		array->Capacity = newCap;
+		array->Neff = susNeff;
+
+		/* Mengisi kembali array dari Temporary: sus */
+		for (j = 0; j < newCap; j++)
+		{
+			array->TW[j] = sus[j];
+		}
+
+		/* Dealokasi Temporary: sus */
+		free(sus);
+	}
+
+	/* Penyisipan elemen baru */
+	for (j = Length((*array)); j > i; j--)
+	{
+		array->TW[j] = array->TW[j - 1];
+	}
+
+	array->TW[i] = el;
+	array->Neff += 1;
 }
 
-void SetEl(TabWord *T, IdxType i, ElType v)
-/* I.S. T terdefinisi, sembarang */
-/* F.S. Elemen T yang ke-i bernilai v */
-/* Mengeset nilai elemen tabel yang ke-i sehingga bernilai v */
+/**
+ * Fungsi untuk menambahkan elemen baru di akhir array.
+ * Prekondisi: array terdefinisi
+ */
+void InsertLast(TabWord *array, ElType el)
 {
-    T->TI[i] = v;
-    T->Neff++;
+	InsertAt(array, el, Length((*array)));
 }
 
-void SetNeff(TabWord *T, IdxType N)
-/* I.S. T terdefinisi, sembarang */
-/* F.S. Nilai indeks efektif T bernilai N */
-/* Mengeset nilai indeks elemen efektif sehingga bernilai N */
+/**
+ * Fungsi untuk menghapus elemen di index ke-i TabWord
+ * Prekondisi: array terdefinisi, i di antara 0..Length(array).
+ */
+void DeleteAt(TabWord *array, IdxType i)
 {
-    T->Neff = N;
+	int j;
+	for (j = i; j <= Length((*array)); j++)
+	{
+		array->TW[j] = array->TW[j + 1];
+	}
+
+	array->Neff -= 1;
 }
 
-/* ********** Test Indeks yang valid ********** */
-boolean IsIdxValid(TabWord T, IdxType i)
-/* Prekondisi : i sembarang */
-/* Mengirimkan true jika i adalah indeks yang valid utk ukuran tabel */
-/* yaitu antara indeks yang terdefinisi utk container*/
+/**
+ * Fungsi untuk menghapus elemen pertama TabWord
+ * Prekondisi: array tidak kosong
+ */
+void DeleteFirst(TabWord *array)
 {
-    return (i >= IdxMin) && (i <= IdxMax);
+	DeleteAt(array, 0);
 }
 
-boolean IsIdxEff(TabWord T, IdxType i)
-/* Prekondisi : i sembarang*/
-/* Mengirimkan true jika i adalah indeks yang terdefinisi utk tabel */
-/* yaitu antara FirstIdx(T)..LastIdx(T) */
+/**
+ * Fungsi untuk melakukan print suatu TabWord.
+ * Prekondisi: array terdefinisi
+ */
+void PrintTabWord(TabWord array)
 {
-    return (i >= GetFirstIdx(T)) && (i <= GetLastIdx(T));
+	int i;
+	if (Length(array) != 0)
+	{
+		printf("Berikut adalah daftar game yang tersedia\n");
+		for (i = 0; i < Length(array); i++)
+		{
+			printf("%d. ", i + 1);
+			printWord(array.TW[i]);
+			printf("\n");
+		}
+	}
+	else
+	{
+		printf("Tidak ada game dalam yang terdaftar.\n");
+	}
 }
 
-/* ********** TEST KOSONG/PENUH ********** */
-/* *** Test tabel kosong *** */
-boolean IsEmpty(TabWord T)
-/* Mengirimkan true jika tabel T kosong, mengirimkan false jika tidak */
+/**
+ * Fungsi untuk melakukan copy suatu TabWord.
+ * Prekondisi: array terdefinisi
+ */
+TabWord CopyTabWord(TabWord array)
 {
-    return (NbElmt(T) == 0);
+	TabWord newArray;
+	int i;
+	MakeTabWord(&newArray);
+	newArray.Capacity = array.Capacity;
+	newArray.Neff = array.Neff;
+	for (i = 0; i < Length(array); i++)
+	{
+		newArray.TW[i] = array.TW[i];
+	}
+	return newArray;
 }
 
-/* *** Test tabel penuh *** */
-boolean IsFull(TabWord T)
-/* Mengirimkan true jika tabel T penuh, mengirimkan false jika tidak */
+/**
+ * Fungsi untuk melakukan search suatu TabWord.
+ * Prekondisi: array terdefinisi
+ */
+IdxType SearchTabWord(TabWord array, ElType el)
 {
-    return (NbElmt(T) == MaxNbEl(T));
-}
-
-/* ********** BACA dan TULIS dengan INPUT/OUTPUT device ********** */
-void TulisIsi(TabWord T)
-/* Proses : Menuliskan isi tabel dengan traversal */
-/* I.S. T boleh kosong */
-/* F.S. Jika T tidak kosong : indeks dan elemen tabel ditulis berderet ke bawah */
-/* Contoh hasil print isi
-   1. lmao pisan
-   2. sussy amogus */
-
-{
-    printf("@ Felisa Edit this Part for List Game");
-    if (IsEmpty(T)){
-        printf("T kosong");
-    }
-    else{
-        for (int i=0; i< NbElmt(T); i++){
-            printf("%d", i+1);
-            for (int j=0; j<T.TI[i].length; j++){
-                printf("%c", T.TI[i].TabWord[j]);
-            }
-        }
-        printf();
-    }
+	int i = 0;
+	while (i < Length(array))
+	{
+		if (compare2Word(Get(array, i), el))
+		{
+			return i;
+		}
+		i++;
+	}
+	return (-1);
 }

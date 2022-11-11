@@ -34,7 +34,7 @@ void enqueue(Queue *q, ElType val)
 {
     if (isFull(*q))
     {
-        printf("Queue is full!\n");
+        printf("Antrian sudah penuh!\n");
     }
     else
     {
@@ -70,19 +70,37 @@ void dequeue(Queue *q, ElType *val)
 
 void displayQueue(Queue q)
 {
-    printf("Berikut adalah antrian game Anda :\n");
     if (isEmpty(q))
     {
         printf("Antrian game Anda kosong.\n");
     }
     else
     {
-        int i;
+        printf("Berikut adalah antrian game Anda :\n");
+        int i, j = 1;
         for (i = IDX_HEAD(q); i <= IDX_TAIL(q); i = (i + 1) % CAPACITY)
         {
+            printf("%d. ", j);
             Word game_name = q.buffer[i];
             printWord(game_name);
             printf("\n");
+            j++;
         }
+        printf("\n");
     }
+}
+
+boolean isInQueue(Queue queueGame, Word gameName)
+{
+    int i = 0;
+    boolean notFound = true;
+    while (i < length(queueGame) && notFound)
+    {
+        if (compare2Word(queueGame.buffer[i], gameName))
+        {
+            notFound = false;
+        }
+        i++;
+    }
+    return !notFound;
 }
