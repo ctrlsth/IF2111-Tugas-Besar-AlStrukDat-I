@@ -130,8 +130,8 @@ void DELETEGAME(ArrayDin *listgame, Queue queuegame){
         if (n > 0 && n <= listgame->Neff){
             permainan = toString(listgame->A[n-1]);
             printDelay("Mencoba menghapus ",25);printDelay(permainan,25);printDelay(" dari list game",25);printDelay("...\n",200);
-            if(n <= 5 || isMemberQueue(listgame->A[n-1], queuegame)){ //game ada di queue atau n <= 5
-                if (n<=5){
+            if(n <= 6 || isMemberQueue(listgame->A[n-1], queuegame)){ //game ada di queue atau n <= 5
+                if (n<=6){
                     printf("Game gagal dihapus (%s terdapat pada file konfigurasi)\n",permainan);
                 }
                 else{
