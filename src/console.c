@@ -117,6 +117,7 @@ void LISTGAME(TabWord listGame)
 
 void CREATEGAME(TabWord *listGame)
 {
+    currentCommand.Length = 0;
     printDelay("Masukkan nama game yang akan ditambahkan: ", 50);
     STARTCMD(true);
     int i = 0;
@@ -131,8 +132,15 @@ void CREATEGAME(TabWord *listGame)
     }
     if (not_exist)
     {
-        InsertLast(listGame, currentCommand);
-        printDelay("Game berhasil ditambahkan!\n", 50);
+        if (currentCommand.Length == 0)
+        {
+            printDelay("Mohon masukkan masukan yang valid!\n", 50);
+        }
+        else
+        {
+            InsertLast(listGame, currentCommand);
+            printDelay("Game berhasil ditambahkan!\n", 50);
+        }
     }
     else
     {
@@ -164,12 +172,12 @@ void DELETEGAME(TabWord *listGame, Queue queueGame)
         }
         else
         {
-            printDelay("\nGagal Menghapus Game: Game terdapat dalam konfigurasi awal!\n", 50);
+            printDelay("\nGagal Menghapus Game: Masukan berada di luar rentang!\n", 50);
         }
     }
     else
     {
-            printDelay("Mohan masukkan masukan yang valid!\n", 50);
+            printDelay("Mohon masukkan masukan yang valid!\n", 50);
     }
 }
 
