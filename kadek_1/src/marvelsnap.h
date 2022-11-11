@@ -49,4 +49,8 @@ void PrintCard(ArrayCard Player);
 
 void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Player1,ArrayInt Arena1Player2, ArrayInt Arena2Player2, ArrayInt Arena3Player2);
 
+void COMMANDGAME();
+
+void PLAYGUIDE();
+
 #endif

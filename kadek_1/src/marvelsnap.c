@@ -287,10 +287,32 @@ void PlayerTurn(int* Energyturn, boolean* pemainNow, boolean* pemainThen, ArrayC
     }
 }
 
+void COMMANDGAME(){
+    printf("GUIDE - ketik command ini untuk melihat cara dan aturan bermain\n");
+    printf("PLAY - ketik command ini untuk memulai permainan\n");
+    printf("Masukkan Command: ");
+    STARTKATAGAME();
+}
+
+void PLAYGUIDE(){
+    printf("1.Game ini dimainkan dengan dua player dimana player 1 memulai turn terlebih dahulu\n");
+    printf("2.Game ini dimainkan dalam enam turn dan pada masing turn, player mendapatkan energy sebesar jumlah turn\n");
+    printf("3. Diawal Game setiap player mendapat tiga kartu dengan setiap player pasti mendapatkan kartu dengan cost 1, serta pada awal turn, setiap pemain mengambil 1 kartu random\n");
+    printf("4.Terdapat tiga arena dimana pada masing - masing arena maksimal dimasukkan empat kartu untuk masing - masing player\n");
+    printf("5.Pada setiap giliran, player dapat memasukkan kartu kedalam arena atau melakukan SKIP\n");
+    printf("6.Pemain dapat memasukkan kartu lebih dari satu pada setiap turn asalkan enery masih cukup\n");
+    printf("6.Board akan diupdate setelah kedua player menyelesaikan turn\n");
+    printf("6.Pada akhir turn 6, setiap arena akan diadu power totalnya. Untuk setiap arena dengan total power lebih banyak, player yang memenagkan arena tersebut mendapatkan skor 1\n");
+    printf("7.Player yang menang adalah player skor lebih banyak\n");
+    printf("8. Jika skor seri, player yang menang adalah player dengan total power pada seluruh arena lebih besar\n");
+    printf("Tekan Enter untuk keluar dari Guide: ");
+    STARTKATAGAME();
+    system("cls");
+}
+
 void MARVELSNAP(){
     printDelay("WELCOME TO MARVEL SNAP\n",40);delay(500);
-    printDelay("Prepare to Play\n",40);delay(500);
-    system("cls");
+    boolean play = false;
     time_t waktu;
     srand(time(&waktu));
     int i,j;
@@ -315,6 +337,23 @@ void MARVELSNAP(){
     ArrayInt Arena1Player2; MakeArrayInt(&Arena1Player2);
     ArrayInt Arena2Player2; MakeArrayInt(&Arena2Player2);
     ArrayInt Arena3Player2; MakeArrayInt(&Arena3Player2);
+    while(!play){
+        COMMANDGAME();
+        system("cls");
+        if(compareWord(CKata,"PLAY")){
+            play = true;
+        }
+        else if(compareWord(CKata,"GUIDE")){
+            PrintArena(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);
+            PLAYGUIDE();
+        }
+        else{
+            printf("Command tidak valid\n");
+        }
+    }
+
+    printDelay("Prepare to Play\n",40);delay(500);
+    system("cls");
     for(i=0;i<3;i++){
         kartu1.Energy = (rand()%(i+1)) + 1;
         kartu1.Power = CardPower(kartu1.Energy);
@@ -327,6 +366,8 @@ void MARVELSNAP(){
     }
     printDelay("The Game has been started\n",25);delay(500);
     printDelay("Player 1 Turn",25);printDelay("...\n",200);
+    printf("Tekan Enter untuk melanjutkan permainan: ");
+    STARTKATAGAME();
     system("cls");
     printf("-------------BOARD TURN 0------------------\n\n");
     PrintArena(PreArena1Player1,PreArena2Player1,PreArena3Player1,PreArena1Player2,PreArena2Player2,PreArena3Player2);
@@ -343,6 +384,8 @@ void MARVELSNAP(){
         }
         system("cls");
         printDelay("Player 2 Turn",25);printDelay("...\n",200);
+        printf("Tekan Enter untuk melanjutkan permainan: ");
+        STARTKATAGAME();
         system("cls");
         insertRandomCard(&Player2);
         printf("-------------BOARD TURN %d------------------\n\n",turn -1);
@@ -365,13 +408,18 @@ void MARVELSNAP(){
             ended = true;
             pemain1 = false;
             pemain2 = false;
+            PrintArena(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);
             skorakhir(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);
             printf("-------------GAME OVER------------------\n\n");
         }
         else{
-            printDelay("Turn ",25);printf("%d ",turn - 1);printDelay("Ended\n",25);delay(500);
-            printDelay("Turn",25);printf("%d ",turn);printDelay("Begin\n",25);delay(500);
+            printDelay("Turn ",25);printf("%d ",turn - 1);printDelay("Ended\n",25);delay(1500);
+            system("cls");
+            printDelay("Turn ",25);printf("%d ",turn);printDelay("Begin\n",25);delay(1500);
+            system("cls");
             printDelay("Player 1 Turn",25);printDelay("...\n",200);
+            printf("Tekan Enter untuk melanjutkan permainan: ");
+            STARTKATAGAME();
             system("cls");
             insertRandomCard(&Player1);
             printf("-------------BOARD TURN %d------------------\n\n",turn-1);
