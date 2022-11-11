@@ -111,10 +111,11 @@ void LISTGAME(TabWord listGame)
 {
     PrintTabWord(listGame);
 }
+
 void CREATEGAME(TabWord *listGame)
 {
     printDelay("Masukkan nama game yang akan ditambahkan: ", 50);
-    STARTCMD();
+    STARTCMD(true);
     InsertLast(listGame, currentCommand);
     printDelay("Game berhasil ditambahkan\n", 50);
 }
@@ -122,18 +123,139 @@ void CREATEGAME(TabWord *listGame)
 void DELETEGAME(TabWord *listGame)
 {
     LISTGAME(*listGame);
+    printf("\n** Hint: Game yang dapat dihapus adalah Game dengan nomor urut > 5 **\n");
     printDelay("Masukkan nomor game yang akan dihapus: ", 50);
-    STARTCMD();
+    STARTCMD(false);
     int number = toInt(currentCommand);
     number--;
-    if (!(number >= 0 && number <= 4) && number <= listGame->Neff)
+    if (number > 4 && number < listGame->Neff)
     {
         DeleteAt(listGame, number);
-        printDelay("Game berhasil dihapus!\n", 50);
+        printDelay("\nGame Berhasil Dihapus!\n", 20);
     }
     else
     {
-        printDelay("Game gagal dihapus!\n", 50);
+        printDelay("\nGagal Menghapus Game!\n", 20);
+    }
+}
+
+void QUEUEGAME(TabWord listGame, Queue *queueGame)
+{
+    int OGLength = length(*queueGame);
+    displayQueue(*queueGame);
+    LISTGAME(listGame);
+    printDelay("Nomor Game yang mau ditambahkan ke antrian : ", 50);
+    STARTCMD(false);
+    if (isNumber(currentCommand))
+    {
+        int i = toInt(currentCommand) - 1;
+        if (i >= 0 && i < Length(listGame))
+        {
+            enqueue(queueGame, Get(listGame, i));
+        }
+        if (OGLength < length(*queueGame))
+        {
+            printDelay("Game berhasil ditambahkan ke dalam daftar antrian.\n", 50);
+        }
+        else
+        {
+            printDelay("Masukan berada di luar rentang \"LIST GAME\"\n", 50);
+            printDelay("Penambahan Game pada daftar antrian dibatalkan.\n", 50);
+        }
+    }
+    else
+    {
+        printDelay("Mohon masukkan masukan yang valid!\n", 50);
+    }
+}
+
+void PLAYGAME(TabWord listGame, Queue *queueGame)
+{
+    if (isEmpty(*queueGame))
+    {
+        printf("BMO: Antrian sama Dompet kamu kok mirip yaa? ^^\n");
+        printf("** Hint: Tambahkan Game dalam antrian menggunakan \"QUEUE GAME\" **\n");
+    }
+    else
+    {
+        ElType Game;
+        dequeue(queueGame, &Game);
+        
+        char* GameName = toString(Game);
+        printDelay("Loading ", 100);
+        printDelay(GameName, 100);
+        printDelay("...\n", 500);
+
+        int i = 0;
+        boolean whatGame = true;
+        while (whatGame && i < Length(listGame))
+        {
+            if (compare2Word(Game, Get(listGame, i)))
+            {
+                whatGame = false;
+            }
+            i++;
+        }
+
+        if (!whatGame)
+        {
+            if (i == 1)
+            {
+                // RNG();
+                printDelay("[ GAME OVER ]\n", 50);
+            }
+            else if (i == 2)
+            {
+                // DinerDASH();
+                printDelay("[ GAME OVER ]\n", 50);
+            }
+            else if (i >= 3 && i <= 5)
+            {
+                printDelay(GameName, 50);
+                printDelay(" masih dalam maintenance.\n", 50);
+                printDelay("Silahkan pilih game lainnya!\n", 50);
+            }
+            else
+            {
+                int score = 69;
+                printDelay("[ GAME OVER ]\n", 50);
+                printDelay("[ SCORE: ", 50);
+                printf("%d ", score);
+                printDelay("]\n", 50);
+            }
+        }
+        else
+        {
+            printDelay("Game ", 50);
+            printDelay(GameName, 50);
+            printDelay(" tidak terdaftar dalam \"LIST GAME\"\n", 50);
+            printDelay("Silahkan pilih game lainnya!\n", 50);
+        }
+    }
+}
+
+void SKIPGAME(TabWord listGame, Queue *queueGame, int num)
+{
+    displayQueue(*queueGame);
+    if (!isEmpty(*queueGame))
+    {
+        printDelay("Skipping ", 5);
+        printf("%d ", num);
+        printDelay("games", 5);
+        ElType Game;
+        for (int i = 0; i < num; i++)
+        {
+            printDelay("...", 500);
+            if (!isEmpty(*queueGame)) 
+            {
+                dequeue(queueGame, &Game);
+            }
+            printf("\b\b\b");
+            printf("   ");
+            printf("\b\b\b");
+        }
+        printDelay("...\n", 500);
+        PLAYGAME(listGame, queueGame);
     }
 }
 
@@ -155,7 +277,7 @@ void SAVE(char *filename, TabWord listGame)
     {
         printf("\n------------------------------------------------\n");
         printf("Gagal membuka / membuat file. Silahkan coba lagi!\n");
-        printf("-------------------------------------------------\n");
+        printf("------------------------------------------------\n");
         delay(50);
     }
     else
@@ -179,7 +301,7 @@ void SAVE(char *filename, TabWord listGame)
 
         printf("\n-------------------------------\n");
         printf("Berhasil menyimpan progress. ^^\n");
-        printf("--------------------------------\n");
+        printf("-------------------------------\n");
     }
 }
 
@@ -194,13 +316,14 @@ void QUIT(TabWord listGame)
             invalid_input = false;
             printf("** Hint: Ketika 'Ya' jika ingin menyimpan atau 'Tidak' jika ingin membuang **\n");
             printf("You: ");
-            STARTCMD();
+            STARTCMD(false);
             if (compareWord(currentCommand, "Ya"))
             {
                 printDelay("\nBMO: Masukkan nama save file anda!\n", 20);
                 printf("Nama file: ");
-                STARTCMD();
-                SAVE(currentCommand.TabChar, listGame);
+                STARTCMD(false);
+                char *savefile = toString(currentCommand);
+                SAVE(savefile, listGame);
             }
             else if (compareWord(currentCommand, "Tidak"))
             {
@@ -209,22 +332,22 @@ void QUIT(TabWord listGame)
             else
             {
                 invalid_input = true;
-                printDelay("BMO: Masukkan tidak dikenali. Mohon masukkan dengan format yang benar!\n", 10);
+                printDelay("\nBMO: Masukkan tidak dikenali. Mohon masukkan dengan format yang benar!\n", 10);
             }
 
         } while (invalid_input);
     }
 
-    printDelay("BMO: BMO sangat senang bisa bermain denganmu! ^^\n", 20);
+    printDelay("\nBMO: BMO sangat senang bisa bermain denganmu! ^^\n", 20);
     printDelay("BMO: Let's play again so- ", 20);
-    delay(200);
-    printf("sometimes");
+    delay(400);
+    printf("\b\bmetimes");
     delay(500);
     printDelay(", okay? ^^\n", 20);
     printDelay("BMO: Battery ", 20);
     delay(500);
     printf("low. ");
     printDelay("Shutdown", 20);
-    printDelay("...\n", 200);
+    printDelay("...\n\n", 200);
     delay(1500);
 }

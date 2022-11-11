@@ -47,13 +47,13 @@ void IgnoreBlanks();
    I.S. : CC sembarang
    F.S. : CC ≠ BLANK atau CC = EOF */
 
-void STARTCMD();
+void STARTCMD(boolean inputGame);
 /* I.S. : CC sembarang
    F.S. : EndWord = true, dan CC = MARK;
           atau EndWord = false, currentCommand adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 
-void ADVCMD();
+void ADVCMD(boolean inputGame);
 /* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
    F.S. : currentCommand adalah kata terakhir yang sudah diakuisisi,
           CC adalah karakter pertama dari kata berikutnya, mungkin MARK
@@ -62,6 +62,14 @@ void ADVCMD();
 
 void COPYCMD();
 /* Mengakuisisi command, menyimpan dalam currentCommand
+   I.S. : CC adalah karakter pertama dari kata
+   F.S. : currentCommand berisi kata yang sudah diakuisisi;
+          CC = BLANK atau CC = MARK;
+          CC adalah karakter sesudah karakter terakhir yang diakuisisi.
+          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+
+void COPYGAME();
+/* Mengakuisisi nama game, menyimpan dalam currentCommand
    I.S. : CC adalah karakter pertama dari kata
    F.S. : currentCommand berisi kata yang sudah diakuisisi;
           CC = BLANK atau CC = MARK;
@@ -82,6 +90,9 @@ char* toString(Word kata);
 
 int toInt(Word kata);
 /* Mengupah type Word menjadi Integer */
+
+boolean isNumber(Word kata);
+/* Melihat apakah masukan merupakan angka atau bukan */
 
 boolean compareWord(Word kata1, char *kata2);
 /* Membandingkan sebuah word dengan sebuah sting

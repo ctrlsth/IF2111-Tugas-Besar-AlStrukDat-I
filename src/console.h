@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "boolean.h"
 #include "ADT/mesinkata.h"
+#include "ADT/queue.h"
 #include "ADT/array.h"
 
 void delay(int milli_seconds);
@@ -24,7 +25,13 @@ void CREATEGAME(TabWord *listGame);
 
 void DELETEGAME(TabWord *listGame);
 
-void SAVE(char* filename, TabWord listGame);
+void QUEUEGAME(TabWord listGame, Queue *queueGame);
+
+void PLAYGAME(TabWord listGame, Queue *queueGame);
+
+void SKIPGAME(TabWord listGame, Queue *queueGame, int num);
+
+void SAVE(char *filename, TabWord listGame);
 
 void QUIT(TabWord listGame);
 
