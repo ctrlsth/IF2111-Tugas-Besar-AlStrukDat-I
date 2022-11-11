@@ -3,6 +3,7 @@
 #include <time.h>
 #include "boolean.h"
 #include "console.h"
+#include "Game/dinerdash.h"
 
 void delay(int milli_seconds)
 {
@@ -206,7 +207,7 @@ void PLAYGAME(TabWord listGame, Queue *queueGame)
             }
             else if (i == 2)
             {
-                // DinerDASH();
+                dinerDASH();
                 printDelay("[ GAME OVER ]\n", 50);
             }
             else if (i >= 3 && i <= 5)
@@ -217,7 +218,7 @@ void PLAYGAME(TabWord listGame, Queue *queueGame)
             }
             else
             {
-                int score = 69;
+                int score = rand();
                 printDelay("[ GAME OVER ]\n", 50);
                 printDelay("[ SCORE: ", 50);
                 printf("%d ", score);
@@ -294,7 +295,10 @@ void SAVE(char *filename, TabWord listGame)
         {
             char *gamename = toString(Get(listGame, i));
             fputs(gamename, savefile);
-            fputs("\n", savefile);
+            if (i != listGame.Neff -1)
+            {
+                fputs("\n", savefile);
+            }
         }
 
         fclose(savefile);
