@@ -150,7 +150,7 @@ int main()
         }
         else if (compareWord(Get(listCommand, 0), "DELETE") && compareWord(Get(listCommand, 1), "GAME"))
         {
-            (loaded) ? DELETEGAME(&listGame) : unknownCommand();
+            (loaded) ? DELETEGAME(&listGame, queueGame) : unknownCommand();
         }
         else if (compareWord(Get(listCommand, 0), "QUEUE") && compareWord(Get(listCommand, 1), "GAME"))
         {

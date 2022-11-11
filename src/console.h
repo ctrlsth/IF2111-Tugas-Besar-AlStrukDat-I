@@ -23,7 +23,7 @@ void LISTGAME(TabWord listGame);
 
 void CREATEGAME(TabWord *listGame);
 
-void DELETEGAME(TabWord *listGame);
+void DELETEGAME(TabWord *listGame, Queue queueGame);
 
 void QUEUEGAME(TabWord listGame, Queue *queueGame);
 

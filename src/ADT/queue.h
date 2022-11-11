@@ -70,4 +70,7 @@ void displayQueue(Queue q);
    dst.
 */
 
+boolean isInQueue(Queue queueGame, Word gameName);
+/* Proses : Mengirimkan keanggotaan suatu game dalam queue */
+
 #endif

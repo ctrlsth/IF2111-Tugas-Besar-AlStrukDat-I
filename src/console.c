@@ -4,6 +4,8 @@
 #include "boolean.h"
 #include "console.h"
 #include "Game/dinerdash.h"
+#include "Game/RNG.h"
+#include "Game/marvelsnap.h"
 
 void delay(int milli_seconds)
 {
@@ -121,22 +123,28 @@ void CREATEGAME(TabWord *listGame)
     printDelay("Game berhasil ditambahkan\n", 50);
 }
 
-void DELETEGAME(TabWord *listGame)
+void DELETEGAME(TabWord *listGame, Queue queueGame)
 {
     LISTGAME(*listGame);
-    printf("\n** Hint: Game yang dapat dihapus adalah Game dengan nomor urut > 5 **\n");
-    printDelay("Masukkan nomor game yang akan dihapus: ", 50);
+    printf("\n** Hint: Game yang dapat dihapus adalah Game dengan nomor urut > 6 **\n");
+    printDelay("Masukkan nomor game yang akan dihapus: ", 20);
     STARTCMD(false);
-    int number = toInt(currentCommand);
-    number--;
-    if (number > 4 && number < listGame->Neff)
-    {
-        DeleteAt(listGame, number);
-        printDelay("\nGame Berhasil Dihapus!\n", 20);
+    int number = toInt(currentCommand) - 1;
+    if (number > 5 && number < listGame->Neff)
+    {   
+        if (isInQueue(queueGame, Get(*listGame, number)))
+        {
+            printDelay("\nGagal Menghapus Game: Game terdapat dalam antrian!\n", 20);
+        }
+        else
+        {
+            DeleteAt(listGame, number);
+            printDelay("\nGame Berhasil Dihapus!\n", 20);
+        }
     }
     else
     {
-        printDelay("\nGagal Menghapus Game!\n", 20);
+        printDelay("\nGagal Menghapus Game: Game terdapat dalam konfigurasi awal!\n", 50);
     }
 }
 
@@ -202,19 +210,24 @@ void PLAYGAME(TabWord listGame, Queue *queueGame)
         {
             if (i == 1)
             {
-                // RNG();
-                printDelay("[ GAME OVER ]\n", 50);
+                system("cls");
+                RNG();
             }
             else if (i == 2)
             {
+                system("cls");
                 dinerDASH();
-                printDelay("[ GAME OVER ]\n", 50);
             }
             else if (i >= 3 && i <= 5)
             {
                 printDelay(GameName, 50);
                 printDelay(" masih dalam maintenance.\n", 50);
                 printDelay("Silahkan pilih game lainnya!\n", 50);
+            }
+            else if (i == 6)
+            {
+                system("cls");
+                MARVELSNAP();
             }
             else
             {
