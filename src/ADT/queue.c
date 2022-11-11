@@ -84,7 +84,23 @@ void displayQueue(Queue q)
             Word game_name = q.buffer[i];
             printWord(game_name);
             printf("\n");
+            j++;
         }
         printf("\n");
     }
+}
+
+boolean isInQueue(Queue queueGame, Word gameName)
+{
+    int i = 0;
+    boolean notFound = true;
+    while (i < length(queueGame) && notFound)
+    {
+        if (compare2Word(queueGame.buffer[i], gameName))
+        {
+            notFound = false;
+        }
+        i++;
+    }
+    return !notFound;
 }
