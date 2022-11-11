@@ -5,7 +5,8 @@
 #include "../src/ADT/array.h"
 #include "../src/ADT/queue.h"
 
-#define kapasitas 20 
+#define kapasitas 20
+#define kapasitasQueue 50 
 typedef struct {
     char* Makanan;
     int DurasiMasak;
@@ -14,7 +15,7 @@ typedef struct {
 } Pesanan;
 
 typedef struct {
-    Pesanan buffer[15];
+    Pesanan buffer[kapasitasQueue];
     int IdxHead;
     int IdxTail;
 } QueuePesanan;

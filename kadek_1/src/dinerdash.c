@@ -65,7 +65,7 @@ void TabelPesanan(QueuePesanan qPesanan){
     if (isEmptyQPesanan(qPesanan)){
         printf("        |                |           |\n");
     } else {
-        for(i = qPesanan.IdxHead; i != qPesanan.IdxTail ; i = (i+1) % 15){
+        for(i = qPesanan.IdxHead; i != qPesanan.IdxTail ; i = (i+1) % kapasitasQueue){
             printf("%s      | %d             | %d        | %d\n", (qPesanan).buffer[i].Makanan, (qPesanan).buffer[i].DurasiMasak, (qPesanan).buffer[i].Ketahanan, (qPesanan).buffer[i].Harga);
         }
         printf("%s      | %d             | %d        | %d\n", (qPesanan).buffer[i].Makanan, (qPesanan).buffer[i].DurasiMasak, (qPesanan).buffer[i].Ketahanan, (qPesanan).buffer[i].Harga); 
@@ -160,7 +160,7 @@ void enqueuePesanan(QueuePesanan *q, Pesanan p){
         {
             (*q).IdxHead = 0;
         }
-        (*q).IdxTail = (q->IdxTail + 1) % 15;
+        (*q).IdxTail = (q->IdxTail + 1) % kapasitasQueue;
         (*q).buffer[q->IdxTail] = p;
     }
 
@@ -173,7 +173,7 @@ void dequeuePesanan(QueuePesanan *q, Pesanan *p){
         }
         else
         {
-            (*q).IdxHead = ((*q).IdxHead + 1) % 15;
+            (*q).IdxHead = ((*q).IdxHead + 1) % kapasitasQueue;
         }
 }
 
@@ -187,7 +187,7 @@ int GetIdx(Kata food, QueuePesanan qPesanan){
             found = true;
         }
         else{
-            i = (i+1)%15;
+            i = (i+1)%kapasitasQueue;
         }
     }
     //found || i == qPesanan.IdxTail
@@ -218,7 +218,7 @@ void Cook(QueuePesanan qPesanan, ArrayPesanan *qDiMasak, Kata food, boolean* tur
             printf("%s tidak ada dalam pesanan\n",makanan);
         }
     } else {
-        printf("Memasak > 5 makanan dalam satu waktu merupakan sebuah tindakan yang dilarang");
+        printf("Memasak > 5 makanan dalam satu waktu merupakan sebuah tindakan yang dilarang\n");
     }
 }
 
@@ -280,7 +280,7 @@ int QueuePesananLength(QueuePesanan qpesanan){
     int count = 0;
     while(i!= qpesanan.IdxTail){
         count +=1;
-        i = (i+1) % 15;
+        i = (i+1) % kapasitasQueue;
     }
     return (count + 1);
 }
@@ -348,6 +348,7 @@ void dinerDASH(){
         MakeArrayDin(&Command);
         printf("SALDO : %d",saldo);
         printf("\n\n");
+        // printf("COUNT: %d\n\n",count);
         TabelPesanan(qPesanan);
         printf("\n");
         TabelMasakan(qDiMasak);
@@ -384,7 +385,7 @@ void dinerDASH(){
             }
         }
         else{
-            printf("Command tidak valid");
+            printf("Command tidak valid\n");
         }
         if(turn_end){
             Ketahanan(&qSelesai);
@@ -395,7 +396,7 @@ void dinerDASH(){
             printf("============================================\n");
             if(count == 15 || QueuePesananLength(qPesanan) > 7){
                 printf("Permainan Selesai\n");
-                printf("Skor Akhir : %d",saldo);
+                printf("Skor Akhir : %d\n",saldo);
                 ended = true;
             }
             turn_end = false;
