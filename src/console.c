@@ -106,7 +106,7 @@ void HELP(boolean loaded)
         printDelay("8.  DELETE GAME - Menghapus suatu game dari dalam daftar\n", 1);
         printDelay("9.  QUEUE GAME - Menambahkan game tertentu ke dalam antrian permainan\n", 1);
         printDelay("10. PLAY GAME - Memulai permainan berdasarkan antrian teratas\n", 1);
-        printDelay("11. SKIPGAME n - Melewati n banyak game dari dalam antrian dan memainkan game berikutnya.\n", 1);
+        printDelay("11. SKIP GAME <n> - Melewati n banyak game dari dalam antrian dan memainkan game berikutnya.\n", 1);
     }
 }
 
@@ -119,8 +119,26 @@ void CREATEGAME(TabWord *listGame)
 {
     printDelay("Masukkan nama game yang akan ditambahkan: ", 50);
     STARTCMD(true);
-    InsertLast(listGame, currentCommand);
-    printDelay("Game berhasil ditambahkan\n", 50);
+    int i = 0;
+    boolean not_exist = true;
+    while (i < Length((*listGame)) && not_exist)
+    {
+        if (compare2Word(Get(*listGame, i), currentCommand))
+        {
+            not_exist = false;
+        }
+        i++;
+    }
+    if (not_exist)
+    {
+        InsertLast(listGame, currentCommand);
+        printDelay("Game berhasil ditambahkan!\n", 50);
+    }
+    else
+    {
+        printDelay("Game sudah terdaftar dalam \"LIST GAME\"!\n", 50);
+    }
+    
 }
 
 void DELETEGAME(TabWord *listGame, Queue queueGame)
@@ -129,22 +147,29 @@ void DELETEGAME(TabWord *listGame, Queue queueGame)
     printf("\n** Hint: Game yang dapat dihapus adalah Game dengan nomor urut > 6 **\n");
     printDelay("Masukkan nomor game yang akan dihapus: ", 20);
     STARTCMD(false);
-    int number = toInt(currentCommand) - 1;
-    if (number > 5 && number < listGame->Neff)
-    {   
-        if (isInQueue(queueGame, Get(*listGame, number)))
-        {
-            printDelay("\nGagal Menghapus Game: Game terdapat dalam antrian!\n", 20);
+    if (isNumber(currentCommand))
+    {
+        int number = toInt(currentCommand) - 1;
+        if (number > 5 && number < listGame->Neff)
+        {   
+            if (isInQueue(queueGame, Get(*listGame, number)))
+            {
+                printDelay("\nGagal Menghapus Game: Game terdapat dalam antrian!\n", 20);
+            }
+            else
+            {
+                DeleteAt(listGame, number);
+                printDelay("\nGame Berhasil Dihapus!\n", 20);
+            }
         }
         else
         {
-            DeleteAt(listGame, number);
-            printDelay("\nGame Berhasil Dihapus!\n", 20);
+            printDelay("\nGagal Menghapus Game: Game terdapat dalam konfigurasi awal!\n", 50);
         }
     }
     else
     {
-        printDelay("\nGagal Menghapus Game: Game terdapat dalam konfigurasi awal!\n", 50);
+            printDelay("Mohan masukkan masukan yang valid!\n", 50);
     }
 }
 
@@ -164,11 +189,11 @@ void QUEUEGAME(TabWord listGame, Queue *queueGame)
         }
         if (OGLength < length(*queueGame))
         {
-            printDelay("Game berhasil ditambahkan ke dalam daftar antrian.\n", 50);
+            printDelay("Game berhasil ditambahkan ke dalam daftar antrian!\n", 50);
         }
         else
         {
-            printDelay("Masukan berada di luar rentang \"LIST GAME\"\n", 50);
+            printDelay("Masukan berada di luar rentang \"LIST GAME\"\n.", 50);
             printDelay("Penambahan Game pada daftar antrian dibatalkan.\n", 50);
         }
     }
@@ -182,7 +207,7 @@ void PLAYGAME(TabWord listGame, Queue *queueGame)
 {
     if (isEmpty(*queueGame))
     {
-        printf("BMO: Antrian sama Dompet kamu kok mirip yaa? ^^\n");
+        printDelay("BMO: Antrian sama Dompet kamu kok mirip yaa? ^^\n", 50);
         printf("** Hint: Tambahkan Game dalam antrian menggunakan \"QUEUE GAME\" **\n");
     }
     else
