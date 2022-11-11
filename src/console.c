@@ -177,7 +177,7 @@ void DELETEGAME(TabWord *listGame, Queue queueGame)
     }
     else
     {
-            printDelay("Mohon masukkan masukan yang valid!\n", 50);
+            printDelay("\nMohon masukkan masukan yang valid!\n", 50);
     }
 }
 
@@ -201,7 +201,7 @@ void QUEUEGAME(TabWord listGame, Queue *queueGame)
         }
         else
         {
-            printDelay("Masukan berada di luar rentang \"LIST GAME\"\n.", 50);
+            printDelay("Masukan berada di luar rentang \"LIST GAME\".\n", 50);
             printDelay("Penambahan Game pada daftar antrian dibatalkan.\n", 50);
         }
     }
