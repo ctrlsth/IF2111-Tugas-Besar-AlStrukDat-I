@@ -99,6 +99,8 @@ boolean compareWord(Word kata1, char *kata2);
    True     : Jika string dan kata sama,
    False    : Jika berbeda */
 
+boolean compareCharWord(Word kata1, char kata2);
+
 boolean compare2Word(Word kata1, Word kata2);
 /* Membandingkan 2 buah word
    True     : Jika kedua word sama,

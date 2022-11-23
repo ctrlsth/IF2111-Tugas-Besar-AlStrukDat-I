@@ -6,6 +6,7 @@
 #include "Game/dinerdash.h"
 #include "Game/RNG.h"
 #include "Game/marvelsnap.h"
+#include "Game/snakeonmeteor.h"
 
 void delay(int milli_seconds)
 {
@@ -251,7 +252,11 @@ void PLAYGAME(TabWord listGame, Queue *queueGame)
                 system("cls");
                 dinerDASH();
             }
-            else if (i >= 3 && i <= 5)
+            else if(i == 4){
+                system("cls");
+                snakemeteor();
+            }
+            else if (i == 3 || i == 5)
             {
                 printDelay(GameName, 50);
                 printDelay(" masih dalam maintenance.\n", 50);

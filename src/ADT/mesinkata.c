@@ -249,6 +249,16 @@ boolean compare2Word(Word kata1, Word kata2)
     return false;
 }
 
+boolean compareCharWord(Word kata1, char kata2){
+    boolean same = false;
+    if(kata1.Length == 1){
+        if (kata1.TabChar[0] == kata2){
+            same = true;
+        }
+    }
+    return same;
+}
+
 int strLength(char *strings)
 /* Mengembalikan panjang suatu string */
 {
