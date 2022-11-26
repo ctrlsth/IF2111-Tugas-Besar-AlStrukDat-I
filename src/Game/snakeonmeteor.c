@@ -40,6 +40,7 @@ void snakemeteor(){
     List ular;
     create_linked_list_matrix(&ular,5,5, baris, kolom,&n);
     SummonFood(&ular);
+    summonobstacle(&ular, 3);
     while(!endgame){
         printArena(ular);
         invalid_input = true;
@@ -55,6 +56,7 @@ void snakemeteor(){
                 else{
                     MeteorDisappear(&ular);
                     if(isNabrak(ular,input)){
+                        printf("Kepala Anda menabrak\n");
                         printf("Game over!\n");
                         endgame = true;
                     }

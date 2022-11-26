@@ -49,4 +49,8 @@ void MeteorDisappear(List *head);
 
 char *makebody(int n);
 
+void makeobstacle(List head, address *obstacle);
+
+void summonobstacle(List* head, int count);
+
 #endif

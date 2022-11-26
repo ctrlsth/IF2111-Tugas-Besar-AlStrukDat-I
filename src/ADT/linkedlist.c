@@ -301,7 +301,7 @@ void MakeMeteor(List head, address *meteor){
 void SummonMeteor(List *head, boolean* end, int *n){
     address meteor = head->zero;
     MakeMeteor(*head,&meteor);
-    while(meteor->info == " o "){
+    while(meteor->info == " o " || meteor->info == " X "){
         MakeMeteor(*head,&meteor);
     }
     if(meteor->info != "   "){
@@ -393,4 +393,33 @@ boolean isNabrakMeteor(List head, char input){
         }
     }
     return nabrak;
+}
+
+void makeobstacle(List head, address *obstacle){
+    *obstacle = head.zero;
+    int baris = rand() % 5;
+    int kolom = rand() % 5;
+    int n = 0;
+    int m = 0;
+    while (m < baris){
+        *obstacle = (*obstacle)->next_row;
+        m +=1;
+    }
+    while (n < kolom){
+        *obstacle = (*obstacle)->next_col;
+        n +=1;
+    }
+}
+
+void summonobstacle(List* head, int count){
+    int i = 0;
+    address obstacle;
+    while(i < count){
+        makeobstacle(*head,&obstacle);
+        while(obstacle->info != "   "){
+            makeobstacle(*head,&obstacle);
+        }
+        obstacle->info = " X ";
+        i +=1;
+    }
 }
