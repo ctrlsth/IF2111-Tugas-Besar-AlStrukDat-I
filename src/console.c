@@ -118,7 +118,6 @@ void LISTGAME(TabWord listGame)
 
 void CREATEGAME(TabWord *listGame)
 {
-    currentCommand.Length = 0;
     printDelay("Masukkan nama game yang akan ditambahkan: ", 50);
     STARTCMD(true);
     int i = 0;
@@ -406,3 +405,83 @@ void QUIT(TabWord listGame)
     printDelay("...\n\n", 200);
     delay(1500);
 }
+
+void DeleteGameHistory(Stack *S, Word game){
+    int i = 0;
+    while(i<=Top(*S) && !IsEmptyStack(*S)){
+        if(compare2Word(S->T[i],game)){
+            DeleteStackAt(S,i);
+        }
+        else{
+            i++;
+        }
+    }
+}
+
+void showHistory(Stack played, int num)
+{
+    int len;
+    int count = 1;
+    int i;
+    printf("Berikut adalah daftar game yang telah dimainkan.\n");
+    if(!IsEmptyStack(played)){
+        len = played.TOP + 1;
+        if(num > len)
+        {
+            num = len;
+        }
+
+        for(i = played.TOP; i >= played.TOP - (num - 1); i--)
+        {
+            printf("%d. ",count);
+            count +=1;
+            printWord(played.T[i]);
+            printf("\n");
+        }
+    }
+    printf("\n");
+}
+
+void ResetHistory(Stack* played)
+{
+    printf("APAKAH KAMU YAKIN INGIN MELAKUKAN RESET HISTORY? (YA/TIDAK)\n");
+    STARTCMD(true);
+    if(compareWord(currentCommand,"YA"))
+    {
+        MakeEmptyStack(played);
+        CreateEmpty(played);
+        printf("History berhasil di reset\n");
+    }
+    else if (compareWord(currentCommand,"TIDAK"))
+    {
+        printf("History tidak jadi di-reset.\n");
+        showHistory(*played, played->TOP + 1);
+    }
+    else{
+        printf("Input tidak valid!\n");
+    }
+}
+
+// main buat nyobain history, reset history, sama delete history kalo gamenya didelete
+// int main(){
+//     Stack S;
+//     CreateEmpty(&S);
+//     boolean end = false;
+//     while(!end){
+//         printf("MASUKAN KATA: ");
+//         STARTCMD(true);
+//         if(currentCommand.Length == 0){
+//             end = true;
+//         }
+//         else{
+//             Push(&S,currentCommand);
+//         }
+//     }
+//     showHistory(S,S.TOP+1);
+//     // ResetHistory(&S);
+//     // if(compareWord(currentCommand,"YA")){
+//     //     showHistory(S,5);
+//     // }
+//     DeleteGameHistory(&S,toWord("AVENGERS"));
+//     showHistory(S,S.TOP+1);
+// }

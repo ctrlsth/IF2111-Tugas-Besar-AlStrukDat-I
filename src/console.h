@@ -6,6 +6,7 @@
 #include "ADT/mesinkata.h"
 #include "ADT/queue.h"
 #include "ADT/array.h"
+#include "ADT/stack.h"
 
 void delay(int milli_seconds);
 /* Memberikan delay pada program selama (lamaDelay * 1/100) detik */

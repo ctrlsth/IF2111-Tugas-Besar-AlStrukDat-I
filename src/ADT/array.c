@@ -204,3 +204,15 @@ IdxType SearchTabWord(TabWord array, ElType el)
 	}
 	return (-1);
 }
+
+boolean isMemberArray(TabWord array, Word Kata){
+	boolean member = false;
+	int i = 0;
+	while(i<array.Neff && !member){
+		if(compare2Word(array.TW[i],Kata)){
+			member = true;
+		}
+		i++;
+	}
+	return member;
+}

@@ -70,6 +70,7 @@ void STARTCMD(boolean inputGame)
           atau EndWord = false, currentCommand adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 {
+    currentCommand.Length = 0;
     cmdstart();
     IgnoreBlanksCMD();
     if (CC == MARK)
@@ -159,6 +160,7 @@ Word toWord(char *someString)
     while (someString[i] != '\0' && someString[i] != ' ')
     {
         converted.TabChar[i] = someString[i];
+        i++;
     }
     converted.Length = i;
 
@@ -296,4 +298,8 @@ void printWord(Word Kata)
 //     ADVWORD();
 //     printWord(currentWord);
 //     return 0;
+// }
+
+// int main(){
+//     printWord(toWord("AVENGERS"));
 // }
