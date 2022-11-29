@@ -2,17 +2,18 @@
 #include <stdlib.h>
 #include <math.h>
 #include "stack.h"
+#include "mesinkata.h"
+#include "array.h"
 
 void showHistory(Stack played, int num)
 {
-    printf("Berikut adalah daftar game yang pernah dimainkan.\n")
+    printf("Berikut adalah daftar game yang pernah dimainkan.\n");
     {
-        len = played.TOP + 1;
-        stacktype game;
+        int lens = played.TOP + 1;
         int i;
-        if(num > len)
+        if(num > lens)
         {
-            num = len;
+            num = lens;
         }
         printf("Berikut adalah daftar game yang telah dimainkan\n");
         for(i = num; i >= 0; i--)
@@ -23,10 +24,11 @@ void showHistory(Stack played, int num)
     }
 }
 
-void ResetHistory(Stack played)
+void resetHistory(Stack played)
 {
     printf("APAKAH KAMU YAKIN INGIN MELAKUKAN RESET HISTORY?\n");
-    if(YA) //Ini input-an dari main, tolong bantu tanyain besok thanks
+    STARTCMD(false);
+    if(compareWord(currentCommand, "YA"))
     {
         CreateEmpty(&played);
     }
