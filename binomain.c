@@ -5,6 +5,9 @@
 #include "src/ADT/mesinkata.h"
 #include "src/ADT/array.h"
 #include "src/ADT/queue.h"
+#include "src/ADT/stack2.h"
+#include "src/ADT/set2.h"
+#include "src/ADT/map2.h"
 #include "src/boolean.h"
 #include "src/console.h"
 
@@ -34,33 +37,36 @@ int main()
     Queue queueGame; CreateQueue(&queueGame);
     TabWord listGame; MakeTabWord(&listGame);
     TabWord listCommand; MakeTabWord(&listCommand);
+    Stack History; CreateEmptyStack(&History);
+    ListOfSet listPlayer; CreateEmptySetList(&listPlayer);
+    ListOfMap scoreBoard; CreateEmptyMapList(&scoreBoard);
 
     boolean active = true;
     boolean loaded = false;
 
     system("cls");
     ASCIIArt();
-    printf("You: ");
-    delay(500);
-    printf("* pressed the power button *\n");
-    delay(1000);
-    printf("BMO: ");
-    printDelay("ZzZzzzzZZzZZZzzZzzzzZZ", 50);
-    printDelay("...\n", 500);
-    printf("BMO: ");
-    printDelay("ZZzz... ", 100);
-    printDelay("Hmmm? ", 50);
-    delay(2000);
-    printDelay("Huhh???\n", 50);
-    delay(2000);
-    printf("BMO: ");
-    printDelay("Ohh! Hai! ", 25);
-    delay(1000);
-    printDelay("Maaf Baru Bangun :'\n", 25);
-    delay(1500);
-    printf("BMO: ");
-    printDelay("Let's play together!! ^^\n", 25);
-    delay(500);
+    // printf("You: ");
+    // delay(500);
+    // printf("* pressed the power button *\n");
+    // delay(1000);
+    // printf("BMO: ");
+    // printDelay("ZzZzzzzZZzZZZzzZzzzzZZ", 50);
+    // printDelay("...\n", 500);
+    // printf("BMO: ");
+    // printDelay("ZZzz... ", 100);
+    // printDelay("Hmmm? ", 50);
+    // delay(2000);
+    // printDelay("Huhh???\n", 50);
+    // delay(2000);
+    // printf("BMO: ");
+    // printDelay("Ohh! Hai! ", 25);
+    // delay(1000);
+    // printDelay("Maaf Baru Bangun :'\n", 25);
+    // delay(1500);
+    // printf("BMO: ");
+    // printDelay("Let's play together!! ^^\n", 25);
+    // delay(500);
 
     /* *** MAIN LOOP *** */
     do
@@ -96,14 +102,13 @@ int main()
                 if (Length(listCommand) == 2)
                 {
                     char* loadfile = toString(Get(listCommand, 1));
-                    LOAD(loadfile, &listGame, &loaded);
+                    LOAD(loadfile, &listGame, &loaded, &History, &listPlayer, &scoreBoard);
                 }
                 else
                 {
                     printf("Mohon masukkan dengan format yang benar!\n");
                     printf("** Hint: Ketik \"HELP\" untuk melihat perintah **\n");
                 }
-                
             }
             else
             {
@@ -188,6 +193,14 @@ int main()
             {
                 unknownCommand();
             }
+        }
+        else if (compareWord(Get(listCommand, 0), "SCOREBOARD"))
+        {
+            (loaded) ? SCOREBOARD(listPlayer, scoreBoard, listGame) : unknownCommand();
+        }
+        else if (compareWord(Get(listCommand, 0), "RESET") && compareWord(Get(listCommand, 1), "SCOREBOARD"))
+        {
+            (loaded) ? RESETSB(&listPlayer, &scoreBoard, listGame) : unknownCommand();
         }
         else
         {

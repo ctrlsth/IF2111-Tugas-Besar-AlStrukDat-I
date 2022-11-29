@@ -13,11 +13,6 @@
 #define InitialSize 3
 #define charsize 1
 
-// typedef struct {
-//     char name[50];
-//     boolean deletable;
-// } Games;
-
 // typedef Games data;
 typedef int IdxType;
 typedef Word ElType;
@@ -25,13 +20,9 @@ typedef Word ElType;
 typedef struct
 {
     ElType *TW;
-//     data *GM;
     int Capacity;
     int Neff;
 } TabWord;
-
-// typedef char* chardin;
-// void MakeArrayChar(chardin * kata);
 
 /**
  * Konstruktor
@@ -43,7 +34,7 @@ void MakeTabWord(TabWord *array);
 /**
  * Destruktor
  * I.S. TabWord terdefinisi
- * F.S. array->A terdealokasi
+ * F.S. array->TW terdealokasi
  */
 void DeallocateTabWord(TabWord *array);
 
@@ -69,7 +60,6 @@ ElType Get(TabWord array, IdxType i);
  * Fungsi untuk mendapatkan kapasitas yang tersedia.
  * Prekondisi: array terdefinisi
  */
-
 int GetCapacity(TabWord array);
 
 /**
@@ -110,8 +100,6 @@ void DeleteFirst(TabWord *array);
 
 /**
  * Fungsi untuk melakukan print suatu TabWord.
- * Print dilakukan dengan format: [elemen-1, elemen-2, ..., elemen-n]
- * dan diakhiri newline.
  * Prekondisi: array terdefinisi
  */
 void PrintTabWord(TabWord array);
