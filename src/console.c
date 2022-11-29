@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #include "boolean.h"
 #include "console.h"
 #include "Game/dinerdash.h"
@@ -54,7 +55,7 @@ void START(char *filename, TabWord *listGame, boolean *loaded)
     }
 }
 
-void LOAD(char *filename, TabWord *listGame, boolean *loaded)
+void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistory, ListOfSet *listPlayer, ListOfMap *scoreBoard)
 {
     int i, j;
     int n = 0;
@@ -73,16 +74,71 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded)
     STARTWORD(loc, loaded);
     if (*loaded)
     {
-        printf("FILE %s BERHASIL DIMUAT!\n", filename);
         if (!EndWord)
         {
-            n = toInt(currentWord);
-            ADVWORD();
-            for (i = 0; i < n; i++)
+            int iteration = 1;
+            n = toInt(currentWord); // Memiliki nilai banyak game yang berada dalam savefile.
+            scoreBoard->Num = n;
+            listPlayer->Num = n;
+
+            // listGame dan History
+            while (iteration != 3)
             {
-                InsertLast(listGame, currentWord);
                 ADVWORD();
+                for (i = 0; i < n; i++)
+                {
+                    if (iteration == 1)
+                    {
+                        InsertLast(listGame, currentWord);
+                    }
+                    else if (iteration == 2)
+                    {
+                        Push(stackHistory, currentWord);
+                    }
+
+                    ADVWORD();
+                }
+                n = toInt(currentWord);
+                iteration++;
             }
+
+            printf("Passed\n");
+
+            // ScoreBoard
+            int idx = 0;
+            while (!EndWord)
+            {
+                n = toInt(currentWord);
+                Set *currentSet = &(listPlayer->GameSet[idx]);
+                Map *currentMap = &(scoreBoard->board[idx]);
+                printf("Passed Declaration\n");
+
+                ADVWORD();
+                for (i = 0; i < n; i++)
+                {
+                    // Melakukan separasi antara nama dan skor
+                    Word Name, Score;
+                    binSep(currentWord, &Name, &Score, ' ');
+                    printf("Passed Sep\n");
+
+                    // Memasukkan nama pada Set dan Skor pada Map
+                    InsertSetEl(currentSet, Name);
+                    printf("Passed Set\n");
+                    MapValIns(currentMap, Name, toInt(Score));
+                    printf("Passed Map\n");
+
+                    ADVWORD();
+                }
+
+                idx++;
+            }
+
+            printf("FILE %s BERHASIL DIMUAT!\n", filename);
+        }
+        else
+        {
+            printf("FILE %s KOSONG!\n", filename);
+            (*loaded) = false;
         }
     }
     else
@@ -400,4 +456,133 @@ void QUIT(TabWord listGame)
     printDelay("Shutdown", 20);
     printDelay("...\n\n", 200);
     delay(1500);
+}
+
+void SCOREBOARD(ListOfSet listPlayer, ListOfMap scoreBoard, TabWord listGame)
+{
+    int j = 0;
+    while (j < listPlayer.Num)
+    {
+        Set playerSet = listPlayer.GameSet[j];
+        Map scoreMap = scoreBoard.board[j];
+
+        printf("**** SCOREBOARD GAME ");
+        printWord(listGame.TW[j]);
+        printf(" ****\n");
+        printf("-------------------------------------------\n");
+        printf("| NAMA               | SKOR               |\n");
+        printf("-------------------------------------------\n");
+        int i;
+        for (i = 0; i < playerSet.Count; i++)
+        {
+            printf("| ");
+            Word player = playerSet.PlayerName[i];
+            printWord(player);
+            for (int j = 0; j < (19 - player.Length); j++)
+            {
+                printf(" ");
+            }
+
+            int skor = Value(scoreMap, player);
+            int countDigit = (skor == 0) ? 1 : log10(skor) + 1;
+            printf("| %d", skor);
+            for (int j = 0; j < (19 - countDigit); j++)
+            {
+                printf(" ");
+            }
+
+            printf("|\n");
+        }
+
+        if (playerSet.Count == 0)
+        {
+            printf("|            SCOREBOARD KOSONG            |\n");
+        }
+        printf("-------------------------------------------\n\n");
+
+        j++;
+    }
+}
+
+void RESETSB(ListOfSet *listPlayer, ListOfMap *scoreBoard, TabWord listGame)
+{
+    int i;
+    printf("DAFTAR SCOREBOARD:\n");
+    printf("0. ALL\n");
+    for (i = 0; i < listGame.Neff; i++)
+    {
+        printf("%d. ", i + 1);
+        printWord(listGame.TW[i]);
+        printf("\n");
+    }
+    printf("\n");
+
+    printf("SCOREBOARD YANG INGIN DIHAPUS: ");
+    STARTCMD(false);
+    printf("\n");
+    if (!isNumber(currentCommand))
+    {
+        printf("MASUKAN TIDAK VALID.\n");
+        printf("RESET SCOREBOARD DIBATALKAN.\n");
+    }
+    else
+    {
+        int n = toInt(currentCommand);
+        printf("APAKAH KAMU YAKIN INGIN MELAKUKAN RESET SCOREBOARD ");
+        if (n == 0)
+        {
+            printf("ALL");
+        }
+        else
+        {
+            printWord(listGame.TW[n - 1]);
+        }
+
+        printf(" (YA/TIDAK)? ");
+        STARTCMD(false);
+        if (compareWord(currentCommand, "YA"))
+        {
+            if (n == 0)
+            {
+                CreateEmptyMapList(scoreBoard);
+                CreateEmptySetList(listPlayer);
+            }
+            else
+            {
+                CreateEmptyMap(&(scoreBoard->board[n - 1]));
+                CreateEmptySet(&(listPlayer->GameSet[n - 1]));
+            }
+
+            printf("\nSCOREBOARD BERHASIL DI RESET!\n");
+        }
+        else if (compareWord(currentCommand, "TIDAK"))
+        {
+            printf("RESET SCOREBOARD DIBATALKAN.\n");
+        }
+        else
+        {
+            printf("MASUKAN TIDAK VALID.\n");
+            printf("RESET SCOREBOARD DIBATALKAN.\n");
+        }
+    }
+}
+
+void UPDATESB(int score, Set *gamePlayers, Map *playerScores)
+{
+    // Check apakah sudah berada dalam set
+    UPPER(&currentCommand);
+    while (IsSetMember((*gamePlayers), currentCommand))
+    {
+        printf("Nama Sudah Terdaftar dalam SCOREBOARD.\n");
+        printf("Harap masukkan Nama lainnya!\n");
+        printf("Masukkan Nama: ");
+        STARTCMD(false);
+        UPPER(&currentCommand);
+    }
+
+    printf("Berhasil Menambahkan Data dalam SCOREBOARD!\n");
+    InsertSetEl(gamePlayers, currentCommand);
+    MapValIns(playerScores, currentCommand, score);
+    SortByVal(playerScores);
+    SortSetByMap(gamePlayers, (*playerScores));
 }
