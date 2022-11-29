@@ -110,4 +110,8 @@ int strLength(char *kata);
 void printWord(Word Kata);
 /* Menampilkan isi kata pada layar */
 
+void binSep(Word Kata, Word *Kata1, Word *Kata2, char separator);
+
+void UPPER(Word *Kata);
+
 #endif

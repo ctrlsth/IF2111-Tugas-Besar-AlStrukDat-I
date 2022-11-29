@@ -271,6 +271,45 @@ void printWord(Word Kata)
     // printf("\n");
 }
 
+void binSep(Word Kata, Word *Kata1, Word *Kata2, char separator)
+{
+    int i, j = 0;
+    boolean passedSep;
+    for (i = 0; i < Kata.Length; i++)
+    {
+        if (passedSep)
+        {
+            Kata2->TabChar[j] = Kata.TabChar[i];
+            j++;
+        }
+        else
+        {
+            if (Kata.TabChar[i] == separator)
+            {
+                passedSep = true;
+                Kata1->Length = i;
+            }
+            else
+            {
+                Kata1->TabChar[i] = Kata.TabChar[i];
+            }
+        }
+    }
+
+    Kata2->Length = j;
+}
+
+void UPPER(Word *Kata)
+{
+    int i;
+    for (i = 0; i < Kata->Length; i++)
+    {
+        if (Kata->TabChar[i] >= 97 && Kata->TabChar[i] <= 122)
+        {
+            Kata->TabChar[i] -= 32;
+        }
+    }
+}
 // int main()
 // {
 //     boolean apa;
