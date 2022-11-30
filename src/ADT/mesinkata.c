@@ -70,6 +70,7 @@ void STARTCMD(boolean inputGame)
           atau EndWord = false, currentCommand adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 {
+    currentCommand.Length = 0;
     cmdstart();
     IgnoreBlanksCMD();
     if (CC == MARK)
@@ -159,6 +160,7 @@ Word toWord(char *someString)
     while (someString[i] != '\0' && someString[i] != ' ')
     {
         converted.TabChar[i] = someString[i];
+        i++;
     }
     converted.Length = i;
 
@@ -168,14 +170,19 @@ Word toWord(char *someString)
 char *toString(Word kata)
 {
     char *str = (char *)malloc((kata.Length) * sizeof(char));
-    int i;
+    // printf("Passed malloc!\n");
+    // printf("Length: %d\n", kata.Length);
 
+    int i;
     for (i = 0; i < kata.Length; i++)
     {
+        // printf("Loop ke-%d\n", i);
         str[i] = kata.TabChar[i];
     }
+    // printf("Loop Success\n");
     str[i] = '\0';
 
+    // printf("Returning.\n");
     return str;
 }
 
@@ -203,7 +210,7 @@ boolean isNumber(Word kata)
         }
         i++;
     }
-    
+
     return number;
 }
 
@@ -310,6 +317,20 @@ void UPPER(Word *Kata)
         }
     }
 }
+
+boolean compareCharWord(Word kata1, char kata2)
+{
+    boolean same = false;
+    if (kata1.Length == 1)
+    {
+        if (kata1.TabChar[0] == kata2)
+        {
+            same = true;
+        }
+    }
+    return same;
+}
+
 // int main()
 // {
 //     boolean apa;

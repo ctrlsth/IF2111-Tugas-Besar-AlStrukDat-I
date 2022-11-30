@@ -10,7 +10,7 @@
 #define false 0
 #define N_MAX 50
 
-#define InitialSize 3
+#define InitialSize 50
 #define charsize 1
 
 // typedef Games data;
@@ -117,5 +117,7 @@ TabWord CopyTabWord(TabWord array);
  * Prekondisi: array terdefinisi
  */
 IdxType SearchTabWord(TabWord array, ElType el);
+
+boolean isMemberArray(TabWord array, Word Kata);
 
 #endif

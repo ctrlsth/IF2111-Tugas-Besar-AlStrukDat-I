@@ -1,13 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "src/ADT/mesinkarakter.h"
-#include "src/ADT/mesinkata.h"
-#include "src/ADT/array.h"
-#include "src/ADT/queue.h"
-#include "src/ADT/stack.h"
-#include "src/ADT/set.h"
-#include "src/ADT/map.h"
 #include "src/boolean.h"
 #include "src/console.h"
 
@@ -46,27 +39,27 @@ int main()
 
     system("cls");
     ASCIIArt();
-    // printf("You: ");
-    // delay(500);
-    // printf("* pressed the power button *\n");
-    // delay(1000);
-    // printf("BMO: ");
-    // printDelay("ZzZzzzzZZzZZZzzZzzzzZZ", 50);
-    // printDelay("...\n", 500);
-    // printf("BMO: ");
-    // printDelay("ZZzz... ", 100);
-    // printDelay("Hmmm? ", 50);
-    // delay(2000);
-    // printDelay("Huhh???\n", 50);
-    // delay(2000);
-    // printf("BMO: ");
-    // printDelay("Ohh! Hai! ", 25);
-    // delay(1000);
-    // printDelay("Maaf Baru Bangun :'\n", 25);
-    // delay(1500);
-    // printf("BMO: ");
-    // printDelay("Let's play together!! ^^\n", 25);
-    // delay(500);
+    printf("You: ");
+    delay(500);
+    printf("* pressed the power button *\n");
+    delay(1000);
+    printf("BMO: ");
+    printDelay("ZzZzzzzZZzZZZzzZzzzzZZ", 50);
+    printDelay("...\n", 500);
+    printf("BMO: ");
+    printDelay("ZZzz... ", 100);
+    printDelay("Hmmm? ", 50);
+    delay(2000);
+    printDelay("Huhh???\n", 50);
+    delay(2000);
+    printf("BMO: ");
+    printDelay("Ohh! Hai! ", 25);
+    delay(1000);
+    printDelay("Maaf Baru Bangun :'\n", 25);
+    delay(1500);
+    printf("BMO: ");
+    printDelay("Let's play together!! ^^\n", 25);
+    delay(500);
 
     /* *** MAIN LOOP *** */
     do
