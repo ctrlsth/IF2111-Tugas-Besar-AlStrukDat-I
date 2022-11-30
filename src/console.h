@@ -40,7 +40,7 @@ void QUIT(TabWord listGame, Stack stackHistory, ListOfMap scoreBoard);
 
 void SCOREBOARD(ListOfSet listPlayer, ListOfMap scoreBoard, TabWord listGame);
 
-void UPDATESB(int score, Set *gamePlayers, Map *playerScores);
+void UPDATESB(int score, Set *gamePlayers, Map *playerScores, int whatGame);
 
 void RESETSB(ListOfSet *listPlayer, ListOfMap *scoreBoard, TabWord listGame);
 

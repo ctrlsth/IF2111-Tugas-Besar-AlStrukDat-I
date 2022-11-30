@@ -7,6 +7,7 @@
 #include "Game/dinerdash.h"
 #include "Game/RNG.h"
 #include "Game/marvelsnap.h"
+#include "Game/snakeonmeteor.h"
 
 void delay(int milli_seconds)
 {
@@ -82,42 +83,33 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
             scoreBoard->Num = n;
             listPlayer->Num = n;
 
-            // listGame dan History
-            while (iteration != 3)
+            // listGame
+            ADVWORD();
+            for (i = 0; i < n; i++)
             {
+                InsertLast(listGame, currentWord);
                 ADVWORD();
-                for (i = 0; i < n; i++)
-                {
-                    if (iteration == 1)
-                    {
-                        InsertLast(listGame, currentWord);
-                    }
-                    else if (iteration == 2)
-                    {
-                        stackHistory->T[n - i - 1] = currentWord;
-                        stackHistory->TOP = n - 1;
-                    }
-
-                    ADVWORD();
-                }
-                n = toInt(currentWord);
-                iteration++;
             }
 
-            // printf("Passed\n");
-
-            // int m;
-            // for (m = 0; m < stackHistory->countEl; m++)
-            // {
-            //     printf("%d. ", m+1);
-            //     printWord(stackHistory->T[m]);
-            //     printf("\n");
-            // }
-
-            // printf("Passed\n");
+            // History
+            n = toInt(currentWord);
+            Stack tempHis;
+            CreateEmptyStack(&tempHis);
+            infostack temp;
+            for (i = 0; i < n; i++)
+            {
+                ADVWORD();
+                Push(&tempHis, currentWord);
+            }
+            while (!IsStackEmpty(tempHis))
+            {
+                Pop(&tempHis, &temp);
+                Push(stackHistory, temp);
+            }
 
             // ScoreBoard
             int idx = 0;
+            ADVWORD();
             while (!EndWord)
             {
                 n = toInt(currentWord);
@@ -131,13 +123,10 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
                     // Melakukan separasi antara nama dan skor
                     Word Name, Score;
                     binSep(currentWord, &Name, &Score, ' ');
-                    // printf("Passed Sep\n");
 
                     // Memasukkan nama pada Set dan Skor pada Map
                     InsertSetEl(currentSet, Name);
-                    // printf("Passed Set\n");
                     MapValIns(currentMap, Name, toInt(Score));
-                    // printf("Passed Map\n");
 
                     ADVWORD();
                 }
@@ -146,6 +135,13 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
             }
 
             printf("FILE %s BERHASIL DIMUAT!\n", filename);
+
+            // printf("\nMap Length Test!\n");
+            // int p;
+            // for (p = 0; p < 6; p++)
+            // {
+            //     printf("Game ke-%d: %d\n", p + 1, scoreBoard->board[p].Count);
+            // }
         }
         else
         {
@@ -347,7 +343,7 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
 
         if (!whatGame)
         {
-            int score = 0;
+            int score = 0, score2 = 0;
             if (i == 1)
             {
                 system("cls");
@@ -373,17 +369,19 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             else if (i == 5)
             {
                 system("cls");
-                printf("This is Snake\n");
-                // SNAKEONMETEOR(&score);
+                snakemeteor(&score);
             }
             else if (i == 6)
             {
                 system("cls");
-                MARVELSNAP();
+                // MARVELSNAP(&score, &score2);
+                score = rand();
+                score2 = rand();
             }
             else
             {
                 score = rand();
+                system("cls");
                 printDelay("[ GAME OVER ]\n", 50);
                 printDelay("[ SCORE: ", 50);
                 printf("%d ", score);
@@ -392,7 +390,17 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
 
             Set *gamePlayers = &(listPlayer->GameSet[i - 1]);
             Map *playerScores = &(scoreBoard->board[i - 1]);
-            UPDATESB(score, gamePlayers, playerScores);
+            if (i == 6)
+            {
+                printDelay("Mohon masukan nama Player 1!\n", 50);
+                UPDATESB(score, gamePlayers, playerScores, i);
+                printDelay("Mohon masukan nama Player 2!\n", 50);
+                UPDATESB(score2, gamePlayers, playerScores, i);
+            }
+            else
+            {
+                UPDATESB(score, gamePlayers, playerScores, i);
+            }
             UPDATEHISTORY(stackHistory, Game);
         }
         else
@@ -446,9 +454,9 @@ void SAVE(char *filename, TabWord listGame, Stack stackHistory, ListOfMap scoreB
     // printf("Passed\n");
     if (savefile == NULL)
     {
-        printf("\n------------------------------------------------\n");
-        printf("Gagal membuka / membuat file. Silahkan coba lagi!\n");
-        printf("------------------------------------------------\n");
+        printf("\n----------------------------------------------------\n");
+        printf("| Gagal membuka / membuat file. Silahkan coba lagi! |\n");
+        printf("----------------------------------------------------\n");
         delay(50);
     }
     else
@@ -483,53 +491,60 @@ void SAVE(char *filename, TabWord listGame, Stack stackHistory, ListOfMap scoreB
 
         // Scoreboard
         Map currentMap;
-        for (i = 0; i < scoreBoard.Num - 1; i++)
+        for (i = 0; i < scoreBoard.Num; i++)
         {
             currentMap = scoreBoard.board[i];
             sprintf(num, "%d", currentMap.Count);
             fputs(num, savefile);
-            fputs("\n", savefile);
-
-            int m;
-            for (m = 0; m < currentMap.Count; m++)
+            if (i != scoreBoard.Num - 1)
             {
-                char *name = toString(currentMap.Elements[m].Key);
-                fputs(name, savefile);
-                sprintf(num, "%d", currentMap.Elements[m].Value);
-                fputs(" ", savefile);
-                fputs(num, savefile);
                 fputs("\n", savefile);
             }
-        }
-
-        // Last Game in Scoreboard
-        currentMap = scoreBoard.board[i];
-        sprintf(num, "%d", currentMap.Count);
-        fputs(num, savefile);
-        if (currentMap.Count != 0)
-        {
-            fputs("\n", savefile);
-            int m;
-            for (m = 0; m < currentMap.Count; m++)
+            else
             {
-                char *name = toString(currentMap.Elements[m].Key);
-                fputs(name, savefile);
-                sprintf(num, "%d", currentMap.Elements[m].Value);
-                fputs(" ", savefile);
-                fputs(num, savefile);
-
-                if (m != currentMap.Count - 1)
+                if (currentMap.Count > 0)
                 {
                     fputs("\n", savefile);
                 }
             }
+
+            // printf("\nMap Length Test!\n");
+            // int p;
+            // for (p = 0; p < 6; p++)
+            // {
+            //     printf("Game ke-%d: %d\n", p + 1, scoreBoard.board[p].Count);
+            // }
+
+            // printf("[Game ke-%d]\n", i + 1);
+
+            int m;
+            for (m = 0; m < currentMap.Count; m++)
+            {
+                // printf("Player ke-%d\n", m+1);
+
+                char *playerName = toString(currentMap.Elements[m].Key);
+                // printf("Passed toString!\n");
+
+                fputs(playerName, savefile);
+                sprintf(num, "%d", currentMap.Elements[m].Value);
+                fputs(" ", savefile);
+                fputs(num, savefile);
+                if (i == scoreBoard.Num - 1 && m == currentMap.Count - 1)
+                    ;
+                else
+                {
+                    fputs("\n", savefile);
+                }
+            }
+
+            // printf("\n");
         }
 
         fclose(savefile);
 
-        printf("\n-------------------------------\n");
-        printf("Berhasil menyimpan progress. ^^\n");
-        printf("-------------------------------\n");
+        printf("\n-----------------------------------\n");
+        printf("| Berhasil menyimpan progress. ^^ |\n");
+        printf("-----------------------------------\n");
     }
 }
 
@@ -576,7 +591,7 @@ void QUIT(TabWord listGame, Stack stackHistory, ListOfMap scoreBoard)
     delay(500);
     printf("low. ");
     printDelay("Shutdown", 20);
-    printDelay("...\n\n", 200);
+    printDelay("...\n", 200);
     delay(1500);
 }
 
@@ -597,10 +612,25 @@ void SCOREBOARD(ListOfSet listPlayer, ListOfMap scoreBoard, TabWord listGame)
         int i;
         for (i = 0; i < playerSet.Count; i++)
         {
+            if (j == 5 && (i % 2 == 0))
+            {
+                if (i != 0)
+                {
+                    printf("-------------------------------------------\n");
+                }
+                printf("| MATCH %d", i / 2 + 1);
+                int countDigit = (i == 0) ? 1 : log10(i) + 1;
+                for (int b = 0; b < 34 - countDigit; b++)
+                {
+                    printf(" ");
+                }
+                printf("|\n-------------------------------------------\n");
+            }
+
             printf("| ");
             Word player = playerSet.PlayerName[i];
             printWord(player);
-            for (int j = 0; j < (19 - player.Length); j++)
+            for (int b = 0; b < (19 - player.Length); b++)
             {
                 printf(" ");
             }
@@ -608,7 +638,7 @@ void SCOREBOARD(ListOfSet listPlayer, ListOfMap scoreBoard, TabWord listGame)
             int skor = Value(scoreMap, player);
             int countDigit = (skor == 0) ? 1 : log10(skor) + 1;
             printf("| %d", skor);
-            for (int j = 0; j < (19 - countDigit); j++)
+            for (int b = 0; b < (19 - countDigit); b++)
             {
                 printf(" ");
             }
@@ -689,7 +719,7 @@ void RESETSB(ListOfSet *listPlayer, ListOfMap *scoreBoard, TabWord listGame)
     }
 }
 
-void UPDATESB(int score, Set *gamePlayers, Map *playerScores)
+void UPDATESB(int score, Set *gamePlayers, Map *playerScores, int whatGame)
 {
     // Check apakah sudah berada dalam set
     printf("Masukkan Nama: ");
@@ -707,8 +737,12 @@ void UPDATESB(int score, Set *gamePlayers, Map *playerScores)
     printf("Berhasil Menambahkan Data dalam SCOREBOARD!\n");
     InsertSetEl(gamePlayers, currentCommand);
     MapValIns(playerScores, currentCommand, score);
-    SortByVal(playerScores);
-    SortSetByMap(gamePlayers, (*playerScores));
+    if (whatGame != 6) // Kalo MARVELSNAP, jangan di Sort
+    {
+        SortByVal(playerScores);
+        SortSetByMap(gamePlayers, (*playerScores));    
+    }
+    
 }
 
 void SHOWHISTORY(Stack stackHistory, int num)
