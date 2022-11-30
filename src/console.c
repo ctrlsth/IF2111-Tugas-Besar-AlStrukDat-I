@@ -72,6 +72,7 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
     loc[i] = '\0';
 
     STARTWORD(loc, loaded);
+    // printf("Passed\n");
     if (*loaded)
     {
         if (!EndWord)
@@ -93,7 +94,8 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
                     }
                     else if (iteration == 2)
                     {
-                        Push(stackHistory, currentWord);
+                        stackHistory->T[n - i - 1] = currentWord;
+                        stackHistory->TOP = n - 1;
                     }
 
                     ADVWORD();
@@ -102,7 +104,17 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
                 iteration++;
             }
 
-            printf("Passed\n");
+            // printf("Passed\n");
+
+            // int m;
+            // for (m = 0; m < stackHistory->countEl; m++)
+            // {
+            //     printf("%d. ", m+1);
+            //     printWord(stackHistory->T[m]);
+            //     printf("\n");
+            // }
+
+            // printf("Passed\n");
 
             // ScoreBoard
             int idx = 0;
@@ -111,7 +123,7 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
                 n = toInt(currentWord);
                 Set *currentSet = &(listPlayer->GameSet[idx]);
                 Map *currentMap = &(scoreBoard->board[idx]);
-                printf("Passed Declaration\n");
+                // printf("Passed Declaration\n");
 
                 ADVWORD();
                 for (i = 0; i < n; i++)
@@ -119,13 +131,13 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
                     // Melakukan separasi antara nama dan skor
                     Word Name, Score;
                     binSep(currentWord, &Name, &Score, ' ');
-                    printf("Passed Sep\n");
+                    // printf("Passed Sep\n");
 
                     // Memasukkan nama pada Set dan Skor pada Map
                     InsertSetEl(currentSet, Name);
-                    printf("Passed Set\n");
+                    // printf("Passed Set\n");
                     MapValIns(currentMap, Name, toInt(Score));
-                    printf("Passed Map\n");
+                    // printf("Passed Map\n");
 
                     ADVWORD();
                 }
@@ -156,13 +168,17 @@ void HELP(boolean loaded)
     printDelay("4.  QUIT - Mengakhiri dan keluar dari sistem\n", 1);
     if (loaded)
     {
-        printDelay("5.  SAVE <namafile.txt> - Melakukan penyimpanan konfigurasi pada file tertentu\n", 1);
+        printDelay("5.  SAVE <namafile>.txt - Melakukan penyimpanan konfigurasi pada file tertentu\n", 1);
         printDelay("6.  CREATE GAME - Membuat dan menambahkan game baru ke dalam daftar\n", 1);
         printDelay("7.  LIST GAME - Menampilkan daftar game yang dapat dimainkan\n", 1);
         printDelay("8.  DELETE GAME - Menghapus suatu game dari dalam daftar\n", 1);
         printDelay("9.  QUEUE GAME - Menambahkan game tertentu ke dalam antrian permainan\n", 1);
         printDelay("10. PLAY GAME - Memulai permainan berdasarkan antrian teratas\n", 1);
-        printDelay("11. SKIP GAME <n> - Melewati n banyak game dari dalam antrian dan memainkan game berikutnya.\n", 1);
+        printDelay("11. SKIP GAME <n> - Melewati n banyak game dari dalam antrian dan memainkan game berikutnya\n", 1);
+        printDelay("12. SCOREBOARD - Menampilkan papan skor untuk setiap game yang terdaftar\n", 1);
+        printDelay("13. RESET SCOREBOARD - Melakukan reset / penghapusan semua entries dalam papan skor\n", 1);
+        printDelay("14. HISTORY <n> - Menampilkan n riwayat game yang pernah dimainkan\n", 1);
+        printDelay("11. RESET HISTORY - Melakukan reset / penghapusan seluruh riwayat permainan\n", 1);
     }
 }
 
@@ -171,7 +187,7 @@ void LISTGAME(TabWord listGame)
     PrintTabWord(listGame);
 }
 
-void CREATEGAME(TabWord *listGame)
+void CREATEGAME(TabWord *listGame, ListOfSet *listPlayers, ListOfMap *scoreBoard)
 {
     currentCommand.Length = 0;
     printDelay("Masukkan nama game yang akan ditambahkan: ", 50);
@@ -195,6 +211,8 @@ void CREATEGAME(TabWord *listGame)
         else
         {
             InsertLast(listGame, currentCommand);
+            listPlayers->Num += 1;
+            scoreBoard->Num += 1;
             printDelay("Game berhasil ditambahkan!\n", 50);
         }
     }
@@ -202,10 +220,9 @@ void CREATEGAME(TabWord *listGame)
     {
         printDelay("Game sudah terdaftar dalam \"LIST GAME\"!\n", 50);
     }
-    
 }
 
-void DELETEGAME(TabWord *listGame, Queue queueGame)
+void DELETEGAME(TabWord *listGame, Queue queueGame, ListOfMap *scoreBoard, ListOfSet *listPlayers, Stack *stackHistory)
 {
     LISTGAME(*listGame);
     printf("\n** Hint: Game yang dapat dihapus adalah Game dengan nomor urut > 6 **\n");
@@ -215,14 +232,45 @@ void DELETEGAME(TabWord *listGame, Queue queueGame)
     {
         int number = toInt(currentCommand) - 1;
         if (number > 5 && number < listGame->Neff)
-        {   
+        {
             if (isInQueue(queueGame, Get(*listGame, number)))
             {
                 printDelay("\nGagal Menghapus Game: Game terdapat dalam antrian!\n", 20);
             }
             else
             {
+                // History
+                Stack tempStack;
+                CreateEmptyStack(&tempStack);
+                infostack temp, gameName = Get((*listGame), number);
+                while (!IsStackEmpty((*stackHistory)))
+                {
+                    Pop(stackHistory, &temp);
+                    if (!compare2Word(temp, gameName))
+                    {
+                        Push(&tempStack, temp);
+                    }
+                }
+                /* Mengembalikan isi History */
+                while (!IsStackEmpty(tempStack))
+                {
+                    Pop(&tempStack, &temp);
+                    Push(stackHistory, temp);
+                }
+
+                // Scoreboard
+                Map *gameBoard = &(scoreBoard->board[number]);
+                CreateEmptyMap(gameBoard);
+                scoreBoard->Num -= 1;
+
+                // Player Names
+                Set *gamePlayers = &(listPlayers->GameSet[number]);
+                CreateEmptySet(gamePlayers);
+                listPlayers->Num -= 1;
+
+                // Game List
                 DeleteAt(listGame, number);
+
                 printDelay("\nGame Berhasil Dihapus!\n", 20);
             }
         }
@@ -233,7 +281,7 @@ void DELETEGAME(TabWord *listGame, Queue queueGame)
     }
     else
     {
-            printDelay("\nMohon masukkan masukan yang valid!\n", 50);
+        printDelay("\nMohon masukkan masukan yang valid!\n", 50);
     }
 }
 
@@ -267,7 +315,7 @@ void QUEUEGAME(TabWord listGame, Queue *queueGame)
     }
 }
 
-void PLAYGAME(TabWord listGame, Queue *queueGame)
+void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfSet *listPlayer, Stack *stackHistory)
 {
     if (isEmpty(*queueGame))
     {
@@ -278,8 +326,8 @@ void PLAYGAME(TabWord listGame, Queue *queueGame)
     {
         ElType Game;
         dequeue(queueGame, &Game);
-        
-        char* GameName = toString(Game);
+
+        char *GameName = toString(Game);
         printDelay("Loading ", 100);
         printDelay(GameName, 100);
         printDelay("...\n", 500);
@@ -288,6 +336,8 @@ void PLAYGAME(TabWord listGame, Queue *queueGame)
         boolean whatGame = true;
         while (whatGame && i < Length(listGame))
         {
+            // printWord(Get(listGame, i));
+            // delay(5000);
             if (compare2Word(Game, Get(listGame, i)))
             {
                 whatGame = false;
@@ -297,21 +347,34 @@ void PLAYGAME(TabWord listGame, Queue *queueGame)
 
         if (!whatGame)
         {
+            int score = 0;
             if (i == 1)
             {
                 system("cls");
-                RNG();
+                RNG(&score);
             }
             else if (i == 2)
             {
                 system("cls");
-                dinerDASH();
+                dinerDASH(&score);
             }
-            else if (i >= 3 && i <= 5)
+            else if (i == 3)
             {
-                printDelay(GameName, 50);
-                printDelay(" masih dalam maintenance.\n", 50);
-                printDelay("Silahkan pilih game lainnya!\n", 50);
+                system("cls");
+                printf("This is Hangman\n");
+                // HANGMAN(&score);
+            }
+            else if (i == 4)
+            {
+                system("cls");
+                printf("This is Tower\n");
+                // TOWEROFHANOI(&score);
+            }
+            else if (i == 5)
+            {
+                system("cls");
+                printf("This is Snake\n");
+                // SNAKEONMETEOR(&score);
             }
             else if (i == 6)
             {
@@ -320,12 +383,17 @@ void PLAYGAME(TabWord listGame, Queue *queueGame)
             }
             else
             {
-                int score = rand();
+                score = rand();
                 printDelay("[ GAME OVER ]\n", 50);
                 printDelay("[ SCORE: ", 50);
                 printf("%d ", score);
                 printDelay("]\n", 50);
             }
+
+            Set *gamePlayers = &(listPlayer->GameSet[i - 1]);
+            Map *playerScores = &(scoreBoard->board[i - 1]);
+            UPDATESB(score, gamePlayers, playerScores);
+            UPDATEHISTORY(stackHistory, Game);
         }
         else
         {
@@ -337,7 +405,7 @@ void PLAYGAME(TabWord listGame, Queue *queueGame)
     }
 }
 
-void SKIPGAME(TabWord listGame, Queue *queueGame, int num)
+void SKIPGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfSet *listPlayer, Stack *stackHistory, int num)
 {
     displayQueue(*queueGame);
     if (!isEmpty(*queueGame))
@@ -349,7 +417,7 @@ void SKIPGAME(TabWord listGame, Queue *queueGame, int num)
         for (int i = 0; i < num; i++)
         {
             printDelay("...", 500);
-            if (!isEmpty(*queueGame)) 
+            if (!isEmpty(*queueGame))
             {
                 dequeue(queueGame, &Game);
             }
@@ -358,11 +426,11 @@ void SKIPGAME(TabWord listGame, Queue *queueGame, int num)
             printf("\b\b\b");
         }
         printDelay("...\n", 500);
-        PLAYGAME(listGame, queueGame);
+        PLAYGAME(listGame, queueGame, scoreBoard, listPlayer, stackHistory);
     }
 }
 
-void SAVE(char *filename, TabWord listGame)
+void SAVE(char *filename, TabWord listGame, Stack stackHistory, ListOfMap scoreBoard)
 {
     int i;
     FILE *savefile;
@@ -385,21 +453,75 @@ void SAVE(char *filename, TabWord listGame)
     }
     else
     {
-        // printf("Passed\n");
         char num[3];
+
+        // List Game
         sprintf(num, "%d", Length(listGame));
-        // printf("PassedX\n");
         fputs(num, savefile);
-        // printf("PassedY\n");
         fputs("\n", savefile);
-        // printf("PassedZ\n");
         for (i = 0; i < listGame.Neff; i++)
         {
             char *gamename = toString(Get(listGame, i));
             fputs(gamename, savefile);
-            if (i != listGame.Neff -1)
+            fputs("\n", savefile);
+        }
+
+        // History
+        sprintf(num, "%d", Top(stackHistory) + 1);
+        fputs(num, savefile);
+        fputs("\n", savefile);
+
+        if (Top(stackHistory) != 0)
+        {
+            for (i = Top(stackHistory); i >= 0; i--)
             {
+                char *gameHistory = toString(stackHistory.T[i]);
+                fputs(gameHistory, savefile);
                 fputs("\n", savefile);
+            }
+        }
+
+        // Scoreboard
+        Map currentMap;
+        for (i = 0; i < scoreBoard.Num - 1; i++)
+        {
+            currentMap = scoreBoard.board[i];
+            sprintf(num, "%d", currentMap.Count);
+            fputs(num, savefile);
+            fputs("\n", savefile);
+
+            int m;
+            for (m = 0; m < currentMap.Count; m++)
+            {
+                char *name = toString(currentMap.Elements[m].Key);
+                fputs(name, savefile);
+                sprintf(num, "%d", currentMap.Elements[m].Value);
+                fputs(" ", savefile);
+                fputs(num, savefile);
+                fputs("\n", savefile);
+            }
+        }
+
+        // Last Game in Scoreboard
+        currentMap = scoreBoard.board[i];
+        sprintf(num, "%d", currentMap.Count);
+        fputs(num, savefile);
+        if (currentMap.Count != 0)
+        {
+            fputs("\n", savefile);
+            int m;
+            for (m = 0; m < currentMap.Count; m++)
+            {
+                char *name = toString(currentMap.Elements[m].Key);
+                fputs(name, savefile);
+                sprintf(num, "%d", currentMap.Elements[m].Value);
+                fputs(" ", savefile);
+                fputs(num, savefile);
+
+                if (m != currentMap.Count - 1)
+                {
+                    fputs("\n", savefile);
+                }
             }
         }
 
@@ -411,7 +533,7 @@ void SAVE(char *filename, TabWord listGame)
     }
 }
 
-void QUIT(TabWord listGame)
+void QUIT(TabWord listGame, Stack stackHistory, ListOfMap scoreBoard)
 {
     boolean invalid_input;
     if (!IsEmpty(listGame))
@@ -429,7 +551,7 @@ void QUIT(TabWord listGame)
                 printf("Nama file: ");
                 STARTCMD(false);
                 char *savefile = toString(currentCommand);
-                SAVE(savefile, listGame);
+                SAVE(savefile, listGame, stackHistory, scoreBoard);
             }
             else if (compareWord(currentCommand, "Tidak"))
             {
@@ -570,6 +692,8 @@ void RESETSB(ListOfSet *listPlayer, ListOfMap *scoreBoard, TabWord listGame)
 void UPDATESB(int score, Set *gamePlayers, Map *playerScores)
 {
     // Check apakah sudah berada dalam set
+    printf("Masukkan Nama: ");
+    STARTCMD(false);
     UPPER(&currentCommand);
     while (IsSetMember((*gamePlayers), currentCommand))
     {
@@ -585,4 +709,58 @@ void UPDATESB(int score, Set *gamePlayers, Map *playerScores)
     MapValIns(playerScores, currentCommand, score);
     SortByVal(playerScores);
     SortSetByMap(gamePlayers, (*playerScores));
+}
+
+void SHOWHISTORY(Stack stackHistory, int num)
+{
+    if (num < 1)
+    {
+        printf("Masukan Angka Tidak Valid.\n");
+        printf("Mohon masukkan angka yang bernilai positif!\n");
+        return;
+    }
+
+    int TOP = Top(stackHistory);
+    if (TOP == StackNil)
+    {
+        printf("Ga hanya History, Hatimu pun kosong ^^\n");
+        return;
+    }
+
+    if (num > TOP + 1)
+    {
+        num = TOP + 1;
+    }
+
+    printf("\nBerikut adalah daftar game yang telah dimainkan:\n");
+    int i = TOP, j = 1;
+    while (j - 1 != num)
+    {
+        printf("%d. ", j);
+        printWord(stackHistory.T[i]);
+        printf("\n");
+        i--;
+        j++;
+    }
+}
+
+void RESETHISTORY(Stack *stackHistory)
+{
+    printf("APAKAH KAMU YAKIN INGIN MELAKUKAN RESET HISTORY (YA/TIDAK)? ");
+    STARTCMD(false);
+    if (compareWord(currentCommand, "YA"))
+    {
+        CreateEmptyStack(stackHistory);
+        printf("HISTORY BERHASIL DI RESET!\n");
+    }
+    else
+    {
+        printf("RESET HISTORY DIBATALKAN.\n");
+        SHOWHISTORY((*stackHistory), MaxEl);
+    }
+}
+
+void UPDATEHISTORY(Stack *stackHistory, Word gameName)
+{
+    Push(stackHistory, gameName);
 }

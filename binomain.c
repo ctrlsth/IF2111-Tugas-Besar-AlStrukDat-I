@@ -5,9 +5,9 @@
 #include "src/ADT/mesinkata.h"
 #include "src/ADT/array.h"
 #include "src/ADT/queue.h"
-#include "src/ADT/stack2.h"
-#include "src/ADT/set2.h"
-#include "src/ADT/map2.h"
+#include "src/ADT/stack.h"
+#include "src/ADT/set.h"
+#include "src/ADT/map.h"
 #include "src/boolean.h"
 #include "src/console.h"
 
@@ -122,12 +122,12 @@ int main()
         }
         else if (compareWord(Get(listCommand, 0), "QUIT"))
         {
-            QUIT(listGame);
+            QUIT(listGame, History, scoreBoard);
             active = false;
         }
         else if (compareWord(Get(listCommand, 0), "CREATE") && compareWord(Get(listCommand, 1), "GAME"))
         {
-            (loaded) ? CREATEGAME(&listGame) : unknownCommand();
+            (loaded) ? CREATEGAME(&listGame, &listPlayer, &scoreBoard) : unknownCommand();
         }
         else if (compareWord(Get(listCommand, 0), "SAVE"))
         {
@@ -136,7 +136,7 @@ int main()
                 if (Length(listCommand) == 2)
                 {
                     char* savefile = toString(Get(listCommand, 1));
-                    SAVE(savefile, listGame);
+                    SAVE(savefile, listGame, History, scoreBoard);
                 }
                 else
                 {
@@ -155,7 +155,7 @@ int main()
         }
         else if (compareWord(Get(listCommand, 0), "DELETE") && compareWord(Get(listCommand, 1), "GAME"))
         {
-            (loaded) ? DELETEGAME(&listGame, queueGame) : unknownCommand();
+            (loaded) ? DELETEGAME(&listGame, queueGame, &scoreBoard, &listPlayer, &History) : unknownCommand();
         }
         else if (compareWord(Get(listCommand, 0), "QUEUE") && compareWord(Get(listCommand, 1), "GAME"))
         {
@@ -166,7 +166,7 @@ int main()
             if (loaded)
             {
                 displayQueue(queueGame);
-                PLAYGAME(listGame, &queueGame);
+                PLAYGAME(listGame, &queueGame, &scoreBoard, &listPlayer, &History);
             }
             else
             {
@@ -181,7 +181,7 @@ int main()
                 if (isNumber(Get(listCommand, 2)))
                 {
                     int i = toInt(Get(listCommand, 2));
-                    SKIPGAME(listGame, &queueGame, i);
+                    SKIPGAME(listGame, &queueGame, &scoreBoard, &listPlayer, &History, i);
                 }
                 else
                 {
@@ -201,6 +201,14 @@ int main()
         else if (compareWord(Get(listCommand, 0), "RESET") && compareWord(Get(listCommand, 1), "SCOREBOARD"))
         {
             (loaded) ? RESETSB(&listPlayer, &scoreBoard, listGame) : unknownCommand();
+        }
+        else if (compareWord(Get(listCommand, 0), "HISTORY"))
+        {
+            (loaded) ? SHOWHISTORY(History, toInt(Get(listCommand, 1))) : unknownCommand();
+        }
+        else if (compareWord(Get(listCommand, 0), "RESET") && compareWord(Get(listCommand, 1), "HISTORY"))
+        {
+            (loaded) ? RESETHISTORY(&History) : unknownCommand();
         }
         else
         {
