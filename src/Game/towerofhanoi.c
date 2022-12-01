@@ -7,14 +7,15 @@ boolean finalGame(Stack S)
     Stack tes;
     int a;
     infostack x;
-    boolean finalGame = true;
+    boolean finished = true;
     CreateEmptyStack(&tes);
 
     for (a = 5; a > 0; a--)
     {
-        char num = 5 + '0';
+        char num = a + '0';
         char strNum[1];
         strNum[0] = num;
+        strNum[1] = '\0';
         Word number = toWord(strNum);
         Push(&tes, number);
     }
@@ -23,15 +24,19 @@ boolean finalGame(Stack S)
     {
         if (toInt(InfoTop(S)) != toInt(InfoTop(tes)))
         {
-            finalGame = false;
+            finished = false;
         }
         Pop(&S, &x);
+        // printWord(x);
+        // printf("\n^^ Dari S ^^\n");
         Pop(&tes, &x);
+        // printWord(x);
+        // printf("\n^^ Dari Tes ^^\n");
     }
 
     if (IsStackEmpty(S) && IsStackEmpty(tes))
     {
-        return finalGame;
+        return finished;
     }
     else
     {
@@ -90,7 +95,7 @@ void piringan(Stack S, int a, int wmax)
     }
 }
 
-void towerOfHanoi()
+void towerOfHanoi(int *skorHanoi)
 {
     // KAMUS//
     int move, i, finalscore, start, end;
@@ -132,7 +137,15 @@ void towerOfHanoi()
             end = toInt(currentCommand);
             printf("\n");
 
-            printf("Memindahkan piringan ke tiang %d ...", end);
+            if (end > 0 && end < 3)
+            {
+                printf("Memindahkan piringan ke tiang %d ...\n", end);
+            }
+            else
+            {
+                printf("Memindahkan piringan ke tiang berapa ???\n");
+            }
+            
             if (start >= 1 && start <= 3 && end >= 1 && end <= 3)
             {
                 if (start != end)
@@ -302,15 +315,19 @@ void towerOfHanoi()
     {
         finalscore = 10;
     }
-    else if (move >= 50 && move < 70)
+    else if (move > 31 && move < 51)
+    {
+        finalscore = 9;
+    }
+    else if (move >= 51 && move < 61)
     {
         finalscore = 8;
     }
-    else if (move >= 70 && move < 90)
+    else if (move >= 61 && move < 71)
     {
         finalscore = 7;
     }
-    else if (move >= 90 && move < 100)
+    else if (move >= 71 && move < 91)
     {
         finalscore = 6;
     }
@@ -318,15 +335,18 @@ void towerOfHanoi()
     {
         finalscore = 5;
     }
+
     showTiang(tiang1, tiang2, tiang3);
     printf("Yey! Kamu berhasil selesai memainkan game Tower of Hanoi dengan berjalan sebanyak %d langkah! \n", move);
     printf("Skor kamu : %d\n", finalscore);
+    (*skorHanoi) = finalscore;
+
     if (finalscore == 10)
     {
-        printf("Wow! Kamu mendapatkan nilai tertinggi!");
+        printf("Wow! Kamu mendapatkan nilai tertinggi!\n");
     }
     else
     {
-        printf("Main lagi yuk!");
+        printf("Main lagi yuk!\n");
     }
 }
