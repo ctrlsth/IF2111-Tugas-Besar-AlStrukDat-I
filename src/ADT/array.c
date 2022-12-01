@@ -155,6 +155,7 @@ void PrintTabWord(TabWord array)
 	int i;
 	if (Length(array) != 0)
 	{
+		printf("Berikut adalah daftar game yang tersedia\n");
 		for (i = 0; i < Length(array); i++)
 		{
 			printf("%d. ", i + 1);
@@ -202,4 +203,19 @@ IdxType SearchTabWord(TabWord array, ElType el)
 		i++;
 	}
 	return (-1);
+}
+
+boolean isMemberArray(TabWord array, Word Kata)
+{
+	boolean member = false;
+	int i = 0;
+	while (i < array.Neff && !member)
+	{
+		if (compare2Word(array.TW[i], Kata))
+		{
+			member = true;
+		}
+		i++;
+	}
+	return member;
 }
