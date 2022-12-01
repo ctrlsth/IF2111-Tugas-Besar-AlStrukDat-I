@@ -1,7 +1,7 @@
 /* File: mesinkar.c */
 /* Implementasi Mesin Karakter */
 
-#include "mesin_kar.h"
+#include "mesinkarakter.h"
 #include <stdio.h>
 
 /* State Mesin */

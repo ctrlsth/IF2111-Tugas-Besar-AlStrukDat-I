@@ -18,10 +18,13 @@ typedef struct {
 } ListH;
 
 int LenghtList(ListH L);
+//mengukur panjang dari sebuah list, entah list yg berada didalam file .txt ataupun tidak.
 
 int savefile(ListH guessword, Word fileName);
+//menyimpan sebuah Word kedalam List. Dipakai untuk menyimpan opsi jawaban/soal baru.
 
 FILE *StartWord(Word source);
+//membaca 
 
 ListH loadfile(Word source);
 
