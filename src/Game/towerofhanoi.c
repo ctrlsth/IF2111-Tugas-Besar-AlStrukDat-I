@@ -114,7 +114,7 @@ void towerOfHanoi()
         Word number = toWord(strNum);
         Push(&tiang1, number);
     }
-
+    
     while (!finalGame(tiang3))
     {
         printf("Gerakan = %d\n", move);
