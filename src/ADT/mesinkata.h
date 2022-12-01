@@ -114,4 +114,7 @@ void binSep(Word Kata, Word *Kata1, Word *Kata2, char separator);
 
 void UPPER(Word *Kata);
 
+boolean compareCharWord(Word kata1, char kata2);
+
+boolean strcompare(char *kata1, char *kata2);
 #endif

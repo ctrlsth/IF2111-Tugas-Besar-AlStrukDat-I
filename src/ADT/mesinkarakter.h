@@ -1,7 +1,7 @@
 #ifndef __MESIN_KAR__
 #define __MESIN_KAR__
 
-#include <stdio.h>
+
 #include "../boolean.h"
 
 #define MARK '\n'
