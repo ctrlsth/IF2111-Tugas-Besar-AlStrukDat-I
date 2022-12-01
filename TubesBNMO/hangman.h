@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include "boolean.h"
-#include "ADT MESIN KATA/mesin_kata.h"
+#include "ADTMESINKATA/mesin_kata.h"
 
 #define IDX_UNDEF -1
 #define MARKK '_'

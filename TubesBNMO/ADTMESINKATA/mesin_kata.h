@@ -5,7 +5,7 @@
 #define __MESINKATA_H__
 
 #include "../boolean.h"
-#include "ADT MESIN KARAKTER/mesin_kar.h"
+#include "ADTMESINKARAKTER/mesin_kar.h"
 
 #define NMax 200
 #define BLANK ' '
