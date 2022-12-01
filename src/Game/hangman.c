@@ -390,23 +390,22 @@ void HangMan (int *skorhangman){
             DigitBenar(&LSoal, input, &Lsalah, &Lbenar);
         }
 
-        if(Lbenar.panjang == 0){
-            skorhangman += point;
-            printf("Skor : %d\n", skorhangman);
-        } else if(Lsalah.panjang > KESEMPATAN){
-            selesai = true;
-        }
-        jumlahMain ++;
-    }
-    if(selesai == true){
-        printf("YAHAHHAA!!!\n");
-        printf("MAAF ANDA KURANG BERUNTUNG. SARAN KAMI SIH COBA LAGI (TAUN DPN YA!!)");
-        printf("btw skor gamem situ saat ini ada di %d point yaaa", skorhangman);
-    } else {
-        printf("WADAWWW.. SITU KEREN BANGET BISA MENANGIN NI GAME!!\n");
-        printf("Karena situ udh menang, aku kasi situ %d point dehhh yakk!!\n", skorhangman);\
-    }
-}
+		if(Lbenar.panjang == 0){
+			(*skorhangman) += point;
+			printf("Skor : %d\n", (*skorhangman));
+		} else if(Lsalah.panjang > KESEMPATAN){
+			selesai = true;
+		}
+		jumlahMain ++;
+	}
+	if(selesai == true){
+		printf("YAHAHHAA!!!\n");
+		printf("MAAF ANDA KURANG BERUNTUNG. SARAN KAMI SIH COBA LAGI (TAUN DPN YA!!)");
+		printf("btw skor gamem situ saat ini ada di %d point yaaa", (*skorhangman));
+	} else {
+		printf("WADAWWW.. SITU KEREN BANGET BISA MENANGIN NI GAME!!\n");
+		printf("Karena situ udh menang, aku kasi situ %d point dehhh yakk!!\n", (*skorhangman));
+	}
 
 int main(){
     int skor = 10;

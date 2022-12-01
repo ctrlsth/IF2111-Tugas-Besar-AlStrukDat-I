@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "towerOfHanoi.h"
+#include "towerofhanoi.h"
 #include "../ADT/mesinkata.h"
 
 boolean finalGame(Stack S)
@@ -13,7 +13,7 @@ boolean finalGame(Stack S)
     for (a = 5; a > 0; a--)
     {
         char num = 5 + '0';
-        char strNum[1]; 
+        char strNum[1];
         strNum[0] = num;
         Word number = toWord(strNum);
         Push(&tes, number);
