@@ -8,6 +8,8 @@
 #include "Game/RNG.h"
 #include "Game/marvelsnap.h"
 #include "Game/snakeonmeteor.h"
+#include "Game/towerofhanoi.h"
+#include "Game/hangman.h"
 
 void delay(int milli_seconds)
 {
@@ -357,14 +359,14 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             else if (i == 3)
             {
                 system("cls");
-                printf("This is Hangman\n");
-                // HANGMAN(&score);
+                // printf("This is Hangman\n");
+                HangMan(&score);
             }
             else if (i == 4)
             {
                 system("cls");
-                printf("This is Tower\n");
-                // TOWEROFHANOI(&score);
+                // printf("This is Tower\n");
+                towerOfHanoi(&score);
             }
             else if (i == 5)
             {
@@ -374,9 +376,9 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             else if (i == 6)
             {
                 system("cls");
-                // MARVELSNAP(&score, &score2);
-                score = rand();
-                score2 = rand();
+                MARVELSNAP(&score, &score2);
+                // score = rand();
+                // score2 = rand();
             }
             else
             {
