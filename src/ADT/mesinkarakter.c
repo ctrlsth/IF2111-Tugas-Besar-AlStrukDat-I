@@ -19,6 +19,7 @@ void START()
           Jika CC != MARK maka EOP akan padam (false)
           Jika CC = MARK maka EOP akan menyala (true) */
 {
+<<<<<<< Updated upstream
     pita = stdin;
     ADV();
 }
@@ -35,6 +36,18 @@ void ADV()
     if (EOP)
     {
         fclose(pita);
+=======
+    // load = NULL;
+    load = fopen(txtfile, "r");
+    if (load == NULL)
+    {
+        *openSuccess = false;
+    }
+    else
+    {
+        *openSuccess = true;
+        adv(true);
+>>>>>>> Stashed changes
     }
 }
 

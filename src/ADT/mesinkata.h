@@ -92,4 +92,12 @@ void CMD_ADVKATA();
 void CMD_COPYWORD();
 
 
+<<<<<<< Updated upstream
 #endif
+=======
+boolean strcompare(char *kata1, char *kata2);
+
+void clear();
+
+#endif
+>>>>>>> Stashed changes

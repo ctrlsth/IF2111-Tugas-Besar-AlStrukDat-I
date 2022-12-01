@@ -306,8 +306,13 @@ void PLAYGUIDE(){
     printf("7.Player yang menang adalah player skor lebih banyak\n");
     printf("8. Jika skor seri, player yang menang adalah player dengan total power pada seluruh arena lebih besar\n");
     printf("Tekan Enter untuk keluar dari Guide: ");
+<<<<<<< Updated upstream:kadek_1/src/marvelsnap.c
     STARTKATAGAME();
     system("cls");
+=======
+    STARTCMD(false);
+    clear();
+>>>>>>> Stashed changes:src/Game/marvelsnap.c
 }
 
 void MARVELSNAP(){
@@ -339,8 +344,13 @@ void MARVELSNAP(){
     ArrayInt Arena3Player2; MakeArrayInt(&Arena3Player2);
     while(!play){
         COMMANDGAME();
+<<<<<<< Updated upstream:kadek_1/src/marvelsnap.c
         system("cls");
         if(compareWord(CKata,"PLAY")){
+=======
+        clear();
+        if(compareWord(currentCommand,"PLAY")){
+>>>>>>> Stashed changes:src/Game/marvelsnap.c
             play = true;
         }
         else if(compareWord(CKata,"GUIDE")){
@@ -353,7 +363,7 @@ void MARVELSNAP(){
     }
 
     printDelay("Prepare to Play\n",40);delay(500);
-    system("cls");
+    clear();
     for(i=0;i<3;i++){
         kartu1.Energy = (rand()%(i+1)) + 1;
         kartu1.Power = CardPower(kartu1.Energy);
@@ -367,8 +377,13 @@ void MARVELSNAP(){
     printDelay("The Game has been started\n",25);delay(500);
     printDelay("Player 1 Turn",25);printDelay("...\n",200);
     printf("Tekan Enter untuk melanjutkan permainan: ");
+<<<<<<< Updated upstream:kadek_1/src/marvelsnap.c
     STARTKATAGAME();
     system("cls");
+=======
+    STARTCMD(false);
+    clear();
+>>>>>>> Stashed changes:src/Game/marvelsnap.c
     printf("-------------BOARD TURN 0------------------\n\n");
     PrintArena(PreArena1Player1,PreArena2Player1,PreArena3Player1,PreArena1Player2,PreArena2Player2,PreArena3Player2);
     insertRandomCard(&Player1);
@@ -378,15 +393,20 @@ void MARVELSNAP(){
             printf("Turn: %d\n",turn);
             printf("Player 1\n");
             PlayerTurn(&Energyturn,&pemain1, &pemain2, &Player1, &Arena1Player1, &Arena2Player1, &Arena3Player1);
-            system("cls");
+            clear();
             printf("--------TEMPORARY BOARD TURN %d------------------\n\n",turn);
             PrintArena(Arena1Player1,Arena2Player1,Arena3Player1,PreArena1Player2,PreArena2Player2,PreArena3Player2);
         }
-        system("cls");
+        clear();
         printDelay("Player 2 Turn",25);printDelay("...\n",200);
         printf("Tekan Enter untuk melanjutkan permainan: ");
+<<<<<<< Updated upstream:kadek_1/src/marvelsnap.c
         STARTKATAGAME();
         system("cls");
+=======
+        STARTCMD(false);
+        clear();
+>>>>>>> Stashed changes:src/Game/marvelsnap.c
         insertRandomCard(&Player2);
         printf("-------------BOARD TURN %d------------------\n\n",turn -1);
         PrintArena(PreArena1Player1,PreArena2Player1,PreArena3Player1,PreArena1Player2,PreArena2Player2,PreArena3Player2);
@@ -395,11 +415,11 @@ void MARVELSNAP(){
             printf("Turn: %d\n",turn);
             printf("Player 2\n");
             PlayerTurn(&Energyturn,&pemain2, &pemain1, &Player2, &Arena1Player2, &Arena2Player2, &Arena3Player2);
-            system("cls");
+            clear();
             printf("--------TEMPORARY BOARD TURN %d------------------\n\n",turn);
             PrintArena(PreArena1Player1,PreArena2Player1,PreArena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);
         }
-        system("cls");
+        clear();
 
         turn +=1;
         if(turn == 7){
@@ -414,13 +434,18 @@ void MARVELSNAP(){
         }
         else{
             printDelay("Turn ",25);printf("%d ",turn - 1);printDelay("Ended\n",25);delay(1500);
-            system("cls");
+            clear();
             printDelay("Turn ",25);printf("%d ",turn);printDelay("Begin\n",25);delay(1500);
-            system("cls");
+            clear();
             printDelay("Player 1 Turn",25);printDelay("...\n",200);
             printf("Tekan Enter untuk melanjutkan permainan: ");
+<<<<<<< Updated upstream:kadek_1/src/marvelsnap.c
             STARTKATAGAME();
             system("cls");
+=======
+            STARTCMD(false);
+            clear();
+>>>>>>> Stashed changes:src/Game/marvelsnap.c
             insertRandomCard(&Player1);
             printf("-------------BOARD TURN %d------------------\n\n",turn-1);
             PrintArena(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);

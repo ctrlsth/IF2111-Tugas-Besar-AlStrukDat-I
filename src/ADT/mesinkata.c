@@ -16,6 +16,7 @@ void IgnoreBlanks(boolean CMD)
    I.S. : CC sembarang
    F.S. : CC ≠ BLANK atau CC = MARK */
 {
+<<<<<<< Updated upstream
     while (CC == BLANK)
     {
         if (CMD)
@@ -48,6 +49,20 @@ void CMD_STARTKATA(){
     {
         EndWord = false;
         CMD_COPYWORD();
+=======
+    loadstart(txtfile, openSuccess);
+    if(*openSuccess){
+        IgnoreBlanks();
+        if (CC == EOF)
+        {
+            EndWord = true;
+        }
+        else
+        {
+            EndWord = false;
+            ADVWORD();
+        }
+>>>>>>> Stashed changes
     }
 }
 
@@ -353,6 +368,31 @@ char* strConcat(char* s1, char* s2){
     }
     s3[i] = '\0';
     return s3;
+}
+
+boolean strcompare(char *kata1, char *kata2){
+    boolean same = false;
+    int i = 0;
+    if(strLength(kata1) == strLength(kata2)){
+        same = true;
+        while(i<strLength(kata1) && same){
+            if(kata1[i] != kata2[i]){
+                same = false;
+            }
+            else{
+                i++;
+            }
+        }
+    }
+    return same;
+}
+
+void clear(){
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
 }
 
 // int main()
