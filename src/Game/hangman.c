@@ -1,17 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
-#include "../boolean.h"
-#include "../ADT/mesinkata.h"
-
-#define IDX_UNDEF -1
-#define MARKK '_'
-#define KESEMPATAN 10
-
-typedef struct {
-    char kata[KESEMPATAN];
-    int panjang;
-} List;
+#include "hangman.h"
 
 //berhasil
 void CreateList(List *LSoal, int digit){
