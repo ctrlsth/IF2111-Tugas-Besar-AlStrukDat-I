@@ -258,8 +258,8 @@ void PrintKalimat(Word W){
 	}
 }
 
-boolean IsOne(Word W){
-    return(W.Length == 1);
+boolean IsOne(){
+    return(currentCommand.Length == 1);
 }
 //berhasil
 int TampilanGame(Word Wbenar , Word Wsalah, int urutan, Word WSoal){
@@ -290,23 +290,27 @@ boolean Ada(char huruf, Word Wsalah, Word Wbenar, Word WSoal){
 	return found;
 }
 
+/*
 void HangMan(int *skorhangman){
-    char answer;
-    ListH LGame;
-    ListH LJawaban;
-    ListH LSoal;
+
+    //inisiasi kebutuhan
+    ListH LGame; 
+    ListH LJawaban; //dipake buat nyimpen dan ngakses jawaban dari jawaban.txt
+    ListH LSoal; //dipake buat nyimpen dan ngakses jawaban dari soal.txt
     CreateList(&LGame);
     CreateList(&LJawaban);
     CreateList(&LSoal);
-    Word WSoal = LGame.kalimat[0];
-    Word Wbenar = LGame.kalimat[1];
-    Word Wsalah = LGame.kalimat[2];
+    Word WSoal = LGame.kalimat[0]; //dipake buat nampilin soal 
+    Word Wbenar = LGame.kalimat[1]; //dipake buat nyimpen '_ _ _' dengan data acuan dari WSoal. 
+    //panjang word ini dijadiin acuan buat ngukur apakah game sudah selesai 1 match atau belum
+    Word Wsalah = LGame.kalimat[2]; //dipake buat nyimpen jawaban yang salah. 
+    //panjang word ini juga dipake buat ngukur apakah game sudah selesai atau belum.
     srand(time(0));
     int point;
     int jumlahMain = 0;
     int jumlahSalah = 0;
     boolean selesai = false;
-    LJawaban = loadfile(toWord("jawaban.txt"));
+    LJawaban = loadfile(toWord("jawaban.txt"));//manggil file txt
     LSoal = loadfile(toWord("soal.txt"));
 
 	// printf("%d\n", LSoal.panjang);
@@ -344,21 +348,38 @@ void HangMan(int *skorhangman){
     printf("                              |__/      |__/ \\_______/|__/|__/                                          \n");
     printf("\n");
     printf("\n");
-    
 
-    while(!selesai || jumlahMain < LJawaban.panjang){
-        int urutan = (rand()%LJawaban.panjang) + 1;
+    //tampilan menu untuk memilih mau langsung main atau nambahin dictionary
+    printf("Pilih yang mana yang kamu suka");
+    printf("Pilih 'L' untuk langsung main");
+    printf("Pilih 'S' untuk menambah dictionary");
+    STARTCMD(true);
+    char input;
+    while(!IsOne){
+        input = currentCommand.TabChar[0];
+        if (input = 'S'){
+            //**masukan fungsi untuk mengisi list soal dan jawaban baru**
+        }
+    }
+
+    
+    //permainan dimulai
+    while(!selesai && jumlahMain < LSoal.panjang){
+        int urutan = (rand()%LJawaban.panjang) + 1; //ngacak urutan dari list yg mau dipake
         // printf("%d\n", urutan);
         
+        //inisiasi Word
         CreateWord(&WSoal);
         CreateWord(&Wbenar);
         CreateWord(&Wsalah);
         
-        Wsalah.Length = jumlahSalah;
+
+        Wsalah.Length = 0;
         Wbenar.Length = WSoal.Length;
         for(int increment = 0; increment<Wbenar.Length; increment++){
-            Wbenar.TabChar[increment] = LJawaban.kalimat[urutan].TabChar[increment]; 
+            Wbenar.TabChar[increment] = CLUE; 
         }
+        CopyList(LSoal, WSoal, urutan);
         
         point = WSoal.Length;
        
@@ -369,9 +390,7 @@ void HangMan(int *skorhangman){
         if(IsOne){
             input = currentCommand.TabChar[0];
         }
-        //scanf("%c", &input);
         printf("\n");
-        //printf("%c", input);
         while(!(input >= 'A' && input <= 'Z')){
             printf("******************************************************************************************\n");
             printf("*  Sori bro, coba situ input hurufnya di capslocskin dlu truss inputnya harus berupa huruf yakk!  *\n");
@@ -384,7 +403,7 @@ void HangMan(int *skorhangman){
             printf("\n");
         }
         UbahHuruf(&WSoal, input, &Wsalah, &Wbenar);
-        while(Wbenar.Length != 0 || Wsalah.Length < KESEMPATAN){
+        while(Wbenar.Length != 0 || Wsalah.Length != 10){
             TampilanGame(Wbenar, Wsalah, urutan, WSoal);
             printf("Masukan Tebakanmu : ");
             STARTCMD(true);
@@ -411,9 +430,12 @@ void HangMan(int *skorhangman){
                 printf("\n");       
             }
             UbahHuruf(&WSoal, input, &Wsalah, &Wbenar);
+
+
             printf("\n\n&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&\n\n\n\n");
         }
 
+        //untuk merubah skor game
         if(Wbenar.Length == 0){
             skorhangman += point;
             printf("Skor : %d\n", skorhangman);
@@ -421,14 +443,151 @@ void HangMan(int *skorhangman){
             selesai = true;
         }
         jumlahMain ++;
+        
+        //untuk memvalidasi kelanjutan permainan
+        printf("Mau lanjut main lagi ga? (Y/N)");
+        STARTCMD(true);
+                if(IsOne){
+                    input = currentCommand.TabChar[0];
+                }
+        while(!(input == 'Y' || input == 'N')){
+            if(input == 'Y'){
+                selesai = true;
+            } else{
+                jumlahSalah = Wsalah.Length;
+                CreateWord(&Wsalah); //inisiasi isi dari kumpulan huruf yang salah
+            }
+        }
     }
+
+    //closingan game
     if(selesai == true){
-        printf("YAHAHHAA!!!\n");
-        printf("MAAF ANDA KURANG BERUNTUNG. SARAN KAMI SIH COBA LAGI (TAUN DPN YA!!)");
+        printf("YAHHH!!!\n");
+        printf("SEDIH BANGET DEH, KAMU BELOM MENCAPAI SKOR MAKSIMAL. SARAN KAMI SIH COBA LAGI (TAUN DPN YA!!)");
         printf("btw skor gamem situ saat ini ada di %d point yaaa", skorhangman);
     } else {
-        printf("WADAWWW.. SITU KEREN BANGET BISA MENANGIN NI GAME!!\n");
+        printf("WADAWWW.. SITU KEREN BANGET BISA TAMATIN NI GAME!!\n");
         printf("Karena situ udh menang, aku kasi situ %d point dehhh yakk!!\n", skorhangman);\
+    }
+}
+*/*
+
+void HangMan(int *skor){
+
+    ListH Lsoal = loadfile(toWord("Document/soal.txt"));
+    ListH Ljawaban = loadfile(toWord("Document/soal.txt"));
+    Word WSoal;
+    Word Wbenar;
+    Word Wsalah;
+    int point = WSoal.Length;
+    int jumlahmain = 0;
+    int jumlahkalah = 0;
+    char input;
+    boolean selesai = false;
+    srand(time(0));
+
+
+    printf("\n\n***INI TAMPILAN AWAL***\n\n");
+
+    while(selesai == false && jumlahmain != Lsoal.panjang){
+        CreateWord(&Wbenar);
+        CreateWord(&WSoal);
+        CreateWord(&Wsalah);
+
+        int urutan = (rand()%Ljawaban.panjang) + 1;
+        CopyList(Lsoal, WSoal, urutan);
+        for(int i = 0; i<WSoal.Length; i++){
+            Wbenar.TabChar[i] = CLUE;
+        }
+        Wsalah.Length = 0;
+        point = WSoal.Length;
+
+        TampilanGame(Wbenar, Wsalah, urutan, WSoal);
+        printf("Masukan Tebakanmu : ");
+        STARTCMD(true);
+        char input;
+        
+        
+        while(!IsOne()){
+            printf("hurufnya jgn > 1 yak!\n");
+            printf("Masukan Tebakanmu : ");
+            STARTCMD(true);
+        }
+        input = currentCommand.TabChar[0];
+        printf("\n");
+        
+        
+        while(!(input >= 'A' && input <= 'Z')){
+            printf("******************************************************************************************\n");
+            printf("*  Sori bro, coba situ input hurufnya di capslocskin dlu truss inputnya harus berupa huruf yakk!  *\n");
+            printf("******************************************************************************************\n");
+            printf("Masukan Tebakanmu : ");
+            while(!IsOne()){
+                printf("hurufnya jgn > 1 yak!\n");
+                printf("Masukan Tebakanmu : ");
+                STARTCMD(true);
+            }
+            input = currentCommand.TabChar[0];
+            printf("\n");
+        }
+        UbahHuruf(&WSoal, input, &Wsalah, &Wbenar);
+        while(Wbenar.Length != 0 && Wsalah.Length < KESEMPATAN){
+            TampilanGame(Wbenar, Wsalah, urutan, WSoal);
+            printf("Masukan Tebakanmu : ");
+            STARTCMD(true);
+            while(!IsOne()){
+                printf("hurufnya jgn > 1 yak!\n");
+                printf("Masukan Tebakanmu : ");
+                STARTCMD(true);
+            }
+            input = currentCommand.TabChar[0];
+            printf("\n");
+            while(!(input >= 'A' && input <= 'Z') || (Ada(input, Wsalah, Wbenar, WSoal))){
+                if((Ada(input, Wsalah, Wbenar, WSoal))){
+                    printf("****************************************************************\n");
+                    printf("*  btw, inputnya jangan huruf yang udh pernah ditebak yakk!!!  *\n");
+                    printf("****************************************************************\n");
+                }
+                else{
+                    printf("******************************************************************************************\n");
+                    printf("*  Sori bro, coba situ input hurufnya di capslocsk dan tentu inputnya harus huruf yakk!  *\n");
+                    printf("******************************************************************************************\n");
+                }
+                printf("Masukan Tebakanmu : ");
+                STARTCMD(true);
+                while(!IsOne()){
+                    printf("hurufnya jgn > 1 yak!\n");
+                    printf("Masukan Tebakanmu : ");
+                    STARTCMD(true);
+                }
+                input = currentCommand.TabChar[0];
+                printf("\n");
+            }
+            UbahHuruf(&WSoal, input, &Wsalah, &Wbenar);
+        }
+
+        if(Wbenar.Length == 0){
+            skor += point;
+            printf("Skor : %d\n", skor);
+        } else if(Wsalah.Length > KESEMPATAN){
+            selesai = true;
+        }
+        jumlahmain ++;
+
+        printf("Mau lanjut main lagi ga? (Y/N)");
+        STARTCMD(true);
+        while(!IsOne() && !(input == 'Y' || input == 'N')){
+            printf("Tolong sesuain jawabannya sama opsi kami yak!\n");
+            printf("Mau lanjut main lagi ga? (Y/N) : ");
+            STARTCMD(true);
+        }
+        input = currentCommand.TabChar[0];
+        printf("\n");
+        if(input == 'N'){
+            selesai = true;
+        } else{
+            jumlahkalah += Wsalah.Length;
+        }
     }
 }
 
