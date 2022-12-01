@@ -70,11 +70,11 @@ List loadfile(Word source)
 }
 
 //berhasil
-void CreateList(List *LSoal, int digit){
-    int i;
-    for(i=0;i<digit;i++){
-        LSoal->kata[i] = MARKK;
-    }
+void CreateListH(ListH *LSoal, int digit){
+	int i;
+	for(i=0;i<digit;i++){
+		LSoal->kata[i] = MARKK;
+	}
 }
 
 void InsertLastt(List *L, Word kata){
@@ -83,8 +83,8 @@ void InsertLastt(List *L, Word kata){
 
 // _ _ _ _ 
 //berhasil
-void CreateEmpty(List *Lsalah){
-    (*Lsalah).panjang = IDX_UNDEF;
+void CreateEmptyH(ListH *Lsalah){
+	(*Lsalah).panjang = IDX_UNDEF;
 }
 
 //berhasil
@@ -193,84 +193,84 @@ void TampilanGaris(List Lsalah){
 }
 
 
-void DeleteAt(List *Lbenar, List LSoal, int indeks){
-    int j;
-    for(j=indeks;j<=LSoal.panjang;j++){
-        (*Lbenar).kata[j] = (*Lbenar).kata[j+1];
-    }
+void DeleteAtH(ListH *Lbenar, ListH LSoal, int indeks){
+	int j;
+	for(j=indeks;j<=LSoal.panjang;j++){
+		(*Lbenar).kata[j] = (*Lbenar).kata[j+1];
+	}
 }
 
 
 //berhasil
-void InsertAt(List *Lbenar, List LSoal, int indeks){
-    int j;
-    List Lbenartemp;
-    for(j=indeks;j<=LSoal.panjang;j++){
-        (Lbenartemp).kata[j] = (*Lbenar).kata[j];
-    }
-    for(j=indeks;j<=LSoal.panjang;j++){
-        (*Lbenar).kata[j+1] = (Lbenartemp).kata[j];
-    }
-    (*Lbenar).kata[indeks] = LSoal.kata[indeks];
+void InsertAtH(ListH *Lbenar, ListH LSoal, int indeks){
+	int j;
+	ListH Lbenartemp;
+	for(j=indeks;j<=LSoal.panjang;j++){
+		(Lbenartemp).kata[j] = (*Lbenar).kata[j];
+	}
+	for(j=indeks;j<=LSoal.panjang;j++){
+		(*Lbenar).kata[j+1] = (Lbenartemp).kata[j];
+	}
+	(*Lbenar).kata[indeks] = LSoal.kata[indeks];
 }
 
 //
-void DigitBenar(List *LSoal, char huruf, List *Lsalah, List *Lbenar){
-    int i = 0;
-    int count = 0;
-    while (i<(*LSoal).panjang ){
-        if((*LSoal).kata[i] == huruf){
-            DeleteAt(Lbenar, *LSoal, i);
-            InsertAt(Lbenar, *LSoal, i);
-            (*Lbenar).panjang--;
-            count++;
-        } 
-        i++;
-    }
-    if(count==0){
-        (*Lsalah).kata[(*Lsalah).panjang] = huruf;
-        (*Lsalah).panjang++;
-    }
+void DigitBenar(ListH *LSoal, char huruf, ListH *Lsalah, ListH *Lbenar){
+	int i = 0;
+	int count = 0;
+	while (i<(*LSoal).panjang ){
+		if((*LSoal).kata[i] == huruf){
+			DeleteAtH(Lbenar, *LSoal, i);
+			InsertAtH(Lbenar, *LSoal, i);
+			(*Lbenar).panjang--;
+			count++;
+		} 
+		i++;
+	}
+	if(count==0){
+		(*Lsalah).kata[(*Lsalah).panjang] = huruf;
+		(*Lsalah).panjang++;
+	}
 
 }
 
 //berhasil
-void PrintList(List L, int max){
-    int i;
-    for(i=0;i<max;i++){
-        printf("%c", (L).kata[i]);
-    }
+void PrintListH(ListH L, int max){
+	int i;
+	for(i=0;i<max;i++){
+		printf("%c", (L).kata[i]);
+	}
 }
 
 //berhasil
-void TampilanGame(List Lbenar ,List Lsalah, int urutan, List LSoal){
-    TampilanGaris(Lsalah);
-    printSoal(urutan);
-    printf("==========================================================================================\n");
+void TampilanGame(ListH Lbenar ,ListH Lsalah, int urutan, ListH LSoal){
+	TampilanGaris(Lsalah);
+	printSoal(urutan);
+	printf("==========================================================================================\n");
 
-    printf("Tebakan sebelumnya : \n");
-    PrintList(Lsalah, Lsalah.panjang);
-    printf("\n");
-    printf("Kata : \n");
-    PrintList(Lbenar, LSoal.panjang);
-    printf("\n");
-    printf("Kesempatan : ");
-    printf("%d", (10-(Lsalah).panjang));
-    printf("\n");
-    printf("==========================================================================================\n");
+	printf("Tebakan sebelumnya : \n");
+	PrintListH(Lsalah, Lsalah.panjang);
+	printf("\n");
+	printf("Kata : \n");
+	PrintListH(Lbenar, LSoal.panjang);
+	printf("\n");
+	printf("Kesempatan : ");
+	printf("%d", (10-(Lsalah).panjang));
+	printf("\n");
+	printf("==========================================================================================\n");
 }
 
 //berhasil
-boolean isExist (char huruf, List Lsalah, List Lbenar, List LSoal){
-    boolean found = false;
-    int i=0;
-    while (i<KESEMPATAN && !found){
-        if (huruf == Lsalah.kata[i] || huruf == Lbenar.kata[i]){
-            found = true;
-        }
-        i++;
-    }
-    return found;
+boolean isExistH (char huruf, ListH Lsalah, ListH Lbenar, ListH LSoal){
+	boolean found = false;
+	int i=0;
+	while (i<KESEMPATAN && !found){
+		if (huruf == Lsalah.kata[i] || huruf == Lbenar.kata[i]){
+			found = true;
+		}
+		i++;
+	}
+	return found;
 }
 
 void HangMan (int *skorhangman){
@@ -293,10 +293,10 @@ void HangMan (int *skorhangman){
     // y
     InsertLastt(&soal, toWord(answer));
 
-    
-    // printf("%d\n", LSoal.panjang);
-    // printf("%d\n", Lbenar.panjang);
-    // printf("%d\n", Lsalah.panjang);
+	
+	// printf("%d\n", LSoal.panjang);
+	// printf("%d\n", Lbenar.panjang);
+	// printf("%d\n", Lsalah.panjang);
 
     printf("\n");
     printf("  /$$$$$$            /$$                                     /$$           /$$                          \n");
