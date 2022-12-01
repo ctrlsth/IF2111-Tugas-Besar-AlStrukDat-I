@@ -14,6 +14,6 @@ void piringan(Stack S, int x, int wmax);
 
 void proceedTiang(Stack *S1, Stack *S2);
 
-void towerOfHanoi();
+void towerOfHanoi(int *skorHanoi);
 
 #endif
