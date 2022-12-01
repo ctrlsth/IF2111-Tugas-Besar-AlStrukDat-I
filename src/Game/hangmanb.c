@@ -1,75 +1,18 @@
-#include "hangman.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include "../boolean.h"
+#include "../ADT/mesinkata.h"
 
-static FILE *saveFile;
+#define IDX_UNDEF -1
+#define MARKK '_'
+#define KESEMPATAN 10
 
-int LenghtList(List L){
-    int i = 0;
-    while (L.kata[i] != '\0'){
-        i++;
-    }
-    return i;
-}
+typedef struct {
+    char kata[100];
+    int panjang;
+} List;
 
-int savefile(List guessword, Word fileName)
-{
-    int retval = 0;
-    saveFile = NULL;
-    saveFile = fopen(toString(fileName), "w+");
-
-    if (saveFile == NULL)
-    {
-        fprintf(stderr, "Penyimpanan gagal, tidak dapat menyimpan dengan nama %s.\n", toString(fileName));
-    }
-    else
-    {
-        int count = LenghtList(guessword);
-        fprintf(saveFile, "%d", count);
-        fprintf(saveFile, "\n");
-        for (int i = 0; i < count; i++)
-        {
-            //Word word = GetWord(guessword, i);
-            for (int j = 0; j < strLength(guessword.kata[i]); j++)
-            {
-                fprintf(saveFile, "%c", guessword.kata[i][j]); //ini masih salah, helppp
-            }
-            fprintf(saveFile, "\n");
-        }
-        retval = 1;
-        fclose(saveFile);
-    }
-
-    return retval;
-}
-
-FILE *STARTWORD(Word source)
-{
-    FILE *pita;
-    pita = STARTF(GetString(&source));
-    if (pita != NULL)
-    {
-        CreateWord(&currentWord);
-        ADVWORD();
-    }
-    return pita;
-}
-
-List loadfile(Word source)
-{
-    FILE* pita;
-    List guessword;
-    pita = STARTWORD(source);
-    CreateEmpty(&guessword);
-    int count = toInt(currentWord);
-    for (int i = 0; i < count; i++)
-    {
-        ADVWORD();
-        InsertLastt(&guessword, currentWord);
-    }
-
-    return guessword;
-}
-
-//berhasil
 void CreateList(List *LSoal, int digit){
     int i;
     for(i=0;i<digit;i++){
@@ -85,6 +28,115 @@ void InsertLastt(List *L, Word kata){
 //berhasil
 void CreateEmpty(List *Lsalah){
     (*Lsalah).panjang = IDX_UNDEF;
+}
+
+//berhasil
+int printSoal(int urutan){
+    if (urutan == 1){
+        printf("Di rumah makan Padang, selain pakai sendok kita makan pakai?\n");
+    } else if (urutan == 2){
+        printf("Seseorang yang memimpin sebuah desa, biasanya dipanggil pak?\n");
+    } else if (urutan == 3){
+        printf("Senikmat-nikmatnya makan di luar lebih nikmat makan di?\n");
+    } else if (urutan == 4){
+        printf("Ikan bernapas di air dengan?\n");
+    } else if (urutan == 5){
+        printf("Yang dibeli seorang cowok untuk pasangannya di saat Valentine biasanya?\n");
+    } else if (urutan == 6){
+        printf("Seorang barber mencukur rambut pelanggan dengan?\n");
+    } else if (urutan == 7){
+        printf("Lorenzo, Marquez, Rossi kejar-kejaran, salip menyalip di?\n");
+    } else if (urutan == 8){
+        printf("Burung bisa terbang karena memiliki?\n");
+    } else if (urutan == 9){
+        printf("Bendera NKRI warnanya?\n");
+    } else if (urutan == 10){
+        printf("Galang menyimpan buku di . . .\n");
+    }
+}
+
+//berhasil
+void variasiSoal(int urutan, List *L){
+    if (urutan == 1){
+        (*L).panjang = 6;
+        (*L).kata[0] = 'T';
+        (*L).kata[1] = 'E';
+        (*L).kata[2] = 'N';
+        (*L).kata[3] = 'A';
+        (*L).kata[4] = 'G';
+        (*L).kata[5] = 'A';
+    } else if (urutan == 2){
+        (*L).kata[0] = 'N';
+        (*L).kata[1] = 'O';
+        (*L).kata[2] = 'L';
+        (*L).kata[3] = 'E';
+        (*L).kata[4] = 'H';
+        (*L).panjang = 5;
+    } else if (urutan == 3){
+        (*L).kata[0] = 'T';
+        (*L).kata[1] = 'E';
+        (*L).kata[2] = 'L';
+        (*L).kata[3] = 'A';
+        (*L).kata[4] = 'N';
+        (*L).panjang = 5;
+    } else if (urutan == 4){
+        (*L).kata[0] = 'T';
+        (*L).kata[1] = 'E';
+        (*L).kata[2] = 'N';
+        (*L).kata[3] = 'A';
+        (*L).kata[4] = 'N';
+        (*L).kata[5] = 'G';
+        (*L).panjang = 6;
+    } else if (urutan == 5){
+        (*L).kata[0] = 'B';
+        (*L).kata[1] = 'A';
+        (*L).kata[2] = 'Y';
+        (*L).kata[3] = 'A';
+        (*L).kata[4] = 'R';
+        (*L).panjang = 5;
+    } else if (urutan == 6){
+        (*L).kata[0] = 'G';
+        (*L).kata[1] = 'A';
+        (*L).kata[2] = 'N';
+        (*L).kata[3] = 'T';
+        (*L).kata[4] = 'I';
+        (*L).kata[5] = 'A';
+        (*L).kata[6] = 'N';
+        (*L).panjang = 7;
+    } else if (urutan == 7){
+        (*L).kata[0] = 'B';
+        (*L).kata[1] = 'I';
+        (*L).kata[2] = 'A';
+        (*L).kata[3] = 'R';
+        (*L).kata[4] = 'K';
+        (*L).kata[5] = 'A';
+        (*L).kata[6] = 'N';
+        (*L).panjang = 7;
+    } else if (urutan == 8){
+        (*L).kata[0] = 'B';
+        (*L).kata[1] = 'A';
+        (*L).kata[2] = 'K';
+        (*L).kata[3] = 'A';
+        (*L).kata[4] = 'T';
+        (*L).panjang = 5;
+    } else if (urutan == 9){
+        (*L).kata[0] = 'C';
+        (*L).kata[1] = 'U';
+        (*L).kata[2] = 'M';
+        (*L).kata[3] = 'A';
+        (*L).kata[4] = 'D';
+        (*L).kata[5] = 'U';
+        (*L).kata[6] = 'A';
+        (*L).kata[7] = 'A';
+        (*L).kata[8] = 'J';
+        (*L).kata[9] = 'A';
+        (*L).panjang = 10;
+    } else if (urutan == 10){
+        (*L).kata[0] = 'M';
+        (*L).kata[1] = 'A';
+        (*L).kata[2] = 'S';
+        (*L).panjang = 3;
+    }
 }
 
 //berhasil
@@ -274,8 +326,7 @@ boolean isExist (char huruf, List Lsalah, List Lbenar, List LSoal){
 }
 
 void HangMan (int *skorhangman){
-    
-    char answer;
+
     List LSoal;
     List Lbenar;
     List Lsalah;
@@ -286,12 +337,6 @@ void HangMan (int *skorhangman){
     int jumlahMain = 0;
     int jumlahSalah = 0;
     boolean selesai = false;
-    jawaban = Loadfile(toWord("data/jawaban.txt"));
-    soal = Loadfile(toWord("data/soal.txt"));
-
-    scanf(&answer);
-    // y
-    InsertLastt(&soal, toWord(answer));
 
     
     // printf("%d\n", LSoal.panjang);
@@ -338,10 +383,9 @@ void HangMan (int *skorhangman){
         variasiSoal(urutan, &LSoal);
         CreateList(&Lbenar, LSoal.panjang);
         CreateEmpty(&Lsalah);
-        
-        LSoal.panjang = strLength(soal.kata[urutan]);
+
         Lsalah.panjang = jumlahSalah;
-        Lbenar.panjang = soal.panjang;
+        Lbenar.panjang = LSoal.panjang;
         point = LSoal.panjang;
 
         TampilanGame(Lbenar, Lsalah, urutan, LSoal);

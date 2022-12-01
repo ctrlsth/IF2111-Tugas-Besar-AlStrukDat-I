@@ -8,10 +8,16 @@
 #define MARKK '_'
 #define KESEMPATAN 10
 
+
+
 typedef struct {
-    char kata[KESEMPATAN];
+    char kata[100];
     int panjang;
 } List;
+
+FILE *STARTWORD(Word source);
+
+List Loadfile(Word source);
 
 void CreateList(List *LSoal, int digit);
 //untuk membuat sebuah list kosong dengan tampilan Mark sebanyak digit.
@@ -33,6 +39,8 @@ void DeleteAt(List *Lbenar, List LSoal, int indeks);
 
 void InsertAt(List *Lbenar, List LSoal, int indeks);
 //prosedur untuk memasukkan elemen (pada indeks yang telah ditentukan) ke dalam list
+
+void InsertLast(List *L);
 
 void DigitBenar(List *LSoal, char huruf, List *Lsalah, List *Lbenar);
 //prosedur untuk merubah tampilan dari '_' menjadi huruf yg ditebak (jika tebakan benar).
