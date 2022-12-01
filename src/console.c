@@ -80,8 +80,9 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
     {
         if (!EndWord)
         {
-            int iteration = 1;
+            // int iteration = 1;
             n = toInt(currentWord); // Memiliki nilai banyak game yang berada dalam savefile.
+            printf("n = %d\n",n);
             scoreBoard->Num = n;
             listPlayer->Num = n;
 
