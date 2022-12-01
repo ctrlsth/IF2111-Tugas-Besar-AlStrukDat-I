@@ -1,9 +1,3 @@
-// NIM              : 18221171
-// Nama             : Hans Stephano E
-// Tanggal          : 21 Oktober 2022
-// Topik praktikum  : Pra-Praktikum 7 - #1
-// Deskripsi        : Implementasi "stack.h"
-
 /* File : stack.h */
 /* deklarasi stack yang diimplementasi dengan tabel kontigu dan ukuran sama */
 /* TOP adalah alamat elemen puncak */
