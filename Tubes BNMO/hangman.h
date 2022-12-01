@@ -47,8 +47,5 @@ void TampilanGame(List Lbenar, List Lsalah, int urutan, List LSoal);
 boolean isExist(char huruf, List Lsalah, List Lbenar, List LSoal);
 //fungsi untuk mencari huruf di dalam list. Fungsi akan mengembalikan true bila huruf dapat ditemukan.
 
-boolean IsFinished(List Lsalah, List Lbenar, List LSoal);
-//fungsi untuk mengecek apakah game sudah selesai atau belum
-
-void HangMan(int skorhangman);
+void HangMan(int *skorhangman);
 //prosedur utama dari game hangman

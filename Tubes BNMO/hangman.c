@@ -311,81 +311,17 @@ boolean isExist (char huruf, List Lsalah, List Lbenar, List LSoal){
     return found;
 }
 
-//berhasil
-boolean IsFinished (List Lsalah, List Lbenar, List LSoal){
-    return (Lbenar.panjang == 0 || Lsalah.panjang > KESEMPATAN);
-}
-
-/*
-int main() {
-    printf("==========================================================================================\n");
-    printf("Selamat datang di game hangman!!\nSemoga kamu ga menyesal bermain game ini!!");
-
-    char input;
-    int point=0;
-    List LSoal;
-    List Lsalah;
-    List Lbenar;
-    srand(time(0));
-    int urutan = (rand()%10) + 1;
-
-    CreateEmpty(&LSoal);
-    variasiSoal(urutan, &LSoal);
-    CreateList(&Lbenar, LSoal.panjang);
-    CreateEmpty(&Lsalah);
-    Lbenar.panjang = LSoal.panjang;
-    Lsalah.panjang = 0;
-
-    printf("\n");
-    TampilanGame(Lbenar, Lsalah, urutan);
-    printf("\nMasukan Tebakan : ");
-    scanf("%c\n", &input);
-    while(!((int) input >= 'A' && (int) input <= 'Z')){
-        printf("Sori bro, coba situ input hurufnya di capslocskin dlu truss inputnya harus berupa huruf yakk!\n");
-        printf("Masukan Tebakan : ");
-        scanf("%c\n", &input);
-    }
-    DigitBenar(LSoal, input, Lsalah, Lbenar);
-    while(!IsFinished(Lsalah, Lbenar, LSoal)){
-        TampilanGame(Lbenar, Lsalah, urutan);
-        printf("Masukan Tebakan : ");
-        scanf("%c\n", &input);
-            while(!((int) input >= 'A' && (int) input <= 'Z') || (isExist(input, Lsalah, Lbenar, LSoal))){
-                printf("Sori bro, coba situ input hurufnya di capslocsk dan tentu inputnya harus huruf yakk!\n");
-                printf("btw, inputnya jangan huruf yang udh pernah ditebak yakk!!!\n");
-                TampilanGame(Lbenar, Lsalah, urutan);
-                printf("Masukan Tebakan : ");
-        }
-        DigitBenar(LSoal, input, Lsalah, Lbenar);
-    }
-    if (Lbenar.panjang == LSoal.panjang){
-        printf("WADAWWW.. SITU KEREN BANGET BISA MENANGIN NI GAME!!\n");
-        printf("Karena situ udh menang, aku kasi situ %d point dehhh!!\n", point);
-    } else if (Lsalah.panjang > KESEMPATAN){
-        printf("YAHAHHAA!!!\n");
-        printf("Cupssss!!\n");
-    }
-    return 0;
-}
-*/
-void HangMan (int skorhangman){
+void HangMan (int *skorhangman){
 
     List LSoal;
     List Lbenar;
     List Lsalah;
     srand(time(0));
     int point;
-    int urutan = (rand()%10) + 1;
+    int jumlahMain = 0;
+    int jumlahSalah = 0;
+    boolean selesai = false;
 
-    printf("%d\n", urutan);
-    CreateEmpty(&LSoal);
-    variasiSoal(urutan, &LSoal);
-    CreateList(&Lbenar, LSoal.panjang);
-    CreateEmpty(&Lsalah);
-
-    Lsalah.panjang = 0;
-    Lbenar.panjang = LSoal.panjang;
-    point = LSoal.panjang;
     
     // printf("%d\n", LSoal.panjang);
     // printf("%d\n", Lbenar.panjang);
@@ -423,51 +359,72 @@ void HangMan (int skorhangman){
     printf("\n");
     printf("\n");
     
-    TampilanGame(Lbenar, Lsalah, urutan, LSoal);
-    printf("Masukan Tebakanmu : ");
-    STARTCMD(true);
-    Word Uinput = currentCommand;
-    char input = Uinput.TabChar[0];
-    //scanf("%c", &input);
-    printf("\n");
-    //printf("%c", input);
-    while(!(input >= 'A' && input <= 'Z')){
-        printf("******************************************************************************************\n");
-        printf("Sori bro, coba situ input hurufnya di capslocskin dlu truss inputnya harus berupa huruf yakk!\n");
-        printf("******************************************************************************************\n");
-        printf("Masukan Tebakanmu : ");
-        scanf("%c", &input);
-        printf("\n");
-    }
-    DigitBenar(&LSoal, input, &Lsalah, &Lbenar);
-    while(!IsFinished(Lsalah, Lbenar, LSoal)){
+    while(selesai == false || jumlahMain == 10){
+        int urutan = (rand()%10) + 1;
+        // printf("%d\n", urutan);
+        
+        CreateEmpty(&LSoal);
+        variasiSoal(urutan, &LSoal);
+        CreateList(&Lbenar, LSoal.panjang);
+        CreateEmpty(&Lsalah);
+
+        Lsalah.panjang = jumlahSalah;
+        Lbenar.panjang = LSoal.panjang;
+        point = LSoal.panjang;
+
         TampilanGame(Lbenar, Lsalah, urutan, LSoal);
         printf("Masukan Tebakanmu : ");
-        scanf(" %c", &input);
+        STARTCMD(true);
+        Word Uinput = currentCommand;
+        char input = Uinput.TabChar[0];
+        //scanf("%c", &input);
         printf("\n");
-        while(!(input >= 'A' && input <= 'Z') || (isExist(input, Lsalah, Lbenar, LSoal))){
+        //printf("%c", input);
+        while(!(input >= 'A' && input <= 'Z')){
             printf("******************************************************************************************\n");
-            if((isExist(input, Lsalah, Lbenar, LSoal))){
-                printf("btw, inputnya jangan huruf yang udh pernah ditebak yakk!!!\n");
-            }
-            else{
-                printf("Sori bro, coba situ input hurufnya di capslocsk dan tentu inputnya harus huruf yakk!\n");
-            }
+            printf("Sori bro, coba situ input hurufnya di capslocskin dlu truss inputnya harus berupa huruf yakk!\n");
             printf("******************************************************************************************\n");
             printf("Masukan Tebakanmu : ");
-            scanf(" %c", &input);
-            printf("\n");       
+            scanf("%c", &input);
+            printf("\n");
         }
         DigitBenar(&LSoal, input, &Lsalah, &Lbenar);
-    }
+        while(Lbenar.panjang != 0 || Lsalah.panjang<=KESEMPATAN){
+            TampilanGame(Lbenar, Lsalah, urutan, LSoal);
+            printf("Masukan Tebakanmu : ");
+            scanf(" %c", &input);
+            printf("\n");
+            while(!(input >= 'A' && input <= 'Z') || (isExist(input, Lsalah, Lbenar, LSoal))){
+                printf("******************************************************************************************\n");
+                if((isExist(input, Lsalah, Lbenar, LSoal))){
+                    printf("btw, inputnya jangan huruf yang udh pernah ditebak yakk!!!\n");
+                }
+                else{
+                    printf("Sori bro, coba situ input hurufnya di capslocsk dan tentu inputnya harus huruf yakk!\n");
+                }
+                printf("******************************************************************************************\n");
+                printf("Masukan Tebakanmu : ");
+                scanf(" %c", &input);
+                printf("\n");       
+            }
+            DigitBenar(&LSoal, input, &Lsalah, &Lbenar);
+        }
 
-    if(Lbenar.panjang == 0){
-        printf("WADAWWW.. SITU KEREN BANGET BISA MENANGIN NI GAME!!\n");
-        printf("Karena situ udh menang, aku kasi situ %d point dehhh yakk!!\n", point);
-    } else if(Lsalah.panjang > KESEMPATAN){
+        if(Lbenar.panjang == 0){
+            skorhangman += point;
+            printf("Skor : %d\n", skorhangman);
+        } else if(Lsalah.panjang > KESEMPATAN){
+            selesai = true;
+        }
+        jumlahMain ++;
+    }
+    if(selesai == true){
         printf("YAHAHHAA!!!\n");
         printf("MAAF ANDA KURANG BERUNTUNG. SARAN KAMI SIH COBA LAGI (TAUN DPN YA!!)");
+        printf("btw skor gamem situ saat ini ada di %d point yaaa", skorhangman);
+    } else {
+        printf("WADAWWW.. SITU KEREN BANGET BISA MENANGIN NI GAME!!\n");
+        printf("Karena situ udh menang, aku kasi situ %d point dehhh yakk!!\n", skorhangman);\
     }
-
     return 0;
 }
