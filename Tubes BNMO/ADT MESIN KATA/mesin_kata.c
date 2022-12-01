@@ -2,247 +2,347 @@
 #include <string.h>
 #include "mesin_kata.h"
 
-boolean EndKata;
-Kata CKata;
+boolean EndWord;
+Word currentWord;
+Word currentCommand;
 
-/*###### Config Start ######*/
-void C_STARTKATA(char *c)
+// ** Mengakuisisi kata dari file.txt ** //
+void STARTWORD(char *txtfile, boolean *openSuccess)
 {
-    C_START(c);
-    IgnoreBlank();
-    C_SalinKata();
-}
-void C_ADVKATA()
-{
-    while ((CC == BLANK) || (CC == MARK))
+    loadstart(txtfile, openSuccess);
+    IgnoreBlanks();
+    if (CC == EOF)
     {
-        C_ADV();
-    }
-    C_SalinKata();
-}
-void C_SalinKata()
-{
-    int i = 1;
-    while ((CC != MARK) && (CC != BLANK))
-    {
-        CKata.TabKata[i] = CC;
-        C_ADV();
-        i++;
-    }
-    CKata.Length = i - 1;
-}
-void C_IgnoreBlank()
-{
-    while ((CC == BLANK) || (CC == MARK))
-    {
-        C_ADV();
-    }
-}
-/*###### Config End ######*/
-
-void IgnoreBlank()
-{
-    while ((CC == BLANK) && (CC != MARK))
-    {
-        ADV();
-    }
-}
-
-void SalinKata()
-{
-    int i = 1;
-    while ((CC != MARK) && (CC != BLANK))
-    {
-        CKata.TabKata[i] = CC;
-        ADV();
-        i++;
-    }
-    CKata.Length = i - 1;
-}
-
-void STARTKATA()
-{
-    START();
-    IgnoreBlank();
-    if (CC == MARK)
-    {
-        EndKata = true;
+        EndWord = true;
     }
     else
     {
-        EndKata = false;
-        SalinKata();
+        EndWord = false;
+        ADVWORD();
     }
 }
 
-void ADVKATA()
+void ADVWORD()
 {
-    IgnoreBlank();
-    if (CC == MARK)
+    IgnoreBlanks();
+    if (CC == EOF)
     {
-        EndKata = true;
+        EndWord = true;
     }
     else
     {
-        SalinKata();
+        COPYWORD();
+        IgnoreBlanks();
     }
-}
-Kata AskCommand()
-{
-    STARTKATA();
-    while (!EndKata)
-    {
-        ADVKATA();
-    }
-    return CKata;
 }
 
-boolean STRCOMP(Kata k1, char k2[100])
+void COPYWORD()
+/* Mengakuisisi kata, menyimpan dalam currentWord
+   I.S. : CC adalah karakter pertama dari kata
+   F.S. : currentWord berisi kata yang sudah diakuisisi;
+          CC = BLANK atau CC = MARK;
+          CC adalah karakter sesudah karakter terakhir yang diakuisisi.
+          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 {
-    int i = 1;
-    int lengthk2 = strlen(k2);
-    boolean sama = true;
-    // (k1.Length == lengthk2) &&
-    while ((sama) && (i < lengthk2))
+    int i = 0;
+    while ((CC != EOF) && (CC != MARK) && (i < NMax))
     {
-        // printf("MASUK KE CEK KATA\n");
-        // printf("K1 CKata = %c\n", k1.TabKata[i]);
-        // printf("K2 CKata = %c\n", k2[i - 1]);
-        if (k1.TabKata[i] == k2[i - 1])
+        currentWord.TabChar[i] = CC;
+        adv(true);
+        i++;
+    }
+    currentWord.Length = i;
+}
+
+void IgnoreBlanks()
+{
+    while (CC == BLANK || CC == MARK)
+    {
+        adv(true);
+    }
+}
+
+// ** Mengakuisisi COMMAND dari MAIN.C ** //
+void STARTCMD(boolean inputGame)
+/* I.S. : CC sembarang
+   F.S. : EndWord = true, dan CC = MARK;
+          atau EndWord = false, currentCommand adalah kata yang sudah diakuisisi,
+          CC karakter pertama sesudah karakter terakhir kata */
+{
+    currentCommand.Length = 0;
+    cmdstart();
+    IgnoreBlanksCMD();
+    if (CC == MARK)
+    {
+        EndWord = true;
+    }
+    else
+    {
+        EndWord = false;
+        ADVCMD(inputGame);
+    }
+}
+
+void ADVCMD(boolean inputGame)
+/* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
+   F.S. : currentCommand adalah kata terakhir yang sudah diakuisisi,
+          CC adalah karakter pertama dari kata berikutnya, mungkin MARK
+          Jika CC = MARK, EndWord = true.
+   Proses : Akuisisi kata menggunakan procedure COPYCMD */
+{
+    if (CC == MARK)
+    {
+        EndWord = true;
+    }
+    else
+    {
+        (inputGame) ? COPYGAME() : COPYCMD();
+        IgnoreBlanksCMD();
+    }
+}
+
+void COPYCMD()
+/* Mengakuisisi command, menyimpan dalam currentCommand
+   I.S. : CC adalah karakter pertama dari kata
+   F.S. : currentCommand berisi kata yang sudah diakuisisi;
+          CC = BLANK atau CC = MARK;
+          CC adalah karakter sesudah karakter terakhir yang diakuisisi.
+          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+{
+    int i = 0;
+    while ((CC != BLANK) && (CC != MARK) && (i < NMax))
+    {
+        currentCommand.TabChar[i] = CC;
+        adv(false);
+        i++;
+    }
+    currentCommand.Length = i;
+}
+
+void COPYGAME()
+/* Mengakuisisi nama game, menyimpan dalam currentCommand
+   I.S. : CC adalah karakter pertama dari kata
+   F.S. : currentCommand berisi kata yang sudah diakuisisi;
+          CC = BLANK atau CC = MARK;
+          CC adalah karakter sesudah karakter terakhir yang diakuisisi.
+          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+{
+    int i = 0;
+    while ((CC != MARK) && (i < NMax))
+    {
+        currentCommand.TabChar[i] = CC;
+        adv(false);
+        i++;
+    }
+    currentCommand.Length = i;
+}
+
+void IgnoreBlanksCMD()
+/* Mengabaikan satu atau beberapa BLANK
+   I.S. : CC sembarang
+   F.S. : CC ≠ BLANK atau CC = MARK atau CC = EOF */
+{
+    while (CC == BLANK)
+    {
+        adv(false);
+    }
+}
+
+// Fungsi Umum //
+
+Word toWord(char *someString)
+/* Mengubah type String menjadi type Kata
+   I.S. : string masukan bisa kosong */
+{
+    Word converted;
+    int i = 0;
+    while (someString[i] != '\0' && someString[i] != ' ')
+    {
+        converted.TabChar[i] = someString[i];
+        i++;
+    }
+    converted.Length = i;
+
+    return converted;
+}
+
+char *toString(Word kata)
+{
+    char *str = (char *)malloc((kata.Length) * sizeof(char));
+    // printf("Passed malloc!\n");
+    // printf("Length: %d\n", kata.Length);
+
+    int i;
+    for (i = 0; i < kata.Length; i++)
+    {
+        // printf("Loop ke-%d\n", i);
+        str[i] = kata.TabChar[i];
+    }
+    // printf("Loop Success\n");
+    str[i] = '\0';
+
+    // printf("Returning.\n");
+    return str;
+}
+
+int toInt(Word kata)
+{
+    int i, X = 0;
+    for (i = 0; i < kata.Length; i++)
+    {
+        // printf("Huruf ke-%d = %c", i, kata.TabChar[i]);
+        X = X * 10 + (kata.TabChar[i] - '0');
+        // printf("X ke-%d = %d\n", i, X);
+    }
+    return X;
+}
+
+boolean isNumber(Word kata)
+{
+    int i = 0;
+    boolean number = true;
+    while (i < kata.Length && number)
+    {
+        if (kata.TabChar[i] < '0' || kata.TabChar[i] > '9')
         {
+            number = false;
+        }
+        i++;
+    }
 
-            sama = true;
+    return number;
+}
+
+boolean compareWord(Word kata1, char *kata2)
+/* Membandingkan sebuah word dengan sebuah sting
+   True     : Jika string dan kata sama,
+   False    : Jika berbeda */
+{
+    if (kata1.Length == strLength(kata2))
+    {
+        int i = 0;
+        while (i < kata1.Length)
+        {
+            if (kata1.TabChar[i] != kata2[i])
+            {
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
+    return false;
+}
+
+boolean compare2Word(Word kata1, Word kata2)
+/* Membandingkan 2 buah word
+   True     : Jika kedua word sama,
+   False    : Jika berbeda */
+{
+    if (kata1.Length == kata2.Length)
+    {
+        int i = 0;
+        while (i < kata1.Length)
+        {
+            if (kata1.TabChar[i] != kata2.TabChar[i])
+            {
+                return false;
+            }
+            i++;
+        }
+        return true;
+    }
+    return false;
+}
+
+int strLength(char *strings)
+/* Mengembalikan panjang suatu string */
+{
+    int i = 0;
+    while (strings[i] != '\0')
+    {
+        i++;
+    }
+    return i;
+}
+
+void printWord(Word Kata)
+/* Menampilkan masukan Kata pada layar */
+{
+    int i;
+    for (i = 0; i < Kata.Length; i++)
+    {
+        printf("%c", Kata.TabChar[i]);
+    }
+    // printf("\n");
+}
+
+void binSep(Word Kata, Word *Kata1, Word *Kata2, char separator)
+{
+    int i, j = 0;
+    boolean passedSep;
+    for (i = 0; i < Kata.Length; i++)
+    {
+        if (passedSep)
+        {
+            Kata2->TabChar[j] = Kata.TabChar[i];
+            j++;
         }
         else
         {
-            // printf("SALAH\n");
-            sama = false;
-            break;
+            if (Kata.TabChar[i] == separator)
+            {
+                passedSep = true;
+                Kata1->Length = i;
+            }
+            else
+            {
+                Kata1->TabChar[i] = Kata.TabChar[i];
+            }
         }
-        i++;
     }
-    return sama;
+
+    Kata2->Length = j;
 }
 
-boolean IsNumber(Kata k)
+void UPPER(Word *Kata)
 {
     int i;
-    if (CKata.TabKata[1] == '-')
+    for (i = 0; i < Kata->Length; i++)
     {
-        i = 2;
-    }
-    else
-    {
-        i = 1;
-    }
-    boolean number = true;
-    while (number && i <= k.Length)
-    {
-        switch (k.TabKata[i])
+        if (Kata->TabChar[i] >= 97 && Kata->TabChar[i] <= 122)
         {
-        case '0':
-            break;
-        case '1':
-            break;
-        case '2':
-            break;
-        case '3':
-            break;
-        case '4':
-            break;
-        case '5':
-            break;
-        case '6':
-            break;
-        case '7':
-            break;
-        case '8':
-            break;
-        case '9':
-            break;
-        default:
-            number = false;
-        };
-        i++;
+            Kata->TabChar[i] -= 32;
+        }
     }
-    return number;
 }
-int KataInt(Kata k)
-{
-    int i;
-    if (CKata.TabKata[1] == '-')
-    {
-        i = 2;
-    }
-    else
-    {
-        i = 1;
-    }
-    int val = 0;
 
-    while (i <= k.Length)
+boolean compareCharWord(Word kata1, char kata2)
+{
+    boolean same = false;
+    if (kata1.Length == 1)
     {
-        val = val * 10;
-        switch (k.TabKata[i])
+        if (kata1.TabChar[0] == kata2)
         {
-        case '0':
-            val += 0;
-            break;
-        case '1':
-            val += 1;
-            break;
-        case '2':
-            val += 2;
-            break;
-        case '3':
-            val += 3;
-            break;
-        case '4':
-            val += 4;
-            break;
-        case '5':
-            val += 5;
-            break;
-        case '6':
-            val += 6;
-            break;
-        case '7':
-            val += 7;
-            break;
-        case '8':
-            val += 8;
-            break;
-        case '9':
-            val += 9;
-            break;
-        };
-        i++;
+            same = true;
+        }
     }
-    if (CKata.TabKata[1] == '-')
-    {
-        val = val * (-1);
-    }
-    return val;
+    return same;
 }
-void KataMap(Kata k, char importMap[100])
-{
-    for (int i = 1; i <= k.Length; i++)
-    {
-        importMap[i - 1] = k.TabKata[i];
-    }
-}
-void KataPlayer(Kata k, char namaPlayer[20])
-{
-    for (int i = 1; i <= k.Length; i++)
-    {
-        namaPlayer[i - 1] = k.TabKata[i];
-    }
-}
-void printKata(Kata kata)
-{
-    for (int i = 1; i <= kata.Length; i++)
-    {
-        printf("%c", kata.TabKata[i]);
-    }
-    puts("");
-}
+
+// int main()
+// {
+//     boolean apa;
+//     STARTWORD("src/ADT/config.txt", &apa);
+//     printf("apa: %d\n", apa);
+//     printWord(currentWord);
+//     printf("Passed\n");
+//     int n = toInt(currentWord);
+//     printf("n = %d\n", n);
+
+//     ADVWORD();
+//     printWord(currentWord);
+//     ADVWORD();
+//     printWord(currentWord);
+//     return 0;
+// }

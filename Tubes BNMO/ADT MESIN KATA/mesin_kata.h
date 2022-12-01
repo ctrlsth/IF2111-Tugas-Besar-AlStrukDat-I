@@ -5,56 +5,115 @@
 #define __MESINKATA_H__
 
 #include "../boolean.h"
-#include "mesin_kar.h"
+#include "ADT MESIN KARAKTER/mesin_kar.h"
 
-#define NMax 500
+#define NMax 200
 #define BLANK ' '
-#define MARK '\n'
 
 typedef struct
 {
-   char TabKata[NMax + 1]; /* container penyimpan kata, indeks yang dipakai [1..NMax] */
+   char TabChar[NMax];
    int Length;
-} Kata;
+} Word;
 
 /* State Mesin Kata */
-extern boolean EndKata;
-extern Kata CKata;
+extern boolean EndWord;
+extern Word currentWord;
+extern Word currentCommand;
 
-void C_STARTKATA(char *c);
-void C_ADVKATA();
-void C_SalinKata();
-void C_IgnoreBlank();
-void IgnoreBlank();
-/* Mengabaikan satu atau beberapa BLANK
-   I.S. : CC sembarang
-   F.S. : CC ≠ BLANK atau CC = MARK */
+void STARTWORD(char* txtfile, boolean *openSuccess);
+/* I.S. : CC sembarang
+   F.S. : EndWord = true, dan CC = MARK;
+          atau EndWord = false, currentWord adalah kata yang sudah diakuisisi,
+          CC karakter pertama sesudah karakter terakhir kata */
 
-void SalinKata();
-/* Mengakuisisi kata, menyimpan dalam CKata
+void ADVWORD();
+/* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
+   F.S. : currentWord adalah kata terakhir yang sudah diakuisisi,
+          CC adalah karakter pertama dari kata berikutnya, mungkin MARK
+          Jika CC = MARK, EndWord = true.
+   Proses : Akuisisi kata menggunakan procedure SalinWord */
+
+void COPYWORD();
+/* Mengakuisisi kata, menyimpan dalam currentWord
    I.S. : CC adalah karakter pertama dari kata
-   F.S. : CKata berisi kata yang sudah diakuisisi;
+   F.S. : currentWord berisi kata yang sudah diakuisisi;
           CC = BLANK atau CC = MARK;
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 
-void STARTKATA();
+void IgnoreBlanks();
+/* Mengabaikan satu atau beberapa BLANK
+   I.S. : CC sembarang
+   F.S. : CC ≠ BLANK atau CC = EOF */
+
+void STARTCMD(boolean inputGame);
 /* I.S. : CC sembarang
-   F.S. : EndKata = true, dan CC = MARK;
-          atau EndKata = false, CKata adalah kata yang sudah diakuisisi,
+   F.S. : EndWord = true, dan CC = MARK;
+          atau EndWord = false, currentCommand adalah kata yang sudah diakuisisi,
           CC karakter pertama sesudah karakter terakhir kata */
 
-void ADVKATA();
+void ADVCMD(boolean inputGame);
 /* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
-   F.S. : CKata adalah kata terakhir yang sudah diakuisisi,
+   F.S. : currentCommand adalah kata terakhir yang sudah diakuisisi,
           CC adalah karakter pertama dari kata berikutnya, mungkin MARK
-          Jika CC = MARK, EndKata = true.
-   Proses : Akuisisi kata menggunakan procedure SalinKata */
-Kata AskCommand();
-boolean STRCOMP(Kata k1, char k2[100]);
-boolean IsNumber(Kata k);
-int KataInt(Kata k);
-void KataMap(Kata k, char importMap[100]);
-void KataPlayer(Kata k, char namaPlayer[20]);
-void printKata(Kata kata);
+          Jika CC = MARK, EndWord = true.
+   Proses : Akuisisi kata menggunakan procedure COPYCMD */
+
+void COPYCMD();
+/* Mengakuisisi command, menyimpan dalam currentCommand
+   I.S. : CC adalah karakter pertama dari kata
+   F.S. : currentCommand berisi kata yang sudah diakuisisi;
+          CC = BLANK atau CC = MARK;
+          CC adalah karakter sesudah karakter terakhir yang diakuisisi.
+          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+
+void COPYGAME();
+/* Mengakuisisi nama game, menyimpan dalam currentCommand
+   I.S. : CC adalah karakter pertama dari kata
+   F.S. : currentCommand berisi kata yang sudah diakuisisi;
+          CC = BLANK atau CC = MARK;
+          CC adalah karakter sesudah karakter terakhir yang diakuisisi.
+          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
+
+void IgnoreBlanksCMD();
+/* Mengabaikan satu atau beberapa BLANK
+   I.S. : CC sembarang
+   F.S. : CC ≠ BLANK atau CC = MARK */
+
+Word toWord(char *someString);
+/* Mengubah type String menjadi type Kata
+   I.S. : string masukan bisa kosong */
+
+char* toString(Word kata);
+/* Mengubah type Word menjadi String */
+
+int toInt(Word kata);
+/* Mengupah type Word menjadi Integer */
+
+boolean isNumber(Word kata);
+/* Melihat apakah masukan merupakan angka atau bukan */
+
+boolean compareWord(Word kata1, char *kata2);
+/* Membandingkan sebuah word dengan sebuah sting
+   True     : Jika string dan kata sama,
+   False    : Jika berbeda */
+
+boolean compare2Word(Word kata1, Word kata2);
+/* Membandingkan 2 buah word
+   True     : Jika kedua word sama,
+   False    : Jika berbeda */
+
+int strLength(char *kata);
+/* Mengembalikan panjang suatu string kata */
+
+void printWord(Word Kata);
+/* Menampilkan isi kata pada layar */
+
+void binSep(Word Kata, Word *Kata1, Word *Kata2, char separator);
+
+void UPPER(Word *Kata);
+
+boolean compareCharWord(Word kata1, char kata2);
+
 #endif
