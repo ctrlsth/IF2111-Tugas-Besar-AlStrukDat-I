@@ -8,21 +8,19 @@
 #include "../ADT/mesinkata.h"
 
 #define IDX_UNDEF -1
-#define MARKK '_'
+#define CLUE '_'
 #define KESEMPATAN 10
 
-
-
 typedef struct {
-    char kata[100];
+    Word kalimat[100];
     int panjang;
 } ListH;
 
 FILE *STARTWORD(Word source);
 
-List Loadfile(Word source);
+ListH Loadfile(Word source);
 
-void CreateList(List *LSoal, int digit);
+void CreateList(ListH *LSoal, int digit);
 //untuk membuat sebuah list kosong dengan tampilan Mark sebanyak digit.
 
 void CreateEmptyH(ListH*Lsalah);
@@ -43,9 +41,9 @@ void DeleteAtH(ListH *Lbenar, ListH LSoal, int indeks);
 void InsertAtH(ListH *Lbenar, ListH LSoal, int indeks);
 //prosedur untuk memasukkan elemen (pada indeks yang telah ditentukan) ke dalam list
 
-void InsertLast(List *L);
+void InsertLast(ListH *L);
 
-void DigitBenar(List *LSoal, char huruf, List *Lsalah, List *Lbenar);
+void DigitBenar(ListH *LSoal, char huruf, ListH *Lsalah, ListH *Lbenar);
 //prosedur untuk merubah tampilan dari '_' menjadi huruf yg ditebak (jika tebakan benar).
 //prosedur ini juga akan memasukkan huruf yang tebakannya salah ke dalam list huruf yg salah.
 
