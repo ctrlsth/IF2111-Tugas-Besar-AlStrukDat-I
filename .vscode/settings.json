@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "DinnerDash.C": "cpp"
+        "DinnerDash.C": "cpp",
+        "mesin_kata.h": "c"
     }
 }

@@ -1,51 +1,60 @@
+
+#ifndef HANGMAN_H
+#define HANGMAN_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include "boolean.h"
-#include "ADTMESINKATA/mesin_kata.h"
+#include "ADT/mesinkata.h"
 
 #define IDX_UNDEF -1
-#define MARKK '_'
+#define CLUE '_'
 #define KESEMPATAN 10
 
 typedef struct {
-    char kata[KESEMPATAN];
+    Word kalimat[100];
     int panjang;
-} List;
+} ListH;
 
-void CreateList(List *LSoal, int digit);
+int LenghtList(ListH L);
+
+int savefile(ListH guessword, Word fileName);
+
+FILE *StartWord(Word source);
+
+ListH loadfile(Word source);
+
+void ADVFL();
+
+FILE* STARTF(char *source);
+
+void CreateClue(Word *WSoal);
 //untuk membuat sebuah list kosong dengan tampilan Mark sebanyak digit.
 
-void CreateEmpty(List*Lsalah);
+void CreateList(ListH *L);
+
+void InsertLastH(ListH *L, Word kata);
+
+void CreateWord(Word *Wsalah);
 //prosedur untuk membuat sebuah list kosong dengan panjang IDX_UNDEF
 
-int printSoal(int urutan);
-//fungsi untuk menampilkan soal pertanyaan
+int Ilustrasi(Word Wsalah);
 
-void variasiSoal(int urutan, List *L);
-//prosedur untuk mencetak jawaban
+void DeleteHuruf(Word *Wbenar, Word WSoal, int indeks);
 
-void TampilanGaris(List Lsalah);
-//prosedur untuk menampilkan visualisasi hangman, berdasarkan jumlah salah
+void InsertHuruf(Word *Wbenar, Word WSoal, int indeks);
 
-void DeleteAt(List *Lbenar, List LSoal, int indeks);
-//prosedur untuk menghapus elemen ke-indeks
+void UbahHuruf(Word *WSoal, char huruf, Word *Wsalah, Word *Wbenar);
 
-void InsertAt(List *Lbenar, List LSoal, int indeks);
-//prosedur untuk memasukkan elemen (pada indeks yang telah ditentukan) ke dalam list
+void PrintKalimat(Word W);
 
-void DigitBenar(List *LSoal, char huruf, List *Lsalah, List *Lbenar);
-//prosedur untuk merubah tampilan dari '_' menjadi huruf yg ditebak (jika tebakan benar).
-//prosedur ini juga akan memasukkan huruf yang tebakannya salah ke dalam list huruf yg salah.
+int TampilanGame(Word Wbenar , Word Wsalah, int urutan, Word WSoal);
 
-void PrintList(List L, int max);
-//prosedur untuk menampilkan isi daripada List
+boolean IsOne(Word W);
 
-void TampilanGame(List Lbenar, List Lsalah, int urutan, List LSoal);
-//prosedur untuk menampilkan tampilan game
+boolean Ada(char huruf, Word Wsalah, Word Wbenar, Word WSoal);
 
-boolean isExist(char huruf, List Lsalah, List Lbenar, List LSoal);
-//fungsi untuk mencari huruf di dalam list. Fungsi akan mengembalikan true bila huruf dapat ditemukan.
+void HangMan (int *skorhangman);
 
-void HangMan(int *skorhangman);
-//prosedur utama dari game hangman
+#endif
