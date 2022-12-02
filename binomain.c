@@ -24,8 +24,14 @@ void ASCIIArt()
     );
 }
 
+// int main(){
+
+//     printf("HALO WORLD!\n");
+// }
+
 int main()
 {
+    printf("TEST\n");
     /* *** INISIALISASI *** */
     Queue queueGame; CreateQueue(&queueGame);
     TabWord listGame; MakeTabWord(&listGame);
@@ -223,9 +229,9 @@ int main()
         DeallocateTabWord(&listCommand);
         MakeTabWord(&listCommand);
 
-        delay(1000);
+        // delay(1000);
 
     } while (active);
 
-    return 0;
+    // return 0;
 }

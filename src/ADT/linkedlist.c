@@ -126,28 +126,28 @@ void movesnake(List* head, char move, int *n){
     row->info = del_huruf;
     del_huruf = huruf;
 
-    if (move == 'd'){
+    if (move == 'D'){
         row->prev = row->next_col; //Prev(row) menjadi next col
         row->prev->next = row; //Next(Prev(row)) menjadi row
         row = row->prev; 
         huruf = row->info;
         row->info = del_huruf;
     }
-    else if (move == 'a'){
+    else if (move == 'A'){
         row->prev = row->prev_col;
         row->prev->next = row;
         row = row->prev;
         huruf = row->info;
         row->info = del_huruf;
     }
-    else if(move == 's'){
+    else if(move == 'S'){
         row->prev = row->next_row;
         row->prev->next = row;
         row = row->prev;
         huruf = row->info;
         row->info = del_huruf;
     }
-    else if(move == 'w'){
+    else if(move == 'W'){
         row->prev = row->prev_row;
         row->prev->next = row;
         row = row->prev;
@@ -255,22 +255,22 @@ boolean isNabrak(List head, char input){
     //apakah ular nabrak obstacle
     boolean nabrak = false;
     addressNode P = head.First;
-    if (input == 'd'){
+    if (input == 'D'){
         if (strcompare(P->next_col->info," X ")){
             nabrak = true;
         }
     }
-    else if(input == 'w'){
+    else if(input == 'W'){
         if(strcompare(P->prev_row->info," X ")){
             nabrak = true;
         }
     }
-    else if(input == 'a'){
+    else if(input == 'A'){
         if(strcompare(P->prev_col->info," X ")){
             nabrak = true;
         }
     }
-    else if(input == 's'){
+    else if(input == 'S'){
         if(strcompare(P->next_row->info," X ")){
             nabrak = true;
         }
@@ -281,7 +281,7 @@ boolean isNabrak(List head, char input){
 boolean isNabrakBody(List head, char input){
     addressNode P = head.First;
     boolean nabrak = false;
-    if (input == 'd'){
+    if (input == 'D'){
         if (!strcompare(P->next_col->info, "   ") && !strcompare(P->next_col->info, " X ") && !strcompare(P->next_col->info, " o ") && !strcompare(P->next_col->info, " M ")){
             if(P->next == head.Last){
                 nabrak = true;
@@ -294,7 +294,7 @@ boolean isNabrakBody(List head, char input){
             }
         }
     }
-    else if(input == 'w'){
+    else if(input == 'W'){
         if((!strcompare(P->prev_row->info,"   ") && !strcompare(P->prev_row->info," X ") && !strcompare(P->prev_row->info," o ") && !strcompare(P->prev_row->info," M "))){
             if(P->next == head.Last){
                 nabrak = true;
@@ -307,7 +307,7 @@ boolean isNabrakBody(List head, char input){
             }
         }
     }
-    else if(input == 'a'){
+    else if(input == 'A'){
         if((!strcompare(P->prev_col->info,"   ") && !strcompare(P->prev_col->info," X ") && !strcompare(P->prev_col->info, " o ") && !strcompare(P->prev_col->info," M "))){
             if(P->next == head.Last){
                 nabrak = true;
@@ -320,7 +320,7 @@ boolean isNabrakBody(List head, char input){
             }
         }
     }
-    else if(input == 's'){
+    else if(input == 'S'){
         if((!strcompare(P->next_row->info,"   ") && !strcompare(P->next_row->info," X ") && !strcompare(P->next_row->info, " o ") && !strcompare(P->next_row->info," M "))){
             if(P->next == head.Last){
                 nabrak = true;
@@ -337,7 +337,7 @@ boolean isNabrakBody(List head, char input){
 }
 
 boolean isNotMoveable(List head){
-    return (isNabrakBody(head,'a') && isNabrakBody(head,'w') && isNabrakBody(head,'s') && isNabrakBody(head,'d'));
+    return (isNabrakBody(head,'A') && isNabrakBody(head,'W') && isNabrakBody(head,'S') && isNabrakBody(head,'D'));
 }
 
 void MakeMeteor(List head, addressNode *meteor, int n_row, int n_cols){
@@ -435,22 +435,22 @@ void MeteorDisappear(List *head, int n_row, int n_cols){
 boolean isNabrakMeteor(List head, char input){
     boolean nabrak = false;
     addressNode P = head.First;
-    if (input == 'd'){
+    if (input == 'D'){
         if (strcompare(P->next_col->info, " M ")){
             nabrak = true;
         }
     }
-    else if(input == 'w'){
+    else if(input == 'W'){
         if(strcompare(P->prev_row->info," M ")){
             nabrak = true;
         }
     }
-    else if(input == 'a'){
+    else if(input == 'A'){
         if(strcompare(P->prev_col->info," M ")){
             nabrak = true;
         }
     }
-    else if(input == 's'){
+    else if(input == 'S'){
         if(strcompare(P->next_row->info," M ")){
             nabrak = true;
         }

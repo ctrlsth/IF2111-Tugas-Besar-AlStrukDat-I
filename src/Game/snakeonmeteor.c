@@ -46,26 +46,26 @@ void GameSetSnake(List *head, int *n_baris, int* n_kolom,int *n){
                         invalid_input = false;
                     }
                     else{
-                        clear();
+                        //clear();
                         printf("Input tidak valid! Jumlah obstacle melebihi luas arena dan panjang snake\n");
                     }
                 }
                 else{
-                    clear();
+                    //clear();
                     printf("Input tidak valid! Masukan obstacle harus berupa integer positif (boleh nol)\n");
                 }
             }
             else{
-                clear();
+                //clear();
                 printf("Input tidak valid! Range panjang arena yang dapat dibuat adalah 5 - 10\n");
             }
         }
         else{
-            clear();
+            //clear();
             printf("Input tidak valid! Masukan panjang arena harus berupa integer positif dengan range 5-10\n");
         }
     }
-    clear();
+    //clear();
     int baris = rand() % (*n_baris);
     int kolom = rand() % (*n_kolom);
     create_linked_list_matrix(head,*n_baris,*n_kolom, baris, kolom);
@@ -126,7 +126,7 @@ void snakeonmeteor(int *score){
     int n_kolom;
     List ular;
     snakeart();
-    clear();
+    //clear();
     GameSetSnake(&ular,&n_baris,&n_kolom,&n);
     // create_linked_list_matrix(&ular,n_baris,n_kolom, baris, kolom);
     // createsnake(&ular,baris,kolom,&n);
@@ -140,7 +140,8 @@ void snakeonmeteor(int *score){
                 printf("TURN %d\n",turn);
                 printf("Silahkan masukkan command anda: ");
                 STARTCMD(true);
-                if (compareCharWord(currentCommand,'a') || compareCharWord(currentCommand,'s') || compareCharWord(currentCommand,'d') || compareCharWord(currentCommand,'w')){
+                UPPER(&currentCommand);
+                if (compareCharWord(currentCommand,'A') || compareCharWord(currentCommand,'S') || compareCharWord(currentCommand,'D') || compareCharWord(currentCommand,'W')){
                     input = currentCommand.TabChar[0];
                     if(isNabrakBody(ular,input)){
                         printf("Kepala tidak dapat bergerak ke badan sendiri! silakan masukkan command lainnya\n");
@@ -158,7 +159,7 @@ void snakeonmeteor(int *score){
                                 endgame = true;
                             }
                             else{
-                                clear();
+                                //clear();
                                 movesnake(&ular,input,&n);
                                 SummonFood(&ular,n_baris,n_kolom);
                                 SummonMeteor(&ular, &endgame,&n,n_baris,n_kolom);

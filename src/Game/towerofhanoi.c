@@ -220,7 +220,7 @@ void towerOfHanoi(int *score){
             printf("TIANG TUJUAN: ");
             STARTCMD(true);
             tujuan = currentCommand;
-            clear();
+            //clear();
             if((tujuan.Length == 1) && (asal.Length == 1)){
                 if((asal.TabChar[0] == 'A' || asal.TabChar[0] == 'B' || asal.TabChar[0] == 'C') && (tujuan.TabChar[0] == 'A' || tujuan.TabChar[0] == 'B' || tujuan.TabChar[0] == 'C')){
                     if(asal.TabChar[0] == tujuan.TabChar[0]){

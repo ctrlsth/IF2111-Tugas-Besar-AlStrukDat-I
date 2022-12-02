@@ -11,8 +11,8 @@ Deklarasi stack yang dengan implementasi array eksplisit-statik rata kiri
 // #define false 0
 // #define true 1
 #define Nil 0
-#define MaxMapEl 100
-#define MaxListEl 50
+#define MaxMapEl 50
+#define MaxListEl 20
 
 // typedef int bool;
 typedef Word keytype;

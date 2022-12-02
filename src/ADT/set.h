@@ -11,8 +11,8 @@ Deklarasi stack yang dengan implementasi array eksplisit-statik rata kiri
 */
 
 #define Nil 0
-#define MaxSetEl 100
-#define MaxListEl 50
+#define MaxSetEl 50
+#define MaxListEl 20
 
 typedef Word setinfo;
 typedef int address;

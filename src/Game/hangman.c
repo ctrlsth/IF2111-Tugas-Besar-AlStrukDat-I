@@ -19,7 +19,7 @@ void CreateWord (Word *LSoal, int digit, boolean mark){
     }
 }
 
-void ListofWord(TabWord* array, boolean *openSuccess){
+void ListofWord(TabWord* arrayWord, TabWord*arraySoal, boolean *openSuccess){
     char * filename = "data/hangman.txt";
     int n;
     int i; 
@@ -28,18 +28,29 @@ void ListofWord(TabWord* array, boolean *openSuccess){
         n = toInt(currentWord);
         ADVWORD();
         if(!EndWord){
-            for (i = 0;i<n;i++){ 
-            InsertLast(array,currentWord);
-            ADVWORD();
+            for (i = 0;i<n;i++){
+                UPPER(&currentWord); 
+                InsertLast(arrayWord,currentWord);
+                ADVWORD();
             }
+            arrayWord->Neff = n;
         }
-        array->Neff = n;
+        
+        if(!EndWord){
+            n = toInt(currentWord);
+            ADVWORD();
+            for(i = 0;i< n ;i++){
+                UPPER(&currentWord);
+                InsertLast(arraySoal,currentWord);
+                ADVWORD();
+            }
+            arraySoal->Neff = n;
+        }
     }
 }
 
-void menuawal(TabWord*array,boolean* game_started){
+void menuawal(TabWord*arrayWord,TabWord *arraySoal,boolean* game_started){
     boolean end_game = false;
-    while(!(*game_started) && !end_game){
         printf("\n");
         printf("  /$$$$$$            /$$                                     /$$           /$$                          \n");
         printf(" /$$__  $$          | $$                                    | $$          | $$                          \n");
@@ -82,30 +93,57 @@ void menuawal(TabWord*array,boolean* game_started){
         printf(" /\\    (_X (_/ _(_  (  \n"); 
         printf("\n");
         printf("\n");
+    while(!(*game_started) && !end_game){
         printf("Masukkan Command (PLAYGAME/ADDWORD/QUIT): ");
         STARTCMD(true);
         // printf("PLAYGAME - untuk memainkan game\n");
         // printf("ADDWORD - untuk menambahkan kata\n");
         // printf("QUIT - untuk keluar dari permainan!\n");
-        clear();
+        //clear();
         if(compareWord(currentCommand,"PLAYGAME")){
             printf("Loading...\n");
             *game_started = true;
         }
         else if(compareWord(currentCommand,"ADDWORD")){
-            printf("Masukkan Kata yang ingin dimasukkan : ");
+            Word soal;
+            Word jawaban;
+            printf("Masukkan kata berupa jawaban yang ingin dimasukkan : ");
             STARTCMD(true);
-            if(isMemberArray(*array,currentCommand)){
-                if(currentCommand.Length == 0){
-                    printf("Masukkan input yang valid!\n");
-                }
-                else{
-                    printf("Kata %s sudah terdapat di dalam list\n", toString(currentCommand));
-                }
+            wordCopy(&jawaban,currentCommand);
+            UPPER(&jawaban);
+            if(isMemberArray(*arrayWord,jawaban)){
+                printf("Kata %s sudah terdapat di dalam list jawaban\n", toString(currentCommand));
+                printf("Kata %s gagal dimasukkan ke dalam list jawaban\n",toString(currentCommand));
             }
             else{
-                InsertLast(array,currentCommand);
-                printf("Kata %s berhasil dimasukkan ke dalam list\n",toString(currentCommand));
+                if(jawaban.Length == 0){
+                    printf("Masukkan jawaban Kosong!\n");
+                    printf("Kata %s gagal dimasukkan ke dalam list jawaban\n",toString(currentCommand));
+                }
+                else{
+                    printf("Masukan soal dari jawaban yang ingin dimasukkan: ");
+                    STARTCMD(true);
+                    wordCopy(&soal,currentCommand);
+                    UPPER(&soal);
+                    if(isMemberArray(*arraySoal,currentCommand)){
+                        printf("Soal %s sudah terdapat di dalam list\n", toString(currentCommand));
+                        printf("Kata %s gagal dimasukkan ke dalam list jawaban\n",toString(jawaban));
+                        printf("Kata %s gagal dimasukkan ke dalam list soal\n",toString(currentCommand));
+                    }
+                    else{
+                        if(currentCommand.Length == 0){
+                            printf("Masukkan Soal Kosong!\n");
+                            printf("Kata %s gagal dimasukkan ke dalam list jawaban\n",toString(jawaban));
+                            printf("Kata %s gagal dimasukkan ke dalam list soal\n",toString(currentCommand));
+                        }
+                        else{
+                            InsertLast(arrayWord,jawaban);
+                            InsertLast(arraySoal,soal);
+                            printf("Kata %s berhasil dimasukkan ke dalam list jawaban\n",toString(jawaban));
+                            printf("Soal %s berhasil dimasukkan ke dalam list soal\n",toString(soal));
+                        }
+                    }   
+                }
             }
         }
         else if(compareWord(currentCommand,"QUIT")){
@@ -118,7 +156,7 @@ void menuawal(TabWord*array,boolean* game_started){
     }
 }
 
-void savelist(TabWord array){
+void savelist(TabWord arrayWord, TabWord arraySoal){
     char *filename = "hangman.txt";
     int i;
     FILE *savefile;
@@ -142,22 +180,40 @@ void savelist(TabWord array){
     {
         // printf("Passed\n");
         char num[3];
-        sprintf(num, "%d", Length(array));
+        sprintf(num, "%d", Length(arrayWord));
         // printf("PassedX\n");
         fputs(num, savefile);
         // printf("PassedY\n");
         fputs("\n", savefile);
         // printf("PassedZ\n");
-        for (i = 0; i < array.Neff; i++)
+        for (i = 0; i < arrayWord.Neff; i++)
         {
-            char *gamename = toString(Get(array, i));
-            fputs(gamename, savefile);
-            if (i != array.Neff -1)
+            // printf("Passed %d\n", i);
+            char *gamejawaban = toString(Get(arrayWord, i));
+            fputs(gamejawaban, savefile);
+            fputs("\n", savefile);
+        }
+        // printf("Passed loop\n");
+        sprintf(num, "%d", Length(arraySoal));
+        // // printf("PassedX\n");
+        fputs(num, savefile);
+        // // printf("PassedY\n");
+        fputs("\n", savefile);
+        // // printf("PassedZ\n");
+        for (i = 0; i < arraySoal.Neff; i++)
+        {
+            // printWord(Get(arraySoal, i));
+            char *gamesoal = toString(Get(arraySoal, i));
+            // printf("After toString\n");
+            fputs(gamesoal, savefile);
+            // printf("After fputs\n");
+            // printf("%d", i);
+            if (i != arraySoal.Neff -1)
             {
                 fputs("\n", savefile);
             }
+            // printf("Passed if\n");
         }
-
         fclose(savefile);
 
         printf("\n-------------------------------\n");
@@ -320,17 +376,18 @@ void PrintList(Word L, boolean benar){
     }
     else{
         for(i=0;i<(L).Length;i++){
-            printf("%c ", (L).TabChar[i]);
+            printf("%c", (L).TabChar[i]);
         }
     }
 }
 
-void TampilanGame(Word Lbenar ,Word Lsalah, int urutan, int count_salah, int count_word_guessed){
+void TampilanGame(Word Lbenar ,Word Lsalah, Word Lsoal,int urutan, int count_salah, int count_word_guessed){
     TampilanGaris(count_salah);
     // printSoal(urutan);
     printf("KATA %d\n",count_word_guessed + 1);
+    printf("SOAL :");PrintList(Lsoal,false);printf("\n");
     printf("Tebakan sebelumnya : ");
-    PrintList(Lsalah,false);
+    PrintList(Lsalah,true);
     printf("\nKata : ");
     PrintList(Lbenar,true);
     printf("\nKesempatan : ");
@@ -378,8 +435,12 @@ void HangMan(int *score){
     srand(time(0));
     boolean opened_file = false;
     TabWord arrayWord;
+    TabWord arraySoal;
     MakeTabWord(&arrayWord);
-    ListofWord(&arrayWord,&opened_file);
+    MakeTabWord(&arraySoal);
+    ListofWord(&arrayWord,&arraySoal,&opened_file);
+    // PrintTabWord(arraySoal);
+    // PrintTabWord(arrayWord);
     // PrintTabWord(arrayWord);
     if(opened_file){
         // printf("Selamat datang di game hangman!!\nSemoga kamu ga menyesal bermain game ini!!\n\n");
@@ -393,18 +454,21 @@ void HangMan(int *score){
         Word LJawaban;
         Word Lsalah;
         Word Lbenar;
-        menuawal(&arrayWord,&game_started);
+        Word LSoal;
+        menuawal(&arrayWord,&arraySoal,&game_started);
         if(game_started){
             TabWord CopyArrayWord = CopyTabWord(arrayWord);
+            TabWord CopyArraySoal = CopyTabWord(arraySoal);
             while(!IsFinished(count_salah,CopyArrayWord)){
                 word_guessed = false;
                 int urutan = (rand()%CopyArrayWord.Neff);
                 LJawaban = CopyArrayWord.TW[urutan];
+                LSoal = CopyArraySoal.TW[urutan];
                 CreateWord(&Lbenar, LJawaban.Length,true);
                 CreateWord(&Lsalah,26,false);
                 while(!IsFinished(count_salah, CopyArrayWord) && !word_guessed){
                     invalid_input = true;
-                    TampilanGame(Lbenar, Lsalah, urutan,count_salah, word_guessed_count);
+                    TampilanGame(Lbenar, Lsalah, LSoal,urutan,count_salah, word_guessed_count);
                     // printf("\nJawaban: ");
                     // PrintList(LJawaban,true);
                     while(!IsFinished(count_salah,CopyArrayWord) && invalid_input && !word_guessed){
@@ -417,7 +481,7 @@ void HangMan(int *score){
                                     printf("Bro... Lu dah pernah nebak huruf %c, coba tebak huruf lain\n",input);
                                 }
                                 else{
-                                    clear();
+                                    //clear();
                                     DigitBenar(LJawaban, input, &Lsalah, &Lbenar,&count_salah,&point);
                                     invalid_input = false;
                                     if(!isMark(Lbenar)){
@@ -428,6 +492,7 @@ void HangMan(int *score){
                                         printf("\nPoint anda bertambah %d\n",LJawaban.Length);
                                         printf("Menuju kata selanjutnya\n");
                                         DeleteAt(&CopyArrayWord,urutan);
+                                        DeleteAt(&CopyArraySoal,urutan);
                                         word_guessed_count +=1;
                                     }
                                 }
@@ -451,9 +516,18 @@ void HangMan(int *score){
             }
             *score = point;
         }
-        savelist(arrayWord);
+        else
+        {
+            *score = -999;
+        }
+        savelist(arrayWord,arraySoal);
     }
     else{
         printf("File tidak bisa dibuka\n");
     }
 }
+
+// int main(){
+//     int score;
+//     HangMan(&score);
+// }

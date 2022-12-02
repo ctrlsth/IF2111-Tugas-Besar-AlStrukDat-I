@@ -27,7 +27,7 @@ void RNG(int *score)
     while(!found && skor >0)
     {
         STARTCMD(false);
-        clear();
+        //clear();
         if(isNumber(currentCommand))
         {
             tebakan = toInt(currentCommand);

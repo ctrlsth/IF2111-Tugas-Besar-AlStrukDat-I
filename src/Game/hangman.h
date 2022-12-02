@@ -9,11 +9,11 @@
 
 void CreateWord (Word *LSoal, int digit, boolean mark);
 
-void ListofWord(TabWord* array, boolean *openSuccess);
+void ListofWord(TabWord* arrayWord, TabWord*arraySoal, boolean *openSuccess);
 
-void menuawal(TabWord*array,boolean* game_started);
+void menuawal(TabWord*arrayWord,TabWord *arraySoal,boolean* game_started);
 
-void savelist(TabWord array);
+void savelist(TabWord arrayWord, TabWord arraySoal);
 
 void TampilanGaris(int count_salah);
 
@@ -23,7 +23,7 @@ void DigitBenar(Word LSoal, char huruf, Word* Lsalah, Word* Lbenar, int *count_s
 
 void PrintList(Word L, boolean benar);
 
-void TampilanGame(Word Lbenar ,Word Lsalah, int urutan, int count_salah, int count_word_guessed);
+void TampilanGame(Word Lbenar ,Word Lsalah, Word Lsoal,int urutan, int count_salah, int count_word_guessed);
 
 boolean isExist (char huruf, Word Lsalah);
 
