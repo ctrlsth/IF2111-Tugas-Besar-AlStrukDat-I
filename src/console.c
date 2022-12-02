@@ -116,7 +116,7 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
             while (!EndWord)
             {
                 n = toInt(currentWord);
-                printf("%d\n", n);
+                // printf("%d\n", n);
                 Set *currentSet = &(listPlayer->GameSet[idx]);
                 Map *currentMap = &(scoreBoard->board[idx]);
                 // printf("Passed Declaration\n");
@@ -127,11 +127,11 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
                     // Melakukan separasi antara nama dan skor
                     Word Name, Score;
                     binSep(currentWord, &Name, &Score, ' ');
-                    printf("Name: ");
-                    printWord(Name);
-                    printf("\nScore: ");
-                    printWord(Score);
-                    printf("\n");
+                    // printf("Name: ");
+                    // printWord(Name);
+                    // printf("\nScore: ");
+                    // printWord(Score);
+                    // printf("\n");
 
                     // Memasukkan nama pada Set dan Skor pada Map
                     InsertSetEl(currentSet, Name);
