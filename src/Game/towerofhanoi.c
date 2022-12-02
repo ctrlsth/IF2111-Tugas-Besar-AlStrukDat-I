@@ -13,7 +13,7 @@ boolean finalGame(Stack S)
     for (a = 5; a > 0; a--)
     {
         char num = a + '0';
-        char strNum[1];
+        char strNum[2];
         strNum[0] = num;
         strNum[1] = '\0';
         Word number = toWord(strNum);
@@ -116,7 +116,7 @@ void towerOfHanoi(int *skorHanoi)
     for (i = 5; i > 0; i--)
     {
         char num = i + '0';
-        char strNum[1];
+        char strNum[2];
         strNum[0] = num;
         Word number = toWord(strNum);
         Push(&tiang1, number);

@@ -408,7 +408,10 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             }
             else
             {
-                UPDATESB(score, gamePlayers, playerScores, i);
+                if (score != -999)
+                {
+                    UPDATESB(score, gamePlayers, playerScores, i);
+                }
             }
             UPDATEHISTORY(stackHistory, Game);
         }
