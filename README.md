@@ -1,4 +1,4 @@
-# Tugas Besar Algoritma Struktur Data 1 [BNMO]
+# Tugas Besar Algoritma Struktur Data [BNMO]
 ## Deskripsi Program
 Program ini melibatkan sebuah robot video game console bernama BNMO. Karena beberapa hal, BNMO sempat rusak, namun sudah diperbaiki–tentu saja, ada beberapa hal yang kurang sejak perbaikan tersebut. Fitur-fitur yang ada pada BNMO harus dikembalikan lagi. Oleh karena itu, kelompok kami berusaha untuk melengkapi kembali fitur-fitur BNMO agar bisa dimainkan lagi. 
 
