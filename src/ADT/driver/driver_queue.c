@@ -8,7 +8,7 @@ int main()
     Queue q;
     CreateQueue(&q);
     printf("Dengan begitu, queue yang kosong sudah dibuat.\n");
-
+    displayQueue(q);
     // Mengecek apakah queue kosong atau tidak
 
     isEmpty(q); // Seharusnya jawabannya iya, karena masih belum dimasukkan apa-apa ke dalam queue
