@@ -56,7 +56,6 @@ void showTiang(Stack S1, Stack S2, Stack S3)
         piringan(S3, a, 9);
         printf("\n");
     }
-    printf(" Tiang 1     Tiang 2     Tiang 3 ");
     printf("\n");
 }
 
