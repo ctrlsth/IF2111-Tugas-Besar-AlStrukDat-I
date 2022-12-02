@@ -363,7 +363,7 @@ void DigitBenar(Word LSoal, char huruf, Word* Lsalah, Word* Lbenar, int *count_s
     }
     else if(benar){
         printf("Selamat anda berhasil menebak %d huruf pada giliran ini\n",count);
-        *point += count;
+        // *point += count;
     }
 }
 
@@ -489,10 +489,12 @@ void HangMan(int *score){
                                         word_guessed = true;
                                         printf("\nJawaban benar: ");
                                         PrintList(LJawaban,true);
+                                        point += LJawaban.Length;
                                         printf("\nPoint anda bertambah %d\n",LJawaban.Length);
                                         printf("Menuju kata selanjutnya\n");
                                         DeleteAt(&CopyArrayWord,urutan);
                                         DeleteAt(&CopyArraySoal,urutan);
+
                                         word_guessed_count +=1;
                                     }
                                 }

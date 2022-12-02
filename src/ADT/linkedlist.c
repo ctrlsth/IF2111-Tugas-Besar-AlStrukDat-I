@@ -362,7 +362,7 @@ void SummonMeteor(List *head, boolean* end, int *n, int n_row, int n_cols){
     while(strcompare(meteor->info," o ") || strcompare(meteor->info, " X ")){
         MakeMeteor(*head,&meteor,n_row,n_cols);
     }
-    if(meteor->info != "   "){
+    if(!strcompare(meteor->info, "   ")){
         if(strcompare(meteor->info, " H ")){
             printf("Kepala snake terkena meteor!\n");
             printf("Game over!\n");
