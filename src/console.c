@@ -99,11 +99,10 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
             Stack tempHis;
             CreateEmptyStack(&tempHis);
             infostack temp;
-            ADVWORD();
             for (i = 0; i < n; i++)
             {
-                Push(&tempHis, currentWord);
                 ADVWORD();
+                Push(&tempHis, currentWord);
             }
             while (!IsStackEmpty(tempHis))
             {
@@ -113,24 +112,27 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
 
             // ScoreBoard
             int idx = 0;
+            ADVWORD();
             while (!EndWord)
             {
                 n = toInt(currentWord);
-                printf("n = %d\n",n);
+                // printf("%d\n", n);
                 Set *currentSet = &(listPlayer->GameSet[idx]);
                 Map *currentMap = &(scoreBoard->board[idx]);
                 // printf("Passed Declaration\n");
 
                 ADVWORD();
-                //clear();
                 for (i = 0; i < n; i++)
                 {
                     // Melakukan separasi antara nama dan skor
                     Word Name, Score;
                     binSep(currentWord, &Name, &Score, ' ');
-                    printf("Nama: ");printWord(Name);printf("\n");
-                    printf("Score: ");printWord(Score);printf("\n");
-                    //clear();
+                    // printf("Name: ");
+                    // printWord(Name);
+                    // printf("\nScore: ");
+                    // printWord(Score);
+                    // printf("\n");
+
                     // Memasukkan nama pada Set dan Skor pada Map
                     InsertSetEl(currentSet, Name);
                     MapValIns(currentMap, Name, toInt(Score));
@@ -353,42 +355,42 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             int score = 0, score2 = 0;
             if (i == 1)
             {
-                system("cls");
+                clear();
                 RNG(&score);
             }
             else if (i == 2)
             {
-                system("cls");
+                clear();
                 dinerDASH(&score);
             }
             else if (i == 3)
             {
-                system("cls");
+                clear();
                 // printf("This is Hangman\n");
                 HangMan(&score);
             }
             else if (i == 4)
             {
-                system("cls");
+                clear();
                 // printf("This is Tower\n");
                 towerOfHanoi(&score);
             }
             else if (i == 5)
             {
-                system("cls");
+                clear();
                 snakeonmeteor(&score);
             }
             else if (i == 6)
             {
-                system("cls");
+                clear();
                 MARVELSNAP(&score, &score2);
                 // score = rand();
                 // score2 = rand();
             }
             else
             {
-                score = rand() % 101;
-                system("cls");
+                score = rand();
+                clear();
                 printDelay("[ GAME OVER ]\n", 50);
                 printDelay("[ SCORE: ", 50);
                 printf("%d ", score);
@@ -406,7 +408,10 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             }
             else
             {
-                UPDATESB(score, gamePlayers, playerScores, i);
+                if (score != -999)
+                {
+                    UPDATESB(score, gamePlayers, playerScores, i);
+                }
             }
             UPDATEHISTORY(stackHistory, Game);
         }
@@ -687,42 +692,53 @@ void RESETSB(ListOfSet *listPlayer, ListOfMap *scoreBoard, TabWord listGame)
     else
     {
         int n = toInt(currentCommand);
-        printf("APAKAH KAMU YAKIN INGIN MELAKUKAN RESET SCOREBOARD ");
-        if (n == 0)
-        {
-            printf("ALL");
-        }
-        else
-        {
-            printWord(listGame.TW[n - 1]);
-        }
-
-        printf(" (YA/TIDAK)? ");
-        STARTCMD(false);
-        if (compareWord(currentCommand, "YA"))
-        {
+        // printf("%d",scoreBoard->Num);
+        if(n <= scoreBoard->Num){
+            printf("APAKAH KAMU YAKIN INGIN MELAKUKAN RESET SCOREBOARD ");
             if (n == 0)
             {
-                for(int i=0;i<scoreBoard->Num;i++){
-                    CreateEmptyMap(&(scoreBoard->board[i]));
-                    CreateEmptySet(&(listPlayer->GameSet[i])); 
-                }
+                printf("ALL");
             }
             else
             {
-                CreateEmptyMap(&(scoreBoard->board[n - 1]));
-                CreateEmptySet(&(listPlayer->GameSet[n - 1]));
+                printWord(listGame.TW[n - 1]);
             }
 
-            printf("\nSCOREBOARD BERHASIL DI RESET!\n");
+            printf(" (YA/TIDAK)? ");
+            STARTCMD(false);
+            if (compareWord(currentCommand, "YA"))
+            {
+                if (n == 0)
+                {
+                    int El = scoreBoard->Num;
+                    CreateEmptyMapList(scoreBoard);
+                    CreateEmptySetList(listPlayer);
+                    if (El > 6)
+                    {
+                        scoreBoard->Num = El;
+                        listPlayer->Num = El;
+                    }
+                }
+                else
+                {
+                    CreateEmptyMap(&(scoreBoard->board[n - 1]));
+                    CreateEmptySet(&(listPlayer->GameSet[n - 1]));
+                }
+
+                printf("\nSCOREBOARD BERHASIL DI RESET!\n");
+            }
+            else if (compareWord(currentCommand, "TIDAK"))
+            {
+                printf("RESET SCOREBOARD DIBATALKAN.\n");
+            }
+            else
+            {
+                printf("MASUKAN TIDAK VALID.\n");
+                printf("RESET SCOREBOARD DIBATALKAN.\n");
+            }
         }
-        else if (compareWord(currentCommand, "TIDAK"))
-        {
-            printf("RESET SCOREBOARD DIBATALKAN.\n");
-        }
-        else
-        {
-            printf("MASUKAN TIDAK VALID.\n");
+        else{
+            printf("MASUKAN TIDAK VALID (BERADA DILUAR RANGE)\n");
             printf("RESET SCOREBOARD DIBATALKAN.\n");
         }
     }
@@ -749,9 +765,8 @@ void UPDATESB(int score, Set *gamePlayers, Map *playerScores, int whatGame)
     if (whatGame != 6) // Kalo MARVELSNAP, jangan di Sort
     {
         SortByVal(playerScores);
-        SortSetByMap(gamePlayers, (*playerScores));    
+        SortSetByMap(gamePlayers, (*playerScores));
     }
-    
 }
 
 void SHOWHISTORY(Stack stackHistory, int num)
