@@ -116,6 +116,7 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
             while (!EndWord)
             {
                 n = toInt(currentWord);
+                printf("%d\n", n);
                 Set *currentSet = &(listPlayer->GameSet[idx]);
                 Map *currentMap = &(scoreBoard->board[idx]);
                 // printf("Passed Declaration\n");
@@ -126,6 +127,11 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
                     // Melakukan separasi antara nama dan skor
                     Word Name, Score;
                     binSep(currentWord, &Name, &Score, ' ');
+                    printf("Name: ");
+                    printWord(Name);
+                    printf("\nScore: ");
+                    printWord(Score);
+                    printf("\n");
 
                     // Memasukkan nama pada Set dan Skor pada Map
                     InsertSetEl(currentSet, Name);
@@ -699,8 +705,14 @@ void RESETSB(ListOfSet *listPlayer, ListOfMap *scoreBoard, TabWord listGame)
         {
             if (n == 0)
             {
+                int El = scoreBoard->Num;
                 CreateEmptyMapList(scoreBoard);
                 CreateEmptySetList(listPlayer);
+                if (El > 6)
+                {
+                    scoreBoard->Num = El;
+                    listPlayer->Num = El;
+                }
             }
             else
             {
@@ -743,9 +755,8 @@ void UPDATESB(int score, Set *gamePlayers, Map *playerScores, int whatGame)
     if (whatGame != 6) // Kalo MARVELSNAP, jangan di Sort
     {
         SortByVal(playerScores);
-        SortSetByMap(gamePlayers, (*playerScores));    
+        SortSetByMap(gamePlayers, (*playerScores));
     }
-    
 }
 
 void SHOWHISTORY(Stack stackHistory, int num)

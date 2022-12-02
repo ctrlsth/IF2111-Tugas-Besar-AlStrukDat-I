@@ -11,15 +11,18 @@ Word currentCommand;
 void STARTWORD(char *txtfile, boolean *openSuccess)
 {
     loadstart(txtfile, openSuccess);
-    IgnoreBlanks();
-    if (CC == EOF)
+    if (*openSuccess)
     {
-        EndWord = true;
-    }
-    else
-    {
-        EndWord = false;
-        ADVWORD();
+        IgnoreBlanks();
+        if (CC == EOF)
+        {
+            EndWord = true;
+        }
+        else
+        {
+            EndWord = false;
+            ADVWORD();
+        }
     }
 }
 
@@ -48,16 +51,19 @@ void COPYWORD()
     int i = 0;
     while ((CC != EOF) && (CC != MARK) && (i < NMax))
     {
-        currentWord.TabChar[i] = CC;
+        if (CC != '\r')
+        {
+            currentWord.TabChar[i] = CC;
+            i++;
+        }
         adv(true);
-        i++;
     }
     currentWord.Length = i;
 }
 
 void IgnoreBlanks()
 {
-    while (CC == BLANK || CC == MARK)
+    while (CC == BLANK || CC == MARK || CC == '\r')
     {
         adv(true);
     }

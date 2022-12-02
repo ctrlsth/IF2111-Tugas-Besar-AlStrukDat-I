@@ -6,12 +6,7 @@ static FILE *saveFile;
 
 int LengthList(ListH L)
 {
-    int i = 0;
-    while (toString(L.kalimat[i]) != '\0')
-    {
-        i++;
-    }
-    return i;
+    return L.panjang;
 }
 
 int savefile(ListH guessword, Word fileName)
