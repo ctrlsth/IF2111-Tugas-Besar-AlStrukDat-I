@@ -7,29 +7,21 @@
 #include "../boolean.h"
 #include "mesinkarakter.h"
 
-#define NMax 100 // Harus diubah
+#define NMax 200
 #define BLANK ' '
 
 typedef struct
 {
-   char TabWord[NMax]; /* container penyimpan kata, indeks yang dipakai [0..NMax-1] */
+   char TabChar[NMax];
    int Length;
 } Word;
 
 /* State Mesin Kata */
 extern boolean EndWord;
-extern Word currentWord1;
-extern Word currentWord2;
-extern Word currentWordFile;
+extern Word currentWord;
+extern Word currentCommand;
 
-void IgnoreBlanks(boolean CMD);
-/* Mengabaikan satu atau beberapa BLANK
-   I.S. : CC sembarang
-   F.S. : CC ≠ BLANK atau CC = MARK */
-
-void C_IgnoreBlank();
-
-void STARTWORD();
+void STARTWORD(char* txtfile, boolean *openSuccess);
 /* I.S. : CC sembarang
    F.S. : EndWord = true, dan CC = MARK;
           atau EndWord = false, currentWord adalah kata yang sudah diakuisisi,
@@ -50,54 +42,82 @@ void COPYWORD();
           CC adalah karakter sesudah karakter terakhir yang diakuisisi.
           Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 
-void STARTCMD();
-void ADVCMD();
+void IgnoreBlanks();
+/* Mengabaikan satu atau beberapa BLANK
+   I.S. : CC sembarang
+   F.S. : CC ≠ BLANK atau CC = EOF */
+
+void STARTCMD(boolean inputGame);
+/* I.S. : CC sembarang
+   F.S. : EndWord = true, dan CC = MARK;
+          atau EndWord = false, currentCommand adalah kata yang sudah diakuisisi,
+          CC karakter pertama sesudah karakter terakhir kata */
+
+void ADVCMD(boolean inputGame);
+/* I.S. : CC adalah karakter pertama kata yang akan diakuisisi
+   F.S. : currentCommand adalah kata terakhir yang sudah diakuisisi,
+          CC adalah karakter pertama dari kata berikutnya, mungkin MARK
+          Jika CC = MARK, EndWord = true.
+   Proses : Akuisisi kata menggunakan procedure COPYCMD */
+
 void COPYCMD();
+/* Mengakuisisi command, menyimpan dalam currentCommand
+   I.S. : CC adalah karakter pertama dari kata
+   F.S. : currentCommand berisi kata yang sudah diakuisisi;
+          CC = BLANK atau CC = MARK;
+          CC adalah karakter sesudah karakter terakhir yang diakuisisi.
+          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 
-void STARTWORDFILE(char *c);
-void ADVWORDFILE();
-void COPYWORDFILE();
+void COPYGAME();
+/* Mengakuisisi nama game, menyimpan dalam currentCommand
+   I.S. : CC adalah karakter pertama dari kata
+   F.S. : currentCommand berisi kata yang sudah diakuisisi;
+          CC = BLANK atau CC = MARK;
+          CC adalah karakter sesudah karakter terakhir yang diakuisisi.
+          Jika panjang kata melebihi NMax, maka sisa kata "dipotong" */
 
-int KataInt(Word k);
+void IgnoreBlanksCMD();
+/* Mengabaikan satu atau beberapa BLANK
+   I.S. : CC sembarang
+   F.S. : CC ≠ BLANK atau CC = MARK */
 
-Word GetCWord1();
-/* Mengembalikan currentWord
-   I.S.  : currentWord sembarang */
-
-Word GetCWord2();
-
-Word addtxt(Word filename);
-
-Word toWord(char* someString);
-/* Mengubah type String menjadi type Kata 
+Word toWord(char *someString);
+/* Mengubah type String menjadi type Kata
    I.S. : string masukan bisa kosong */
 
-boolean compareWord(Word kata1, char* kata2);
+char* toString(Word kata);
+/* Mengubah type Word menjadi String */
+
+int toInt(Word kata);
+/* Mengupah type Word menjadi Integer */
+
+boolean isNumber(Word kata);
+/* Melihat apakah masukan merupakan angka atau bukan */
+
+boolean compareWord(Word kata1, char *kata2);
 /* Membandingkan sebuah word dengan sebuah sting
-   True     : Jika string dan kata sama, 
+   True     : Jika string dan kata sama,
+   False    : Jika berbeda */
+
+boolean compare2Word(Word kata1, Word kata2);
+/* Membandingkan 2 buah word
+   True     : Jika kedua word sama,
    False    : Jika berbeda */
 
 int strLength(char *kata);
 /* Mengembalikan panjang suatu string kata */
 
 void printWord(Word Kata);
+/* Menampilkan isi kata pada layar */
 
-char* toString(Word Kata);
+void binSep(Word Kata, Word *Kata1, Word *Kata2, char separator);
 
-char* strConcat(char* s1, char* s2);
+void UPPER(Word *Kata);
 
-void IgnoreBlank();
-void CMD_STARTKATA();
-void CMD_ADVKATA();
-void CMD_COPYWORD();
+boolean compareCharWord(Word kata1, char kata2);
 
-
-<<<<<<< Updated upstream
-#endif
-=======
 boolean strcompare(char *kata1, char *kata2);
 
 void clear();
 
 #endif
->>>>>>> Stashed changes

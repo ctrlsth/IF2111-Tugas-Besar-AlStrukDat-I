@@ -1,235 +1,221 @@
-// NIM      : 18221047
-// Nama     : I Dewa Made Manu Pradnyana
-// Tanggal  : 19 Oktober 2022
-// Topik praktikum  : PraPraktikum 03 - arraydin.c
-// Deskripsi : Realisasi fungsi arraydin.h
 
-#include "array.h"
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include "array.h"
 
 /**
  * Konstruktor
  * I.S. sembarang
- * F.S. Terbentuk ArrayDin kosong dengan ukuran InitialSize
+ * F.S. Terbentuk TabWord kosong dengan ukuran InitialSize
  */
-void MakeArrayDin(ArrayDin *array){
-    array->A = (ElType*) malloc (InitialSize * (sizeof(ElType)));
-    array->Capacity = InitialSize;
-    array->Neff = 0;
+void MakeTabWord(TabWord *Array)
+{
+	Array->TW = (ElType *)malloc(InitialSize * sizeof(ElType));
+	Array->Capacity = InitialSize;
+	Array->Neff = 0;
 }
 
 /**
  * Destruktor
- * I.S. ArrayDin terdefinisi
- * F.S. array->A terdealokasi
+ * I.S. TabWord terdefinisi
+ * F.S. array->TW terdealokasi
  */
-void DeallocateArrayDin(ArrayDin *array){
-    free(array->A);
+void DeallocateTabWord(TabWord *array)
+{
+	free(array->TW);
+	array->Neff = 0;
+	array->Capacity = 0;
 }
 
 /**
  * Fungsi untuk mengetahui apakah suatu array kosong.
  * Prekondisi: array terdefinisi
  */
-boolean IsEmpty(ArrayDin array){
-    return (array.Neff == 0);
+boolean IsEmpty(TabWord array)
+{
+	return (array.Neff == 0);
 }
 
 /**
  * Fungsi untuk mendapatkan banyaknya elemen efektif array, 0 jika tabel kosong.
  * Prekondisi: array terdefinisi
  */
-int Length(ArrayDin array){
-    return array.Neff;
+int Length(TabWord array)
+{
+	return (array.Neff);
 }
 
 /**
  * Mengembalikan elemen array L yang ke-I (indeks lojik).
  * Prekondisi: array tidak kosong, i di antara 0..Length(array).
  */
-ElType Get(ArrayDin array, IdxType i){
-    return(array.A[i]);
+ElType Get(TabWord array, IdxType i)
+{
+	return (array.TW[i]);
 }
-
-// boolean compareWord(ElType kata1, char *kata2)
-// /* Membandingkan sebuah word dengan sebuah sting
-//    True     : Jika string dan kata sama,
-//    False    : Jika berbeda */
-// {
-//     boolean same = false;
-//     if (kata1.Length == strLength(kata2))
-//     {
-//         int i = 0;
-//         same = true;
-//         while (i < kata1.Length && (same))
-//         {
-//             if (kata1.TabWord[i] != kata2[i])
-//             {
-//                 same = false;
-//             }
-//             i++;
-//         }
-//     }
-//     return same;
-// }
 
 /**
  * Fungsi untuk mendapatkan kapasitas yang tersedia.
  * Prekondisi: array terdefinisi
  */
-int GetCapacity(ArrayDin array){
-    return array.Capacity;
+int GetCapacity(TabWord array)
+{
+	return (array.Capacity);
 }
 
 /**
  * Fungsi untuk menambahkan elemen baru di index ke-i
  * Prekondisi: array terdefinisi, i di antara 0..Length(array).
  */
+void InsertAt(TabWord *array, ElType el, IdxType i)
+{
+	int j;
 
+	/* Penambahan ukuran array, jika array sudah penuh */
+	if (Length((*array)) == GetCapacity(*array))
+	{
+		/* Inisialisasi Temporary */
+		int newCap, susNeff;
+		ElType *sus;
 
-void InsertAt(ArrayDin *array, ElType el, IdxType i){
-    int length = Length(*array);
-    int capacity = GetCapacity(*array);
-    if (length == capacity){
-        int desiredCapacity = capacity + InitialSize; 
-        ElType *arr = (ElType*) malloc(desiredCapacity * (sizeof(ElType)));
-        for (int j = 0;j < length; j++){
-            arr[j] = Get(*array,j);
-        }
-        free(array->A);
-        array->A = arr;
-        array->Capacity = desiredCapacity;
-    }   
-    for (int j=length -1; j >= i;j--){
-        (*array).A[j+1] = (*array).A[j];
-    }
-    array->A[i] = el;
-    array->Neff+=1;
+		/* Pemindahan isi array ke Temporary: sus */
+		newCap = GetCapacity((*array)) + InitialSize;
+		sus = (ElType *)malloc(newCap * sizeof(ElType));
+		for (j = 0; j < Length((*array)); j++)
+		{
+			sus[j] = array->TW[j];
+		}
+		susNeff = Length((*array));
+
+		/* Relokasi array */
+		DeallocateTabWord(array);
+		array->TW = (ElType *)malloc(newCap * sizeof(ElType));
+		array->Capacity = newCap;
+		array->Neff = susNeff;
+
+		/* Mengisi kembali array dari Temporary: sus */
+		for (j = 0; j < newCap; j++)
+		{
+			array->TW[j] = sus[j];
+		}
+
+		/* Dealokasi Temporary: sus */
+		free(sus);
+	}
+
+	/* Penyisipan elemen baru */
+	for (j = Length((*array)); j > i; j--)
+	{
+		array->TW[j] = array->TW[j - 1];
+	}
+
+	array->TW[i] = el;
+	array->Neff += 1;
 }
 
-void increaseCapacity(ArrayDin* array){
-    if (array->Neff == array->Capacity){
-        int desiredCapacity = array->Neff + InitialSize; 
-        ElType *arr = (ElType*) malloc(desiredCapacity * (sizeof(ElType)));
-        for (int j = 0;j < array->Neff; j++){
-            arr[j] = Get(*array,j);
-        }
-        free(array->A);
-        array->A = arr;
-        array->Capacity = desiredCapacity;
-    }   
-}
 /**
  * Fungsi untuk menambahkan elemen baru di akhir array.
  * Prekondisi: array terdefinisi
  */
-void InsertLast(ArrayDin *array, ElType el){
-    InsertAt(array, el, Length(*array));
+void InsertLast(TabWord *array, ElType el)
+{
+	InsertAt(array, el, Length((*array)));
 }
 
 /**
- * Fungsi untuk menambahkan elemen baru di awal array.
- * Prekondisi: array terdefinisi
- */
-void InsertFirst(ArrayDin *array, ElType el){
-    InsertAt(array, el, 0);
-}
-
-/**
- * Fungsi untuk menghapus elemen di index ke-i ArrayDin
+ * Fungsi untuk menghapus elemen di index ke-i TabWord
  * Prekondisi: array terdefinisi, i di antara 0..Length(array).
  */
-void DeleteAt(ArrayDin *array, IdxType i){
-    int length = Length(*array);
-    for (int j = i; j < length - 1;j++){
-        array->A[j]=array->A[j+1];
-    }
-    array->Neff -=1;
+void DeleteAt(TabWord *array, IdxType i)
+{
+	int j;
+	for (j = i; j <= Length((*array)); j++)
+	{
+		array->TW[j] = array->TW[j + 1];
+	}
+
+	array->Neff -= 1;
 }
 
 /**
- * Fungsi untuk menghapus elemen terakhir ArrayDin
+ * Fungsi untuk menghapus elemen pertama TabWord
  * Prekondisi: array tidak kosong
  */
-void DeleteLast(ArrayDin *array){
-    DeleteAt(array, Length(*array)-1);
+void DeleteFirst(TabWord *array)
+{
+	DeleteAt(array, 0);
 }
 
 /**
- * Fungsi untuk menghapus elemen pertama ArrayDin
- * Prekondisi: array tidak kosong
- */
-void DeleteFirst(ArrayDin *array){
-    DeleteAt(array, 0);
-}
-
-/**
- * Fungsi untuk melakukan print suatu ArrayDin.
- * Print dilakukan dengan format: [elemen-1, elemen-2, ..., elemen-n]
- * dan diakhiri newline.
+ * Fungsi untuk melakukan print suatu TabWord.
  * Prekondisi: array terdefinisi
  */
-void PrintArrayDin(ArrayDin array){
-    if (IsEmpty(array)){
-        printf("[]\n");
-    }
-    else{
-        printf("[");
-        for(int i = 0; i < array.Neff;i++){
-            printf("%d",array.A[i]);
-            if (i<array.Neff - 1) {
-                printf(",");
-            }
-        }
-        printf("]\n");
-    }
+void PrintTabWord(TabWord array)
+{
+	int i;
+	if (Length(array) != 0)
+	{
+		printf("Berikut adalah daftar game yang tersedia\n");
+		for (i = 0; i < Length(array); i++)
+		{
+			printf("%d. ", i + 1);
+			printWord(array.TW[i]);
+			printf("\n");
+		}
+	}
+	else
+	{
+		printf("Tidak ada game dalam yang terdaftar.\n");
+	}
 }
 
 /**
- * Fungsi untuk melakukan reverse suatu ArrayDin.
+ * Fungsi untuk melakukan copy suatu TabWord.
  * Prekondisi: array terdefinisi
  */
-void ReverseArrayDin(ArrayDin *array){
-    int length = Length(*array);
-    ElType temp;
-    for (int i=0;i<(length/2);i++){
-        temp = array->A[i];
-        array->A[i] = array->A[length-1-i];
-        array->A[length-1-i] = temp;
-    }
+TabWord CopyTabWord(TabWord array)
+{
+	TabWord newArray;
+	int i;
+	MakeTabWord(&newArray);
+	newArray.Capacity = array.Capacity;
+	newArray.Neff = array.Neff;
+	for (i = 0; i < Length(array); i++)
+	{
+		newArray.TW[i] = array.TW[i];
+	}
+	return newArray;
 }
 
 /**
- * Fungsi untuk melakukan copy suatu ArrayDin.
+ * Fungsi untuk melakukan search suatu TabWord.
  * Prekondisi: array terdefinisi
  */
-ArrayDin CopyArrayDin(ArrayDin array){
-    ArrayDin copy;
-    MakeArrayDin(&copy);
-    for (int i = 0; i < array.Neff;i++){
-        InsertLast(&copy, array.A[i]);
-    }
-    return copy;
+IdxType SearchTabWord(TabWord array, ElType el)
+{
+	int i = 0;
+	while (i < Length(array))
+	{
+		if (compare2Word(Get(array, i), el))
+		{
+			return i;
+		}
+		i++;
+	}
+	return (-1);
 }
 
-/**
- * Fungsi untuk melakukan search suatu ArrayDin.
- * Index pertama yang ditemukan akan dikembalikan.
- * Jika tidak ditemukan, akan mengembalikan -1.
- * Prekondisi: array terdefinisi
- */
-// IdxType SearchArrayDin(ArrayDin array, ElType el){
-//     int i = 0;
-//     IdxType indeks;
-//     while((array.A[i] != el) && (i<Length(array)-1)){
-//         i +=1;
-//     }
-//     if (array.A[i] == el){
-//         indeks = i;
-//     }
-//     else{
-//         indeks = -1;
-//     }
-//     return indeks;
-// }
+boolean isMemberArray(TabWord array, Word Kata)
+{
+	boolean member = false;
+	int i = 0;
+	while (i < array.Neff && !member)
+	{
+		if (compare2Word(array.TW[i], Kata))
+		{
+			member = true;
+		}
+		i++;
+	}
+	return member;
+}

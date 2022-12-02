@@ -1,32 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 #include "boolean.h"
 #include "console.h"
-
-<<<<<<< Updated upstream
-boolean SAVE(Word filename, ArrayDin listgame, ArrayDin listhistory)
-{
-    int i;
-    FILE* savefile;
-    savefile = fopen(filename.TabWord, "w+");
-    if (savefile == NULL)
-=======
-
+#include "Game/dinerdash.h"
+#include "Game/RNG.h"
+#include "Game/marvelsnap.h"
+#include "Game/snakeonmeteor.h"
+#include "Game/towerofhanoi.h"
+#include "Game/hangman.h"
 
 void delay(int milli_seconds)
 {
-    int secs = milli_seconds / 10000; 
-    int retTime = time(NULL) + secs;
-    while(time(NULL) < retTime);
-    // clock_t start_time = clock();
-    // clock_t current;
-    // while((double)(current - start_time)/CLOCKS_PER_SEC < milli_seconds){
-    //     current = clock();
-    // }
-
-    // while (clock() < start_time + milli_seconds)
-        // ;
+    clock_t start_time = clock();
+    while (clock() < start_time + milli_seconds)
+        ;
 }
 
 void printDelay(char *daString, int lamaDelay)
@@ -64,87 +53,19 @@ void START(char *filename, TabWord *listGame, boolean *loaded)
         }
     }
     else
->>>>>>> Stashed changes
     {
-        printf("Error opening the file %s", filename.TabWord);
-        return false;
+        printf("KONFIGURASI AWAL GAGAL!\n");
     }
-    for (i = 0; i < listgame.Neff; i++)
-    {
-        fprintf(savefile, "%s\n", listgame.A[i].TabWord);
-    }
-    for (i = 0; i < listhistory.Neff; i++)
-    {
-        fprintf(savefile, "%s\n", listhistory.A[i].TabWord);
-    }
-
-    fputc('.', savefile);
-    fclose(savefile);
-
-    printf("Your progress is saved successfully. ^^\n");
-
-    return true;
 }
 
-// void QUIT(ArrayDin listgame, ArrayDin listhistory)
-// {
-//     boolean invalid_input;
-//     char user_input[10];
-//     printf("BMO: Do you wish to save your current progress?\n");
-//     do
-//     {
-//         invalid_input = false;
-//         printf("** Hint: Type 'Yes' to save; Type 'No' to discard **\n");
-//         printf("You: ");
-//         fgets(user_input, 10, stdin);
-//         if (compareStr(user_input, "Yes"))
-//         {
-//             char filename[50];
-//             printf("Save-File Name: ");
-//             fgets(filename, 50, stdin);
-            
-//             Word filenameW = toWord(filename);
-//             SAVE(filenameW, listgame, listhistory);
-//         }
-//         else if (compareStr(user_input, "No"))
-//         {
-//             printf("Your progress is discarded.\n");
-//         }
-//         else
-//         {
-//             invalid_input = true;
-//             printf("BMO: Unrecognized input. Please use the correct format!\n");
-//         }
-//     } while (invalid_input);
-
-//     printf("BMO: It's been a fun journey playing with You. ^^\n");   
-//     printf("BMO: But I think i- it's be --en t- t-- too f-- unn\n");
-//     printf("BMO: Battery low. Shutdown.");
-// }
-
-void LOAD(char * filename, ArrayDin *arraygame){
+void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistory, ListOfSet *listPlayer, ListOfMap *scoreBoard)
+{
+    int i, j;
     int n = 0;
-    int i,j;
     int length = 0;
     int count = 0;
     char huruf;
     ElType kata;
-<<<<<<< Updated upstream
-    char* path = "data/";
-    char* fileloc = strConcat(path,filename);
-    STARTWORDFILE(fileloc);
-    if (!EndWord){
-        n = KataInt(currentWord1);
-        ADVWORDFILE();
-    for(i=0;i<n;i++){
-        kata = currentWord1;
-        InsertLast(arraygame,kata);
-        ADVWORDFILE();
-        }
-    }
-    // }
-    printf("Load file berhasil!\n");
-=======
     char loc[50] = "./data/";
 
     for (i = 7; i < strLength(filename) + 7; i++)
@@ -161,7 +82,7 @@ void LOAD(char * filename, ArrayDin *arraygame){
         {
             // int iteration = 1;
             n = toInt(currentWord); // Memiliki nilai banyak game yang berada dalam savefile.
-            printf("n = %d\n",n);
+            // printf("n = %d\n",n);
             scoreBoard->Num = n;
             listPlayer->Num = n;
 
@@ -192,32 +113,29 @@ void LOAD(char * filename, ArrayDin *arraygame){
 
             // ScoreBoard
             int idx = 0;
-            // ADVWORD();
             while (!EndWord)
             {
                 n = toInt(currentWord);
-                // Set *currentSet = &(listPlayer->GameSet[idx]);
-                // Map *currentMap = &(scoreBoard->board[idx]);
+                printf("n = %d\n",n);
+                Set *currentSet = &(listPlayer->GameSet[idx]);
+                Map *currentMap = &(scoreBoard->board[idx]);
                 // printf("Passed Declaration\n");
 
                 ADVWORD();
-                printf("n scoreboard = %d\n",n);
                 clear();
                 for (i = 0; i < n; i++)
                 {
                     // Melakukan separasi antara nama dan skor
                     Word Name, Score;
                     binSep(currentWord, &Name, &Score, ' ');
-                    printf("Nama: ");
-                    printWord(Name);printf("\n");
-                    printf("Score: ");
-                    printWord(Score);printf("\n");
+                    printf("Nama: ");printWord(Name);printf("\n");
+                    printf("Score: ");printWord(Score);printf("\n");
+                    clear();
                     // Memasukkan nama pada Set dan Skor pada Map
-                    InsertSetEl(&(listPlayer->GameSet[idx]), Name);
-                    MapValIns(&(scoreBoard->board[idx]), Name, toInt(Score));
+                    InsertSetEl(currentSet, Name);
+                    MapValIns(currentMap, Name, toInt(Score));
 
                     ADVWORD();
-                    clear();
                 }
 
                 idx++;
@@ -469,7 +387,7 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             }
             else
             {
-                score = rand();
+                score = rand() % 101;
                 system("cls");
                 printDelay("[ GAME OVER ]\n", 50);
                 printDelay("[ SCORE: ", 50);
@@ -787,10 +705,8 @@ void RESETSB(ListOfSet *listPlayer, ListOfMap *scoreBoard, TabWord listGame)
             {
                 for(int i=0;i<scoreBoard->Num;i++){
                     CreateEmptyMap(&(scoreBoard->board[i]));
-                    CreateEmptySet(&(listPlayer->GameSet[i]));
+                    CreateEmptySet(&(listPlayer->GameSet[i])); 
                 }
-                // CreateEmptyMapList(scoreBoard);
-                // CreateEmptySetList(listPlayer);
             }
             else
             {
@@ -890,5 +806,4 @@ void RESETHISTORY(Stack *stackHistory)
 void UPDATEHISTORY(Stack *stackHistory, Word gameName)
 {
     Push(stackHistory, gameName);
->>>>>>> Stashed changes
 }

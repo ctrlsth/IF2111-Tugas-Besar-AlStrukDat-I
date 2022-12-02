@@ -1,6 +1,3 @@
-// UNMODIFIED //
-// UNMODIFIED //
-// UNMODIFIED //
 
 #include <stdio.h>
 #include "queue.h"
@@ -37,7 +34,7 @@ void enqueue(Queue *q, ElType val)
 {
     if (isFull(*q))
     {
-        printf("Queue is full!\n");
+        printf("Antrian sudah penuh!\n");
     }
     else
     {
@@ -75,26 +72,35 @@ void displayQueue(Queue q)
 {
     if (isEmpty(q))
     {
-        printf("[]\n");
+        printf("Antrian game Anda kosong.\n");
     }
     else
     {
-        int i,j;
-        printf("[");
-        for (i = IDX_HEAD(q); i != IDX_TAIL(q); i = (i + 1) % CAPACITY)
+        printf("Berikut adalah antrian game Anda :\n");
+        int i, j = 1;
+        for (i = IDX_HEAD(q); i <= IDX_TAIL(q); i = (i + 1) % CAPACITY)
         {
-            for(j=0;j<q.buffer[i].Length;j++)
-            {
-                printf("%c", q.buffer[i].TabWord[j]);
-            }
+            printf("%d. ", j);
+            Word game_name = q.buffer[i];
+            printWord(game_name);
             printf("\n");
+            j++;
         }
-        for(j=0;j<q.buffer[i].Length;j++)
-            {
-                printf("%c", q.buffer[i].TabWord[j]);
-            }
-            printf("\n");
-        // printf("%d]\n", TAIL(q));
+        printf("\n");
     }
 }
 
+boolean isInQueue(Queue queueGame, Word gameName)
+{
+    int i = 0;
+    boolean notFound = true;
+    while (i < length(queueGame) && notFound)
+    {
+        if (compare2Word(queueGame.buffer[i], gameName))
+        {
+            notFound = false;
+        }
+        i++;
+    }
+    return !notFound;
+}

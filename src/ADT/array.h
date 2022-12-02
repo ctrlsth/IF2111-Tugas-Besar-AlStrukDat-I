@@ -4,129 +4,120 @@
 #include "mesinkata.h"
 #include "../boolean.h"
 
-#define InitialSize 50
-// #define charsize 1
+// Boolean
+#define boolean unsigned char
+#define true 1
+#define false 0
+#define N_MAX 50
 
+#define InitialSize 50
+#define charsize 1
+
+// typedef Games data;
 typedef int IdxType;
 typedef Word ElType;
 
-typedef struct {
-    ElType *A;
+typedef struct
+{
+    ElType *TW;
     int Capacity;
     int Neff;
-} ArrayDin;
-
-// typedef char* chardin;
-// void MakeArrayChar(chardin * kata);
+} TabWord;
 
 /**
  * Konstruktor
  * I.S. sembarang
- * F.S. Terbentuk ArrayDin kosong dengan ukuran InitialSize
+ * F.S. Terbentuk TabWord kosong dengan ukuran InitialSize
  */
-void MakeArrayDin(ArrayDin *array);
+void MakeTabWord(TabWord *array);
 
 /**
  * Destruktor
- * I.S. ArrayDin terdefinisi
- * F.S. array->A terdealokasi
+ * I.S. TabWord terdefinisi
+ * F.S. array->TW terdealokasi
  */
-void DeallocateArrayDin(ArrayDin *array);
+void DeallocateTabWord(TabWord *array);
 
 /**
  * Fungsi untuk mengetahui apakah suatu array kosong.
  * Prekondisi: array terdefinisi
  */
-boolean IsEmpty(ArrayDin array);
+boolean IsEmpty(TabWord array);
 
 /**
  * Fungsi untuk mendapatkan banyaknya elemen efektif array, 0 jika tabel kosong.
  * Prekondisi: array terdefinisi
  */
-int Length(ArrayDin array);
+int Length(TabWord array);
 
 /**
  * Mengembalikan elemen array L yang ke-I (indeks lojik).
  * Prekondisi: array tidak kosong, i di antara 0..Length(array).
  */
-ElType Get(ArrayDin array, IdxType i);
+ElType Get(TabWord array, IdxType i);
 
 /**
  * Fungsi untuk mendapatkan kapasitas yang tersedia.
  * Prekondisi: array terdefinisi
  */
-
-// ElType toEltype(Kata kata);
-
-// boolean compareWord(ElType kata1, char *kata2);
-
-int GetCapacity(ArrayDin array);
+int GetCapacity(TabWord array);
 
 /**
  * Fungsi untuk menambahkan elemen baru di index ke-i
  * Prekondisi: array terdefinisi, i di antara 0..Length(array).
  */
-
-void increaseCapacity(ArrayDin* array);
-
-void InsertAt(ArrayDin *array, ElType el, IdxType i);
+void InsertAt(TabWord *array, ElType el, IdxType i);
 
 /**
  * Fungsi untuk menambahkan elemen baru di akhir array.
  * Prekondisi: array terdefinisi
  */
-void InsertLast(ArrayDin *array, ElType el);
+void InsertLast(TabWord *array, ElType el);
 
 /**
  * Fungsi untuk menambahkan elemen baru di awal array.
  * Prekondisi: array terdefinisi
  */
-void InsertFirst(ArrayDin *array, ElType el);
+void InsertFirst(TabWord *array, ElType el);
 
 /**
- * Fungsi untuk menghapus elemen di index ke-i ArrayDin
+ * Fungsi untuk menghapus elemen di index ke-i TabWord
  * Prekondisi: array terdefinisi, i di antara 0..Length(array).
  */
-void DeleteAt(ArrayDin *array, IdxType i);
+void DeleteAt(TabWord *array, IdxType i);
 
 /**
- * Fungsi untuk menghapus elemen terakhir ArrayDin
+ * Fungsi untuk menghapus elemen terakhir TabWord
  * Prekondisi: array tidak kosong
  */
-void DeleteLast(ArrayDin *array);
+void DeleteLast(TabWord *array);
 
 /**
- * Fungsi untuk menghapus elemen pertama ArrayDin
+ * Fungsi untuk menghapus elemen pertama TabWord
  * Prekondisi: array tidak kosong
  */
-void DeleteFirst(ArrayDin *array);
+void DeleteFirst(TabWord *array);
 
 /**
- * Fungsi untuk melakukan print suatu ArrayDin.
- * Print dilakukan dengan format: [elemen-1, elemen-2, ..., elemen-n]
- * dan diakhiri newline.
+ * Fungsi untuk melakukan print suatu TabWord.
  * Prekondisi: array terdefinisi
  */
-void PrintArrayDin(ArrayDin array);
+void PrintTabWord(TabWord array);
 
 /**
- * Fungsi untuk melakukan reverse suatu ArrayDin.
+ * Fungsi untuk melakukan copy suatu TabWord.
  * Prekondisi: array terdefinisi
  */
-void ReverseArrayDin(ArrayDin *array);
+TabWord CopyTabWord(TabWord array);
 
 /**
- * Fungsi untuk melakukan copy suatu ArrayDin.
- * Prekondisi: array terdefinisi
- */
-ArrayDin CopyArrayDin(ArrayDin array);
-
-/**
- * Fungsi untuk melakukan search suatu ArrayDin.
+ * Fungsi untuk melakukan search suatu TabWord.
  * Index pertama yang ditemukan akan dikembalikan.
  * Jika tidak ditemukan, akan mengembalikan -1.
  * Prekondisi: array terdefinisi
  */
-IdxType SearchArrayDin(ArrayDin array, ElType el);
+IdxType SearchTabWord(TabWord array, ElType el);
+
+boolean isMemberArray(TabWord array, Word Kata);
 
 #endif

@@ -28,45 +28,50 @@ void snakeart(){
     STARTCMD(true);
 }
 
-void setGameSnake(List *head, int* count_row, int*count_cols, int *n){
+void GameSetSnake(List *head, int *n_baris, int* n_kolom,int *n){
     int n_obstacle;
     boolean invalid_input = true;
     while(invalid_input){
-        printf("Masukan panjang arena yang ingin anda mainkan (Minimal 5): ");
+        printf("Masukan panjang arena yang ingin dimainkan: ");
         STARTCMD(true);
         if(isNumber(currentCommand)){
-            if((toInt(currentCommand) >= 5)){
-                *count_row = toInt(currentCommand);
-                *count_cols = toInt(currentCommand);
-                printf("Masukan banyak obstacle yang ingin anda mainkan :");
+            if(toInt(currentCommand) >= 5 && toInt(currentCommand)<=10){
+                *n_baris = toInt(currentCommand);
+                *n_kolom = toInt(currentCommand);
+                printf("Masukan jumlah obstacle yang ingin dimainkan :");
                 STARTCMD(true);
                 if(isNumber(currentCommand)){
-                    if(((*count_cols) * (*count_row)) - 3 - toInt(currentCommand) > 0){
+                    if(((*n_baris) * (*n_kolom)) - 4 >= toInt(currentCommand)){
                         n_obstacle = toInt(currentCommand);
                         invalid_input = false;
                     }
                     else{
-                        printf("Input tidak valid ! Jumlah obstacle melebihi luas arena dan panjang snake awal\n");
+                        clear();
+                        printf("Input tidak valid! Jumlah obstacle melebihi luas arena dan panjang snake\n");
                     }
                 }
                 else{
-                    printf("Input tidak valid! Masukan harus berupa angka! \n");
+                    clear();
+                    printf("Input tidak valid! Masukan obstacle harus berupa integer positif (boleh nol)\n");
                 }
             }
             else{
-                printf("Input tidak valid! Panjang arena minimal adalah 5\n");
+                clear();
+                printf("Input tidak valid! Range panjang arena yang dapat dibuat adalah 5 - 10\n");
             }
         }
         else{
-            printf("Input tidak valid! Masukan harus berupa angka! \n");
+            clear();
+            printf("Input tidak valid! Masukan panjang arena harus berupa integer positif dengan range 5-10\n");
         }
     }
-    int baris = rand() % (*count_row);
-    int kolom = rand() % (*count_cols);
-    create_linked_list_matrix(head,*count_row,*count_cols, baris, kolom);
+    clear();
+    int baris = rand() % (*n_baris);
+    int kolom = rand() % (*n_kolom);
+    create_linked_list_matrix(head,*n_baris,*n_kolom, baris, kolom);
     createsnake(head,baris,kolom,n);
-    SummonFood(head,*count_row,*count_cols);
-    summonobstacle(head,n_obstacle,*count_row,*count_cols);
+    SummonFood(head,*n_baris,*n_kolom);
+    summonobstacle(head,n_obstacle,*n_baris,*n_kolom);
 }
 
 void printArena(List matriks, int n_row, int n_cols){
@@ -122,7 +127,11 @@ void snakeonmeteor(int *score){
     List ular;
     snakeart();
     clear();
-    setGameSnake(&ular,&n_baris,&n_kolom,&n);
+    GameSetSnake(&ular,&n_baris,&n_kolom,&n);
+    // create_linked_list_matrix(&ular,n_baris,n_kolom, baris, kolom);
+    // createsnake(&ular,baris,kolom,&n);
+    // SummonFood(&ular,n_baris,n_kolom);
+    // summonobstacle(&ular, 3,n_baris,n_kolom);
     while(!endgame){
         printArena(ular,n_baris,n_kolom);
         invalid_input = true;
@@ -180,18 +189,5 @@ void snakeonmeteor(int *score){
 
 // int main(){
 //     srand(time(0));
-//     int score;
-//     // List ular;
-//     // int n = 1;
-//     // int baris = rand() % 5;
-//     // int kolom = rand() % 5;
-//     // create_linked_list_matrix(&ular,5,5, baris, kolom,&n);
-//     // SummonFood(&ular);
-//     // summonobstacle(&ular, 3);
-//     // printf("Berikut adalah permainan ular\n");
-//     // printArena(ular);
-//     // List copyular = ular;
-//     // printf("Berikut adalah permainan copyluar\n");
-//     // printArena(copyular);
-//     snakeonmeteor(&score);
+//     snakemeteor();
 // }

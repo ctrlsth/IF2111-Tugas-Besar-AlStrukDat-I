@@ -1,6 +1,3 @@
-// UNMODIFIED //
-// UNMODIFIED //
-// UNMODIFIED //
 
 /* File : queue.h */
 /* Definisi ADT Queue dengan representasi array secara eksplisit dan alokasi statik */
@@ -8,14 +5,14 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
+#include "mesinkata.h"
 #include "../boolean.h"
-#include "array.h"
 
 #define IDX_UNDEF -1
 #define CAPACITY 100
 
 /* Definisi elemen dan address */
-// typedef int ElType;
+typedef Word ElType;
 typedef struct
 {
     ElType buffer[CAPACITY];
@@ -66,8 +63,14 @@ void displayQueue(Queue q);
    siku; antara dua elemen dipisahkan dengan separator "koma", tanpa tambahan
    karakter di depan, di tengah, atau di belakang, termasuk spasi dan enter */
 /* I.S. q boleh kosong */
-/* F.S. Jika q tidak kosong: [e1,e2,...,en] */
-/* Contoh : jika ada tiga elemen bernilai 1, 20, 30 akan dicetak: [1,20,30] */
-/* Jika Queue kosong : menulis [] */
+/* F.S. Jika q tidak kosong: Menuliskan isi queue dengan secara berurutan ke bawah
+   Contoh hasil print:
+   1. lmao pisan
+   2. sussyamogus 
+   dst.
+*/
+
+boolean isInQueue(Queue queueGame, Word gameName);
+/* Proses : Mengirimkan keanggotaan suatu game dalam queue */
 
 #endif

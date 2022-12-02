@@ -457,7 +457,3 @@ void HangMan(int *score){
         printf("File tidak bisa dibuka\n");
     }
 }
-
-// int main(){
-    // hangman();
-// }

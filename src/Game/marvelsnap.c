@@ -1,6 +1,6 @@
 #include "marvelsnap.h"
-#include "console.h"
-#include "boolean.h"
+#include "../console.h"
+#include "../boolean.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -122,9 +122,9 @@ void PlayerTurn(int* Energyturn, boolean* pemainNow, boolean* pemainThen, ArrayC
         //Player Memilih Kartu yang ingin dimainkan
         printf("Energy : %d\n", *Energyturn);
         printf("Masukan nomor kartu yang ingin dimainkan: ");
-        STARTKATAGAME();
-        if(IsNumber(CKata)){
-            n = KataInt(CKata);
+        STARTCMD(false);
+        if(isNumber(currentCommand)){
+            n = toInt(currentCommand);
             if(n>0 && n<= Player->Neff){
                 if(Player->Hand[n-1].Energy <= *Energyturn){
                     kartu_valid = true;
@@ -141,7 +141,7 @@ void PlayerTurn(int* Energyturn, boolean* pemainNow, boolean* pemainThen, ArrayC
                 }
         }
         else{
-            if(compareWord(CKata,"SKIP")){
+            if(compareWord(currentCommand,"SKIP")){
                 //Langsung ke validasi input (yakin atau tidak)
                 kartu_valid = true;
                 arena_valid = true;
@@ -157,9 +157,9 @@ void PlayerTurn(int* Energyturn, boolean* pemainNow, boolean* pemainThen, ArrayC
     while(!arena_valid){
         //Player memilih arena yang ingin dimasukkan kartu
         printf("Masukan arena yang ingin dimasukkan kartu(1/2/3): ");
-        STARTKATAGAME();
-        if(IsNumber(CKata)){
-            m = KataInt(CKata);
+        STARTCMD(false);
+        if(isNumber(currentCommand)){
+            m = toInt(currentCommand);
             if(m>0 && m<=3){
                 if(m==1){
                     //Player memilih arena 1
@@ -211,8 +211,8 @@ void PlayerTurn(int* Energyturn, boolean* pemainNow, boolean* pemainThen, ArrayC
     while(!valid){
         //Validasi input (apakah yakin atau tidak)
         printf("Apakah Anda yakin?(YES/NO) ");
-        STARTKATAGAME();
-        if(compareWord(CKata, "YES")){
+        STARTCMD(false);
+        if(compareWord(currentCommand, "YES")){
             //Ke bagian akhir
             valid = true;
             if(!skip){
@@ -241,7 +241,7 @@ void PlayerTurn(int* Energyturn, boolean* pemainNow, boolean* pemainThen, ArrayC
                 turn_end = true;
             }
         }
-        else if(compareWord(CKata,"NO")){
+        else if(compareWord(currentCommand,"NO")){
             //turn berakhir namun tidak berpindah pemain (mengulang loop)
             valid = true;
             kartu_valid = false;
@@ -265,15 +265,15 @@ void PlayerTurn(int* Energyturn, boolean* pemainNow, boolean* pemainThen, ArrayC
         else{
             printf("Sisa energy = %d\n",*Energyturn);
             printf("Apakah Anda masih ingin menaruh kartu? (YES/NO): ");
-            STARTKATAGAME();
-            if(compareWord(CKata, "YES")){
+            STARTCMD(false);
+            if(compareWord(currentCommand, "YES")){
                 //Player mengulang turn kembali
                 turn_end = true;
                 arena_valid = false;
                 kartu_valid = false;
                 valid = false;
             }
-            else if(compareWord(CKata,"NO")){
+            else if(compareWord(currentCommand,"NO")){
                 //Player menyudahi turn
                 *pemainNow = false;
                 *pemainThen = true;
@@ -291,7 +291,7 @@ void COMMANDGAME(){
     printf("GUIDE - ketik command ini untuk melihat cara dan aturan bermain\n");
     printf("PLAY - ketik command ini untuk memulai permainan\n");
     printf("Masukkan Command: ");
-    STARTKATAGAME();
+    STARTCMD(false);
 }
 
 void PLAYGUIDE(){
@@ -306,16 +306,11 @@ void PLAYGUIDE(){
     printf("7.Player yang menang adalah player skor lebih banyak\n");
     printf("8. Jika skor seri, player yang menang adalah player dengan total power pada seluruh arena lebih besar\n");
     printf("Tekan Enter untuk keluar dari Guide: ");
-<<<<<<< Updated upstream:kadek_1/src/marvelsnap.c
-    STARTKATAGAME();
-    system("cls");
-=======
     STARTCMD(false);
     clear();
->>>>>>> Stashed changes:src/Game/marvelsnap.c
 }
 
-void MARVELSNAP(){
+void MARVELSNAP(int *skorP1, int *skorP2){
     printDelay("WELCOME TO MARVEL SNAP\n",40);delay(500);
     boolean play = false;
     time_t waktu;
@@ -344,16 +339,11 @@ void MARVELSNAP(){
     ArrayInt Arena3Player2; MakeArrayInt(&Arena3Player2);
     while(!play){
         COMMANDGAME();
-<<<<<<< Updated upstream:kadek_1/src/marvelsnap.c
-        system("cls");
-        if(compareWord(CKata,"PLAY")){
-=======
         clear();
         if(compareWord(currentCommand,"PLAY")){
->>>>>>> Stashed changes:src/Game/marvelsnap.c
             play = true;
         }
-        else if(compareWord(CKata,"GUIDE")){
+        else if(compareWord(currentCommand,"GUIDE")){
             PrintArena(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);
             PLAYGUIDE();
         }
@@ -377,13 +367,8 @@ void MARVELSNAP(){
     printDelay("The Game has been started\n",25);delay(500);
     printDelay("Player 1 Turn",25);printDelay("...\n",200);
     printf("Tekan Enter untuk melanjutkan permainan: ");
-<<<<<<< Updated upstream:kadek_1/src/marvelsnap.c
-    STARTKATAGAME();
-    system("cls");
-=======
     STARTCMD(false);
     clear();
->>>>>>> Stashed changes:src/Game/marvelsnap.c
     printf("-------------BOARD TURN 0------------------\n\n");
     PrintArena(PreArena1Player1,PreArena2Player1,PreArena3Player1,PreArena1Player2,PreArena2Player2,PreArena3Player2);
     insertRandomCard(&Player1);
@@ -400,13 +385,8 @@ void MARVELSNAP(){
         clear();
         printDelay("Player 2 Turn",25);printDelay("...\n",200);
         printf("Tekan Enter untuk melanjutkan permainan: ");
-<<<<<<< Updated upstream:kadek_1/src/marvelsnap.c
-        STARTKATAGAME();
-        system("cls");
-=======
         STARTCMD(false);
         clear();
->>>>>>> Stashed changes:src/Game/marvelsnap.c
         insertRandomCard(&Player2);
         printf("-------------BOARD TURN %d------------------\n\n",turn -1);
         PrintArena(PreArena1Player1,PreArena2Player1,PreArena3Player1,PreArena1Player2,PreArena2Player2,PreArena3Player2);
@@ -429,7 +409,7 @@ void MARVELSNAP(){
             pemain1 = false;
             pemain2 = false;
             PrintArena(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);
-            skorakhir(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);
+            skorakhir(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2,skorP1,skorP2);
             printf("-------------GAME OVER------------------\n\n");
         }
         else{
@@ -439,13 +419,8 @@ void MARVELSNAP(){
             clear();
             printDelay("Player 1 Turn",25);printDelay("...\n",200);
             printf("Tekan Enter untuk melanjutkan permainan: ");
-<<<<<<< Updated upstream:kadek_1/src/marvelsnap.c
-            STARTKATAGAME();
-            system("cls");
-=======
             STARTCMD(false);
             clear();
->>>>>>> Stashed changes:src/Game/marvelsnap.c
             insertRandomCard(&Player1);
             printf("-------------BOARD TURN %d------------------\n\n",turn-1);
             PrintArena(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);
@@ -459,7 +434,7 @@ void MARVELSNAP(){
     }
 }
 
-void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Player1,ArrayInt Arena1Player2, ArrayInt Arena2Player2, ArrayInt Arena3Player2){
+void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Player1,ArrayInt Arena1Player2, ArrayInt Arena2Player2, ArrayInt Arena3Player2, int *skorP1, int *skorP2){
     int skorPlayer1 = 0;
     int skorPlayer2 = 0;
     int PowerArena1Player1 = Arena1Player1.kekuatan[0] + Arena1Player1.kekuatan[1]+ Arena1Player1.kekuatan[2]+ Arena1Player1.kekuatan[3];
@@ -490,9 +465,13 @@ void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Pl
     }
     if(skorPlayer1 > skorPlayer2){
         printf("Player 1 menang dengan skor %d - %d\n", skorPlayer1, skorPlayer2);
+        (*skorP1) = skorPlayer1;
+        (*skorP2) = skorPlayer2;
     }
     else if(skorPlayer1 < skorPlayer2){
         printf("Player 2 menang dengan skor %d - %d\n", skorPlayer2, skorPlayer1);
+        (*skorP1) = skorPlayer1;
+        (*skorP2) = skorPlayer2;
     }
     else{ //SkorPlayer1 = SkorPlayer 2
         if(PowerTotalPlayer1 > PowerTotalPlayer2){
@@ -506,5 +485,8 @@ void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Pl
         else{
             printf("PERMAINAN SERI\n");
         }
+        
+        (*skorP1) = PowerTotalPlayer1;
+        (*skorP2) = PowerTotalPlayer2;
     }
 }

@@ -150,7 +150,7 @@ void SortByVal(Map *M)
 {
     Map sortedMap;
     CreateEmptyMap(&sortedMap);
-    
+
     // int k;
     // printf("Before Update (M): \n");
     // for (k = 0; k < M->Count; k++)

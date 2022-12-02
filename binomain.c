@@ -197,18 +197,7 @@ int main()
         }
         else if (compareWord(Get(listCommand, 0), "HISTORY"))
         {
-            if (loaded){
-                if (isNumber(Get(listCommand, 1))){
-                    SHOWHISTORY(History, toInt(Get(listCommand, 1)));
-                }
-                else{
-                    printf("Mohon masukkan dengan format yang benar!\n");
-                    printf("** Hint: Ketik \"HELP\" untuk melihat perintah **\n");
-                }
-            }
-            else{
-                unknownCommand();
-            }
+            (loaded) ? SHOWHISTORY(History, toInt(Get(listCommand, 1))) : unknownCommand();
         }
         else if (compareWord(Get(listCommand, 0), "RESET") && compareWord(Get(listCommand, 1), "HISTORY"))
         {

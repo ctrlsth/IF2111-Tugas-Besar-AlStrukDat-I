@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "boolean.h"
-#include "../src/ADT/mesinkata.h"
+#include "../boolean.h"
+#include "../ADT/mesinkata.h"
 
 int acakAngka()
 {
@@ -15,7 +15,7 @@ int acakAngka()
     return (BilRandom);
 }
 
-void RNG()
+void RNG(int *score)
 {
     int tebakan;
     int jawaban;
@@ -26,11 +26,11 @@ void RNG()
     printf("RNG Telah dimulai. Uji keberuntungan Anda dengan menebak X.\n");
     while(!found && skor >0)
     {
-        STARTKATAGAME();
-        system("cls");
-        if(IsNumber(CKata))
+        STARTCMD(false);
+        clear();
+        if(isNumber(currentCommand))
         {
-            tebakan = KataInt(CKata);
+            tebakan = toInt(currentCommand);
             printf("%d\n",tebakan);
             if (tebakan == jawaban)
             {
@@ -64,4 +64,6 @@ void RNG()
         printf("X adalah %d\n",jawaban);
         printf("Skor akhir Anda = %d\n",skor);
     }
+
+    (*score) = skor;
 }

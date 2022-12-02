@@ -118,7 +118,7 @@ void MovePiringan(Stack* S1, Stack *S2,int tumpukan, char a, char b, boolean * p
             printf("Tiang %c kosong, silahkan memilih tiang lain\n\n", a);
         }
         else if(isTowerFull(*S2,tumpukan)){
-            printf("Tiang %c penuh, silahkan memilih tiang lain yang ingin ditempatkan piringan\n\n", a);
+            printf("Tiang %c penuh, silahkan memilih tiang lain yang ingin ditempatkan piringan\n\n", b);
         }
         else if(S1->T[S1->TOP].Length > S2->T[S2->TOP].Length){
             printf("Piring gagal dipindahkan dari %c ke %c (Ukuran piringan harus lebih kecil dari piringan dibawahnya!)\n\n", a , b);
