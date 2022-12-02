@@ -116,6 +116,7 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
             while (!EndWord)
             {
                 n = toInt(currentWord);
+                // printf("%d\n", n);
                 Set *currentSet = &(listPlayer->GameSet[idx]);
                 Map *currentMap = &(scoreBoard->board[idx]);
                 // printf("Passed Declaration\n");
@@ -126,6 +127,11 @@ void LOAD(char *filename, TabWord *listGame, boolean *loaded, Stack *stackHistor
                     // Melakukan separasi antara nama dan skor
                     Word Name, Score;
                     binSep(currentWord, &Name, &Score, ' ');
+                    // printf("Name: ");
+                    // printWord(Name);
+                    // printf("\nScore: ");
+                    // printWord(Score);
+                    // printf("\n");
 
                     // Memasukkan nama pada Set dan Skor pada Map
                     InsertSetEl(currentSet, Name);
@@ -349,34 +355,34 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             int score = 0, score2 = 0;
             if (i == 1)
             {
-                system("cls");
+                clear();
                 RNG(&score);
             }
             else if (i == 2)
             {
-                system("cls");
+                clear();
                 dinerDASH(&score);
             }
             else if (i == 3)
             {
-                system("cls");
+                clear();
                 // printf("This is Hangman\n");
                 HangMan(&score);
             }
             else if (i == 4)
             {
-                system("cls");
+                clear();
                 // printf("This is Tower\n");
                 towerOfHanoi(&score);
             }
             else if (i == 5)
             {
-                system("cls");
-                snakemeteor(&score);
+                clear();
+                snakeonmeteor(&score);
             }
             else if (i == 6)
             {
-                system("cls");
+                clear();
                 MARVELSNAP(&score, &score2);
                 // score = rand();
                 // score2 = rand();
@@ -384,7 +390,7 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             else
             {
                 score = rand();
-                system("cls");
+                clear();
                 printDelay("[ GAME OVER ]\n", 50);
                 printDelay("[ SCORE: ", 50);
                 printf("%d ", score);
@@ -402,7 +408,10 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             }
             else
             {
-                UPDATESB(score, gamePlayers, playerScores, i);
+                if (score != -999)
+                {
+                    UPDATESB(score, gamePlayers, playerScores, i);
+                }
             }
             UPDATEHISTORY(stackHistory, Game);
         }
@@ -699,8 +708,14 @@ void RESETSB(ListOfSet *listPlayer, ListOfMap *scoreBoard, TabWord listGame)
         {
             if (n == 0)
             {
+                int El = scoreBoard->Num;
                 CreateEmptyMapList(scoreBoard);
                 CreateEmptySetList(listPlayer);
+                if (El > 6)
+                {
+                    scoreBoard->Num = El;
+                    listPlayer->Num = El;
+                }
             }
             else
             {
@@ -743,9 +758,8 @@ void UPDATESB(int score, Set *gamePlayers, Map *playerScores, int whatGame)
     if (whatGame != 6) // Kalo MARVELSNAP, jangan di Sort
     {
         SortByVal(playerScores);
-        SortSetByMap(gamePlayers, (*playerScores));    
+        SortSetByMap(gamePlayers, (*playerScores));
     }
-    
 }
 
 void SHOWHISTORY(Stack stackHistory, int num)

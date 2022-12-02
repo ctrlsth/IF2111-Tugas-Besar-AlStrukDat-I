@@ -11,15 +11,18 @@ Word currentCommand;
 void STARTWORD(char *txtfile, boolean *openSuccess)
 {
     loadstart(txtfile, openSuccess);
-    IgnoreBlanks();
-    if (CC == EOF)
+    if (*openSuccess)
     {
-        EndWord = true;
-    }
-    else
-    {
-        EndWord = false;
-        ADVWORD();
+        IgnoreBlanks();
+        if (CC == EOF)
+        {
+            EndWord = true;
+        }
+        else
+        {
+            EndWord = false;
+            ADVWORD();
+        }
     }
 }
 
@@ -48,16 +51,19 @@ void COPYWORD()
     int i = 0;
     while ((CC != EOF) && (CC != MARK) && (i < NMax))
     {
-        currentWord.TabChar[i] = CC;
+        if (CC != '\r')
+        {
+            currentWord.TabChar[i] = CC;
+            i++;
+        }
         adv(true);
-        i++;
     }
     currentWord.Length = i;
 }
 
 void IgnoreBlanks()
 {
-    while (CC == BLANK || CC == MARK)
+    while (CC == BLANK || CC == MARK || CC == '\r')
     {
         adv(true);
     }
@@ -169,7 +175,7 @@ Word toWord(char *someString)
 
 char *toString(Word kata)
 {
-    char *str = (char *)malloc((kata.Length) * sizeof(char));
+    char *str = (char *)malloc((kata.Length + 1) * sizeof(char));
     // printf("Passed malloc!\n");
     // printf("Length: %d\n", kata.Length);
 
@@ -281,7 +287,7 @@ void printWord(Word Kata)
 void binSep(Word Kata, Word *Kata1, Word *Kata2, char separator)
 {
     int i, j = 0;
-    boolean passedSep;
+    boolean passedSep = false;
     for (i = 0; i < Kata.Length; i++)
     {
         if (passedSep)
@@ -329,6 +335,47 @@ boolean compareCharWord(Word kata1, char kata2)
         }
     }
     return same;
+}
+
+boolean strcompare(char *kata1, char *kata2)
+{
+    boolean same = false;
+    int i = 0;
+    if (strLength(kata1) == strLength(kata2))
+    {
+        same = true;
+        while (i < strLength(kata1) && same)
+        {
+            if (kata1[i] != kata2[i])
+            {
+                same = false;
+            }
+            else
+            {
+                i++;
+            }
+        }
+    }
+    return same;
+}
+
+void clear()
+{
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+void wordCopy(Word *kata1, Word Kata2)
+{
+    int i;
+    for (i = 0; i < Kata2.Length; i++)
+    {
+        kata1->TabChar[i] = Kata2.TabChar[i];
+    }
+    kata1->Length = Kata2.Length;
 }
 
 // int main()

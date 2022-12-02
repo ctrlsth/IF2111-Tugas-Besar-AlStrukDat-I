@@ -1,19 +1,29 @@
 #ifndef towerOfHanoi_H
 #define towerOfHanoi_H
 
-#include <stdio.h>
 #include "../boolean.h"
 #include "../ADT/stack.h"
 
+void CreateTower(Stack *S, int tumpukan);
 
-boolean finalGame(Stack S);
+void printStack(Stack S1, Stack S2, Stack S3, int tumpukan);
 
-void showTiang(Stack S1, Stack S2, Stack S3);
+void printDasar(char a, int tumpukan, int panjang);
 
-void piringan(Stack S, int x, int wmax);
+void printPiring(Stack S, int i, int tumpukan);
 
-void proceedTiang(Stack *S1, Stack *S2);
+int piringLength(Word kata);
 
-void towerOfHanoi(int *skorHanoi);
+boolean isTowerFull(Stack S, int tumpukan);
+
+boolean isStackMoveable(Stack S1, Stack S2,int tumpukan);
+
+void MovePiringan(Stack* S1, Stack *S2, int tumpukan, char a, char b, boolean * piringan_moved);
+
+boolean isTowerFinished(Stack S3, int tumpukan);
+
+int FinalScore(int turn, int tumpukan);
+
+void towerOfHanoi(int *score);
 
 #endif

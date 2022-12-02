@@ -3,7 +3,8 @@
 
 #include "../boolean.h"
 #include "mesinkata.h"
-#define KNil NULL
+
+// #define Nil NULL
 
 typedef char* infotype;
 typedef struct MatrixNode_ *addressNode;
@@ -24,33 +25,42 @@ typedef struct {
 }List;
 
 MatrixNode* create_node();
+/* Membuat node */
 
-void create_linked_list_matrix(List *head, int rows, int cols, int headrow, int headcols, int *n);
+void create_linked_list_matrix(List *head, int rows, int cols, int headrow, int headcols);
+/**/
+
+void createsnake(List* head,int headrow, int headcols, int *n);
+
 
 void display_matrix(List head);
 
 void movesnake(List* head, char move, int *n);
 
-void MakeFood(List head, addressNode *food);
+void MakeFood(List head, addressNode *food, int n_row, int n_cols);
 
-void SummonFood(List *head);
+void SummonFood(List *head, int n_row, int n_cols);
 
-boolean isFood(List head);
+boolean isFood(List head,int n_row, int n_cols);
 
 boolean isNabrak(List head, char input);
 
+boolean isNabrakBody(List head, char input);
+
 boolean isNabrakMeteor(List head, char input);
 
-void MakeMeteor(List head, addressNode *meteor);
+void MakeMeteor(List head, addressNode *meteor,int n_row, int n_cols);
 
-void SummonMeteor(List *head, boolean* end, int *n);
+void SummonMeteor(List *head, boolean* end, int *n, int n_row, int n_cols);
 
-void MeteorDisappear(List *head);
+void MeteorDisappear(List *head, int n_row, int n_cols);
 
 char *makebody(int n);
 
-void makeobstacle(List head, addressNode *obstacle);
+boolean isNotMoveable(List head);
 
-void summonobstacle(List* head, int count);
+void makeobstacle(List head, addressNode *obstacle,int n_row, int n_cols);
+
+void summonobstacle(List* head, int count,int n_row, int n_cols);
 
 #endif

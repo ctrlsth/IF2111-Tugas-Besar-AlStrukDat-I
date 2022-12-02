@@ -37,7 +37,7 @@ int main()
     boolean active = true;
     boolean loaded = false;
 
-    system("cls");
+    clear();
     ASCIIArt();
     printf("You: ");
     delay(500);
@@ -197,7 +197,22 @@ int main()
         }
         else if (compareWord(Get(listCommand, 0), "HISTORY"))
         {
-            (loaded) ? SHOWHISTORY(History, toInt(Get(listCommand, 1))) : unknownCommand();
+            if (loaded)
+            {
+                if (isNumber(Get(listCommand, 1)))
+                {
+                    SHOWHISTORY(History, toInt(Get(listCommand, 1)));
+                }
+                else
+                {
+                    printf("Mohon masukkan dengan format yang benar!\n");
+                    printf("** Hint: Ketik \"HELP\" untuk melihat perintah **\n");
+                }
+            }
+            else
+            {
+                unknownCommand();
+            }
         }
         else if (compareWord(Get(listCommand, 0), "RESET") && compareWord(Get(listCommand, 1), "HISTORY"))
         {
