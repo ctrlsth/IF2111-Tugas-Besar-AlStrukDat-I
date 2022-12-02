@@ -8,7 +8,7 @@ int main()
     Queue q;
     CreateQueue(&q);
     printf("Dengan begitu, queue yang kosong sudah dibuat.\n");
-
+    displayQueue(q);
     // Mengecek apakah queue kosong atau tidak
 
     isEmpty(q); // Seharusnya jawabannya iya, karena masih belum dimasukkan apa-apa ke dalam queue
@@ -37,7 +37,7 @@ int main()
     dequeue(&q, &val);
     displayQueue(q); //Seharusnya menampilkan bahwa antrian kosong
     printf("Sejak di-dequeue, ketika ditampilkan kembali, queue akan menjadi kosong.\n");
-
+    displayQueue(q);
     // Mengecek apakah elemen yang kita ingin cari ada pada queue
     isInQueue(q, currentCommand);
     printf("Akan dicek apakah game yang di-input di awal program adalah game yang kita ingin cari dan berada di queue.\n");
