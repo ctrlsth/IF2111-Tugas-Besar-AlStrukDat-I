@@ -116,4 +116,8 @@ void UPPER(Word *Kata);
 
 boolean compareCharWord(Word kata1, char kata2);
 
+boolean strcompare(char *kata1, char *kata2);
+
+void clear();
+
 #endif

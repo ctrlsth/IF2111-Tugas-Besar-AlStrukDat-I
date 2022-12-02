@@ -46,7 +46,9 @@ boolean finalGame(Stack S)
 
 void showTiang(Stack S1, Stack S2, Stack S3)
 {
-    int a;
+    printf("  Tiang       Tiang       Tiang\n");
+    printf("   [1]         [2]         [3]\n\n");
+    int a;  
     for (a = 5; a >= 0; a--)
     {
         piringan(S1, a, 9);
