@@ -337,6 +337,37 @@ boolean compareCharWord(Word kata1, char kata2)
     return same;
 }
 
+boolean strcompare(char *kata1, char *kata2)
+{
+    boolean same = false;
+    int i = 0;
+    if (strLength(kata1) == strLength(kata2))
+    {
+        same = true;
+        while (i < strLength(kata1) && same)
+        {
+            if (kata1[i] != kata2[i])
+            {
+                same = false;
+            }
+            else
+            {
+                i++;
+            }
+        }
+    }
+    return same;
+}
+
+void clear()
+{
+    #ifdef _WIN32
+        system("cls");
+    #else
+        system("clear");
+    #endif
+}
+
 // int main()
 // {
 //     boolean apa;

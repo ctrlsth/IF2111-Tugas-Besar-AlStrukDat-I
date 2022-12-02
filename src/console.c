@@ -355,34 +355,34 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             int score = 0, score2 = 0;
             if (i == 1)
             {
-                system("cls");
+                clear();
                 RNG(&score);
             }
             else if (i == 2)
             {
-                system("cls");
+                clear();
                 dinerDASH(&score);
             }
             else if (i == 3)
             {
-                system("cls");
+                clear();
                 // printf("This is Hangman\n");
                 HangMan(&score);
             }
             else if (i == 4)
             {
-                system("cls");
+                clear();
                 // printf("This is Tower\n");
                 towerOfHanoi(&score);
             }
             else if (i == 5)
             {
-                system("cls");
-                snakemeteor(&score);
+                clear();
+                snakeonmeteor(&score);
             }
             else if (i == 6)
             {
-                system("cls");
+                clear();
                 MARVELSNAP(&score, &score2);
                 // score = rand();
                 // score2 = rand();
@@ -390,7 +390,7 @@ void PLAYGAME(TabWord listGame, Queue *queueGame, ListOfMap *scoreBoard, ListOfS
             else
             {
                 score = rand();
-                system("cls");
+                clear();
                 printDelay("[ GAME OVER ]\n", 50);
                 printDelay("[ SCORE: ", 50);
                 printf("%d ", score);

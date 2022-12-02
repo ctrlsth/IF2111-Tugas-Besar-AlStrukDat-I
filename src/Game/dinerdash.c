@@ -427,7 +427,7 @@ void dinerDASH(int *score)
         printf("\n\n");
         printf("MASUKKAN COMMAND: ");
         STARTCMD(false);
-        system("cls");
+        clear();
         while (!EndWord)
         {
             InsertLast(&Command, currentCommand);

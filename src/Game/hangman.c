@@ -681,8 +681,8 @@ void HangMan(int *skor)
     }
 }
 
-int main()
-{
-    int skor = 10;
-    HangMan(&skor);
-}
+// int main()
+// {
+//     int skor = 10;
+//     HangMan(&skor);
+// }

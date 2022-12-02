@@ -37,7 +37,7 @@ int main()
     boolean active = true;
     boolean loaded = false;
 
-    system("cls");
+    clear();
     ASCIIArt();
     printf("You: ");
     delay(500);
