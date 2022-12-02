@@ -5,6 +5,7 @@
         "stdio.h": "c",
         "stdlib.h": "c",
         "listsirkuler.h": "c",
-        "chrono": "c"
+        "chrono": "c",
+        "stack.h": "c"
     }
 }
