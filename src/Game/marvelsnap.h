@@ -47,7 +47,7 @@ void PlayerTurn(int* Energyturn, boolean* pemainNow ,boolean* pemainThen, ArrayC
 
 void PrintCard(ArrayCard Player);
 
-void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Player1,ArrayInt Arena1Player2, ArrayInt Arena2Player2, ArrayInt Arena3Player2);
+void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Player1,ArrayInt Arena1Player2, ArrayInt Arena2Player2, ArrayInt Arena3Player2, int *skorP1, int *skorP2);
 
 void COMMANDGAME();
 

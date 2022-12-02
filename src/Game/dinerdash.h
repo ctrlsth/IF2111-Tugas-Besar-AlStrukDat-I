@@ -72,6 +72,6 @@ void Cook(QueuePesanan qPesanan, ArrayPesanan *qDiMasak, Word Food, boolean *tur
 
 void serve(ArrayPesanan *qDimasak, ArrayPesanan *qDiserve, QueuePesanan *qPesanan, Word food, int *saldo, boolean *endturn);
 
-void dinerDASH();
+void dinerDASH(int *score);
 
 #endif

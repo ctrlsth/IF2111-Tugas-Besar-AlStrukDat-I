@@ -310,7 +310,7 @@ void PLAYGUIDE(){
     system("cls");
 }
 
-void MARVELSNAP(){
+void MARVELSNAP(int *skorP1, int *skorP2){
     printDelay("WELCOME TO MARVEL SNAP\n",40);delay(500);
     boolean play = false;
     time_t waktu;
@@ -409,7 +409,7 @@ void MARVELSNAP(){
             pemain1 = false;
             pemain2 = false;
             PrintArena(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);
-            skorakhir(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2);
+            skorakhir(Arena1Player1,Arena2Player1,Arena3Player1,Arena1Player2,Arena2Player2,Arena3Player2,skorP1,skorP2);
             printf("-------------GAME OVER------------------\n\n");
         }
         else{
@@ -434,7 +434,7 @@ void MARVELSNAP(){
     }
 }
 
-void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Player1,ArrayInt Arena1Player2, ArrayInt Arena2Player2, ArrayInt Arena3Player2){
+void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Player1,ArrayInt Arena1Player2, ArrayInt Arena2Player2, ArrayInt Arena3Player2, int *skorP1, int *skorP2){
     int skorPlayer1 = 0;
     int skorPlayer2 = 0;
     int PowerArena1Player1 = Arena1Player1.kekuatan[0] + Arena1Player1.kekuatan[1]+ Arena1Player1.kekuatan[2]+ Arena1Player1.kekuatan[3];
@@ -465,9 +465,13 @@ void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Pl
     }
     if(skorPlayer1 > skorPlayer2){
         printf("Player 1 menang dengan skor %d - %d\n", skorPlayer1, skorPlayer2);
+        (*skorP1) = skorPlayer1;
+        (*skorP2) = skorPlayer2;
     }
     else if(skorPlayer1 < skorPlayer2){
         printf("Player 2 menang dengan skor %d - %d\n", skorPlayer2, skorPlayer1);
+        (*skorP1) = skorPlayer1;
+        (*skorP2) = skorPlayer2;
     }
     else{ //SkorPlayer1 = SkorPlayer 2
         if(PowerTotalPlayer1 > PowerTotalPlayer2){
@@ -481,5 +485,8 @@ void skorakhir(ArrayInt Arena1Player1, ArrayInt Arena2Player1, ArrayInt Arena3Pl
         else{
             printf("PERMAINAN SERI\n");
         }
+        
+        (*skorP1) = PowerTotalPlayer1;
+        (*skorP2) = PowerTotalPlayer2;
     }
 }

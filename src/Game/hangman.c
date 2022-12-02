@@ -1,314 +1,413 @@
-#include <stdio.h>
-#include <time.h>
-#include "../boolean.h"
+#include "hangman.h"
 
-const char MARK = '_';
-const int KESEMPATAN = 10;
+static FILE *saveFile;
 
-typedef struct {
-    char* kata[KESEMPATAN];
-    int panjang;
-} List;
-
-void CreateList1 (List *LSoal, int digit){
-    int i;
-    for(i=0;i<digit;i++){
-        LSoal->kata[i] = MARK;
-    }
-}
-
-int printSoal(int urutan){
-    if (urutan == 1){
-        printf("Di rumah makan Padang, selain pakai sendok kita makan pakai?\n");
-    } else if (urutan == 2){
-        printf("Seseorang yang memimpin sebuah desa, biasanya dipanggil pak?\n");
-    } else if (urutan == 3){
-        printf("Senikmat-nikmatnya makan di luar lebih nikmat makan di?\n");
-    } else if (urutan == 4){
-        printf("Ikan bernapas di air dengan?\n");
-    } else if (urutan == 5){
-        printf("Yang dibeli seorang cowok untuk pasangannya di saat Valentine biasanya?\n");
-    } else if (urutan == 6){
-        printf("Seorang barber mencukur rambut pelanggan dengan?\n");
-    } else if (urutan == 7){
-        printf("Lorenzo, Marquez, Rossi kejar-kejaran, salip menyalip di?\n");
-    } else if (urutan == 8){
-        printf("Burung bisa terbang karena memiliki?\n");
-    } else if (urutan == 9){
-        printf("Bendera NKRI warnanya?\n");
-    } else if (urutan == 10){
-        printf("Galang menyimpan buku di…\n");
-    }
-}
-
-void variasiSoal(int urutan, List L){
-    if (urutan == 1){
-        L.panjang = 6;
-        L.kata[0] = "T";
-        L.kata[1] = "E";
-        L.kata[2] = "N";
-        L.kata[3] = "A";
-        L.kata[4] = "G";
-        L.kata[5] = "A";
-    } else if (urutan == 2){
-        L.kata[0] = "N";
-        L.kata[1] = "O";
-        L.kata[2] = "L";
-        L.kata[3] = "E";
-        L.kata[4] = "H";
-        L.panjang = 5;
-    } else if (urutan == 3){
-        L.kata[0] = "T";
-        L.kata[1] = "E";
-        L.kata[2] = "L";
-        L.kata[3] = "A";
-        L.kata[4] = "N";
-        L.panjang = 5;
-    } else if (urutan == 4){
-        L.kata[0] = "T";
-        L.kata[1] = "E";
-        L.kata[2] = "N";
-        L.kata[3] = "A";
-        L.kata[4] = "N";
-        L.kata[5] = "G";
-        L.panjang = 6;
-    } else if (urutan == 5){
-        L.kata[0] = "B";
-        L.kata[1] = "A";
-        L.kata[2] = "Y";
-        L.kata[3] = "A";
-        L.kata[4] = "R";
-        L.panjang = 5;
-    } else if (urutan == 6){
-        L.kata[0] = "G";
-        L.kata[1] = "A";
-        L.kata[2] = "N";
-        L.kata[3] = "T";
-        L.kata[4] = "I";
-        L.kata[5] = "A";
-        L.kata[6] = "N";
-        L.panjang = 7;
-    } else if (urutan == 7){
-        L.kata[0] = "B";
-        L.kata[1] = "I";
-        L.kata[2] = "A";
-        L.kata[3] = "R";
-        L.kata[4] = "K";
-        L.kata[5] = "A";
-        L.kata[6] = "N";
-        L.panjang = 7;
-    } else if (urutan == 8){
-        L.kata[0] = "B";
-        L.kata[1] = "A";
-        L.kata[2] = "K";
-        L.kata[3] = "A";
-        L.kata[4] = "T";
-        L.panjang = 5;
-    } else if (urutan == 9){
-        L.kata[0] = "C";
-        L.kata[1] = "U";
-        L.kata[2] = "M";
-        L.kata[3] = "A";
-        L.kata[4] = "D";
-        L.kata[5] = "U";
-        L.kata[6] = "A";
-        L.kata[7] = "A";
-        L.kata[8] = "J";
-        L.kata[9] = "A";
-        L.panjang = 10;
-    } else if (urutan == 10){
-        L.kata[0] = "M";
-        L.kata[1] = "A";
-        L.kata[2] = "S";
-        L.panjang = 3;
-    }
-}
-
-void TampilanGaris(List Lsalah){
-    if (Lsalah.panjang == 1){
-        printf("======================================\n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                          ||          \n");
-        printf("======================================\n");
-    } else if (Lsalah.panjang == 2){
-        printf("======================================\n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("======================================\n");
-    } else if (Lsalah.panjang == 3){
-        printf("======================================\n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("======================================\n");
-    } else if (Lsalah.panjang == 4){
-        printf("======================================\n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                   -------||          \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("======================================\n");
-    } else if (Lsalah.panjang == 5){
-        printf("======================================\n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                   -------||          \n");
-        printf("                   O      ||          \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("======================================\n");
-    } else if (Lsalah.panjang == 6){
-        printf("======================================\n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                   -------||          \n");
-        printf("                   O      ||          \n");
-        printf("                  /       ||          \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("======================================\n");
-    } else if (Lsalah.panjang == 7){
-        printf("======================================\n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                   -------||          \n");
-        printf("                   O      ||          \n");
-        printf("                  / \'    ||          \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("======================================\n");
-    } else if (Lsalah.panjang == 8){
-        printf("======================================\n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                   -------||          \n");
-        printf("                   O      ||          \n");
-        printf("                  /|\'    ||          \n");
-        printf("                          ||          \n");
-        printf("                          ||          \n");
-        printf("======================================\n");
-    } else if (Lsalah.panjang == 9){
-        printf("======================================\n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                   -------||          \n");
-        printf("                   O      ||          \n");
-        printf("                  /|\'    ||          \n");
-        printf("                  /       ||          \n");
-        printf("                          ||          \n");
-        printf("======================================\n");
-    } else if (Lsalah.panjang == 10){
-        printf("======================================\n");
-        printf("                                      \n");
-        printf("                                      \n");
-        printf("                   -------||          \n");
-        printf("                   O      ||          \n");
-        printf("                  /|\'    ||          \n");
-        printf("                  / \'    ||          \n");
-        printf("                          ||          \n");
-        printf("======================================\n");
-    }
-}
-
-void DeleteAt(List *Lbenar, List LSoal, int indeks){
-    int j;
-    for(j=indeks;j<=LSoal.panjang;j++){
-        (*Lbenar).kata[j] = (*Lbenar).kata[j+1];
-    }
-}
-
-void InsertAt(List *Lbenar, List LSoal, int indeks){
-    int j;
-    for(j=indeks;j<=LSoal.panjang;j++){
-        (*Lbenar).kata[j+1] = (*Lbenar).kata[j];
-    }
-    (*Lbenar).kata[indeks] = LSoal.kata[indeks];
-}
-
-void DigitBenar(List LSoal, char huruf, List Lsalah, List Lbenar){
+int LenghtList(ListH L){
     int i = 0;
-    while (i<LSoal.panjang){
-        if(LSoal.kata[i] == huruf){
-            DeleteAt(&Lbenar, LSoal, i);
-            InsertAt(&Lbenar, LSoal, i);
-            Lbenar.panjang++;
-            i++;
-        } else {
-            InsertAt(&Lsalah, LSoal, Lsalah.panjang);
-            Lsalah.panjang++;
+    while (toString(L.kalimat[i]) != '\0'){
+        i++;
+    }
+    return i;
+}
+
+int savefile(ListH guessword, Word fileName)
+{
+    int retval = 0;
+    saveFile = NULL;
+    saveFile = fopen(toString(fileName), "w+");
+
+    if (saveFile == NULL)
+    {
+        fprintf(stderr, "Penyimpanan gagal, tidak dapat menyimpan dengan nama %s.\n", toString(fileName));
+    }
+    else
+    {
+        int count = LenghtList(guessword);
+        fprintf(saveFile, "%d", count);
+        fprintf(saveFile, "\n");
+        for (int i = 0; i < count; i++)
+        {
+            //Word word = GetWord(guessword, i);
+            for (int j = 0; j < strLength(toString(guessword.kalimat[i])); j++)
+            {
+                fprintf(saveFile, "%c", guessword.kalimat[i].TabChar[j]); //ini masih salah, helppp
+            }
+            fprintf(saveFile, "\n");
         }
+        retval = 1;
+        fclose(saveFile);
+    }
+
+    return retval;
+}
+
+FILE *STARTWORD(Word source)
+{
+    FILE *pita;
+    pita = STARTF(GetString(&source));
+    if (pita != NULL)
+    {
+        CreateWord(&currentWord);
+        ADVWORD();
+    }
+    return pita;
+}
+
+ListH loadfile(Word source)
+{
+    FILE* pita;
+    ListH guessword;
+    pita = STARTWORD(source);
+    CreateEmpty(&guessword);
+    int count = toInt(currentWord);
+    for (int i = 0; i < count; i++)
+    {
+        ADVWORD();
+        InsertLastt(&guessword, currentWord);
+    }
+
+    return guessword;
+}
+
+//berhasil
+void CreateClue(ListH *LSoal, int urutan){
+	int i;
+	for(i=0;i<(*LSoal).kalimat[urutan].Length;i++){
+		(*LSoal).kalimat[urutan].TabChar[i] = CLUE;
+	}
+}
+
+void InsertLastH(ListH *L, Word kata){
+    (*L).kalimat[(*L).panjang + 1] = kata;
+}
+
+// _ _ _ _ 
+//berhasil
+void CreateWord(Word *Wsalah){
+	(*Wsalah).Length = IDX_UNDEF;
+}
+
+//berhasil
+void Ilustrasi(Word Wsalah){
+    if (Wsalah.Length == 1){
+        printf("========================================\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                          ||          |\n");
+        printf("========================================\n");
+    } else if (Wsalah.Length == 2){
+        printf("========================================\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("========================================\n");
+    } else if (Wsalah.Length == 3){
+        printf("========================================\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("========================================\n");
+    } else if (Wsalah.Length== 4){
+        printf("========================================\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                   -------||          |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("========================================\n");
+    } else if (Wsalah.Length == 5){
+        printf("========================================\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                   -------||          |\n");
+        printf("|                   O      ||          |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("========================================\n");
+    } else if (Wsalah.Length == 6){
+        printf("========================================\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                   -------||          |\n");
+        printf("|                   O      ||          |\n");
+        printf("|                  /       ||          |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("========================================\n");
+    } else if (Wsalah.Length == 7){
+        printf("========================================\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                   -------||          |\n");
+        printf("|                   O      ||          |\n");
+        printf("|                  / \\    ||          |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("========================================\n");
+    } else if (Wsalah.Length == 8){
+        printf("========================================\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                                      |\n");
+        printf("|                   -------||          |\n");
+        printf("|                   O      ||          |\n");
+        printf("|                  /|\\    ||          |\n");
+        printf("|                          ||          |\n");
+        printf("|                          ||          |\n");
+        printf("========================================\n");
+    } else if (Wsalah.Length == 9){
+        
+        printf("========================================\n");
+        printf("|        EHH KOK GUA DISINI!!??        |\n");
+        printf("|             TOLONGGG!!!              |\n");
+        printf("|                   -------||          |\n");
+        printf("|                   O      ||          |\n");
+        printf("|                  /|\\    ||          |\n");
+        printf("|                  /       ||          |\n");
+        printf("|                          ||          |\n");
+        printf("========================================\n");
+    } else if (Wsalah.Length == 10){
+        printf("======================================\n");
+        printf("|            TIIIIDAAAAKKK!!!!!!       |\n");
+        printf("|        AARGHHH!!     AAAAAARGHHH!!   |\n");
+        printf("|     AAAARGHHH!!   -------||  ARGHH!  |\n");
+        printf("|        AARGHHH!!  O      || ARGHH!   |\n");
+        printf("|     AAAARGHHH!!  /|\\    ||  ARGHH!  |\n");
+        printf("|        AARGHHH!! / \\    || ARGHH!   |\n");
+        printf("|     AAAARGHHH!!          ||  ARGHH!  |\n");
+        printf("======================================\n");
     }
 }
 
-void PrintList(List L){
-    int i;
-    for(i=0;i<(L).panjang;i++){
-        printf("%c", (L).kata[i]);
-    }
-}
 
-void TampilanGame(List Lbenar ,List *Lsalah, int urutan){
-    TampilanGaris(*Lsalah);
-    printSoal(urutan);
-    printf("Tebakan sebelumnya : ");
-    PrintList(*Lsalah);
-    printf("\nKata : ");
-    PrintList(Lbenar);
-    printf("\nKesempatan : ");
-    printf("%d", (10-(*Lsalah).panjang));
-    printf("\nMasukan tebakan : ");
+void DeleteHuruf(Word *Wbenar, Word WSoal, int indeks){
+	int j;
+	for(j=indeks;j<=WSoal.Length;j++){
+		(*Wbenar).TabChar[j] = (*Wbenar).TabChar[j+1];
+	}
 }
 
 
-boolean IsFinished (List Lsalah, List Lbenar, List LSoal){
-    return (Lbenar.panjang == LSoal.panjang || Lsalah.panjang > KESEMPATAN);
+//berhasil
+void InsertHuruf(Word *Wbenar, Word WSoal, int indeks){
+	int j;
+	Word Wbenartemp;
+	for(j=indeks;j<=WSoal.Length;j++){
+		(Wbenartemp).TabChar[j] = (*Wbenar).TabChar[j];
+	}
+	for(j=indeks;j<=WSoal.Length;j++){
+		(*Wbenar).TabChar[j+1] = (Wbenartemp).TabChar[j];
+	}
+	(*Wbenar).TabChar[indeks] = WSoal.TabChar[indeks];
 }
 
-int main() {
-    printf("Selamat datang di game hangman!!\n Semoga kamu ga menyesal bermain game ini!!");
-    char input;
-    int point=0;
+//
+void UbahHuruf(Word *WSoal, char huruf, Word *Wsalah, Word *Wbenar){
+	int i = 0;
+	int count = 0;
+	while (i<(*WSoal).Length ){
+		if((*WSoal).TabChar[i] == huruf){
+			DeleteHuruf(Wbenar, *WSoal, i);
+			InsertHuruf(Wbenar, *WSoal, i);
+			(*Wbenar).Length--;
+			count++;
+		} 
+		i++;
+	}
+	if(count==0){
+		(*Wsalah).TabChar[(*Wsalah).Length] = huruf;
+		(*Wsalah).Length++;
+	}
+
+}
+
+//berhasil
+void PrintKalimat(Word W){
+	for(int i=0;i<W.Length;i++){
+		printf("%c", (W).TabChar[i]);
+	}
+}
+
+//berhasil
+void TampilanGame(Word Wbenar , Word Wsalah, int urutan, Word WSoal){
+	Ilustrasi(Wsalah);
+	PrintKalimat(WSoal);
+	printf("==========================================================================================\n");
+	printf("Tebakan sebelumnya : \n");
+	PrintKalimat(Wsalah);
+	printf("\n");
+	printf("Kata : \n");
+	PrintKalimat(Wbenar);
+	printf("\n");
+	printf("Kesempatan : ");
+	printf("%d", (10-(Wsalah).Length));
+	printf("\n");
+	printf("==========================================================================================\n");
+}
+
+//berhasil
+boolean Ada(char huruf, Word Wsalah, Word Wbenar, Word WSoal){
+	boolean found = false;
+	int i=0;
+	while (i<KESEMPATAN && !found){
+		if (huruf == Wsalah.TabChar[i] || huruf == Wbenar.TabChar[i]){
+			found = true;
+		}
+		i++;
+	}
+	return found;
+}
+
+void HangMan (int *skorhangman){
+    
+    char answer;
+    ListH LSoal;
+    ListH Lbenar;
+    ListH Lsalah;
+    ListH jawaban;
+    ListH soal;
     srand(time(0));
-    List LSoal;
-    List Lsalah;
-    List Lbenar;
-    Lbenar.panjang = 0;
-    Lsalah.panjang = 0;
-    int urutan = (rand()%10) + 1;
-    variasiSoal(urutan, LSoal);
-    CreateList1(&LSoal, LSoal.panjang);
-    TampilanGame(Lbenar, &Lsalah, urutan);
-    scanf("%c", &input);
-    DigitBenar(LSoal, input, Lsalah, Lbenar);
-    while(!IsFinished){
-        TampilanGame(Lbenar, &Lsalah, urutan);
-        scanf("%c", &input);
-        DigitBenar(LSoal, input, Lsalah, Lbenar);
-    }
-    if (Lbenar.panjang == LSoal.panjang){
-        printf("WADAWWW.. SITU KEREN BANGET BISA MENANGIN NI GAME!!\n");
-        printf("Karena situ udh menang, aku kasi situ %d point dehhh!!\n", point);
-    } else if (Lsalah.panjang > KESEMPATAN){
-        printf("YAHAHHAA!!!\n");
-        printf("Cupssss!!\n");
-    }
-    return 0;
+    int point;
+    int jumlahMain = 0;
+    int jumlahSalah = 0;
+    boolean selesai = false;
+    jawaban = Loadfile(toWord("data/jawaban.txt"));
+    soal = Loadfile(toWord("data/soal.txt"));
+
+    scanf(&answer);
+    // y
+    InsertLastt(&soal, toWord(answer));
+
+	
+	// printf("%d\n", LSoal.panjang);
+	// printf("%d\n", Lbenar.panjang);
+	// printf("%d\n", Lsalah.panjang);
+
+    printf("\n");
+    printf("  /$$$$$$            /$$                                     /$$           /$$                          \n");
+    printf(" /$$__  $$          | $$                                    | $$          | $$                          \n");
+    printf("| $$  \\__/  /$$$$$$ | $$  /$$$$$$  /$$$$$$/$$$$   /$$$$$$  /$$$$$$        | $$$$$$$   /$$$$$$   /$$$$$$ \n");
+    printf("|  $$$$$$  /$$__  $$| $$ |____  $$| $$_  $$_  $$ |____  $$|_  $$_/        | $$__  $$ /$$__  $$ /$$__  $$\n");
+    printf(" \\____  $$| $$$$$$$$| $$  /$$$$$$$| $$ \\ $$ \\ $$  /$$$$$$$  | $$          | $$  \\ $$| $$$$$$$$| $$  \\__/\n");
+    printf(" /$$  \\ $$| $$_____/| $$ /$$__  $$| $$ | $$ | $$ /$$__  $$  | $$ /$$      | $$  | $$| $$_____/| $$      \n");
+    printf("|  $$$$$$/|  $$$$$$$| $$|  $$$$$$$| $$ | $$ | $$|  $$$$$$$  |  $$$$/      | $$$$$$$/|  $$$$$$$| $$      \n");
+    printf(" \\______/  \\_______/|__/ \\_______/|__/ |__/ |__/ \\_______/   \\___/        |_______/  \\_______/|__/      \n");
+    printf("\n");
+    printf("\n");
+    printf("             /$$   /$$  /$$$$$$  /$$   /$$  /$$$$$$  /$$      /$$  /$$$$$$  /$$   /$$                   \n");
+    printf("            | $$  | $$ /$$__  $$| $$$ | $$ /$$__  $$| $$$    /$$$ /$$__  $$| $$$ | $$                   \n");
+    printf("            | $$  | $$| $$  \\ $$| $$$$| $$| $$  \\__/| $$$$  /$$$$| $$  \\ $$| $$$$| $$                   \n");
+    printf("            | $$$$$$$$| $$$$$$$$| $$ $$ $$| $$ /$$$$| $$ $$/$$ $$| $$$$$$$$| $$ $$ $$                   \n");
+    printf("            | $$__  $$| $$__  $$| $$  $$$$| $$|_  $$| $$  $$$| $$| $$__  $$| $$  $$$$                   \n");
+    printf("            | $$  | $$| $$  | $$| $$\\  $$$| $$  \\ $$| $$\\  $ | $$| $$  | $$| $$\\  $$$                   \n");
+    printf("            | $$  | $$| $$  | $$| $$ \\  $$|  $$$$$$/| $$ \\/  | $$| $$  | $$| $$ \\  $$                   \n");
+    printf("            |__/  |__/|__/  |__/|__/  \\__/ \\______/ |__/     |__/|__/  |__/|__/  \\__/                   \n");
+    printf("\n");
+    printf("\n");
+    printf("                                         /$$           /$$ /$$                                          \n");
+    printf("                                        |__/          | $$| $$                                          \n");
+    printf("                                /$$$$$$  /$$  /$$$$$$ | $$| $$                                          \n");
+    printf("                               /$$__  $$| $$ |____  $$| $$| $$                                          \n");
+    printf("                              | $$  \\__/| $$  /$$$$$$$|__/|__/                                          \n");
+    printf("                              | $$      | $$ /$$__  $$                                                  \n");
+    printf("                              | $$      | $$|  $$$$$$$ /$$ /$$                                          \n");
+    printf("                              |__/      |__/ \\_______/|__/|__/                                          \n");
+    printf("\n");
+    printf("\n");
+    
+    while(selesai == false || jumlahMain == 10){
+        int urutan = (rand()%10) + 1;
+        // printf("%d\n", urutan);
+        
+        CreateEmpty(&LSoal);
+        variasiSoal(urutan, &LSoal);
+        CreateList(&Lbenar, LSoal.panjang);
+        CreateEmpty(&Lsalah);
+        
+        LSoal.panjang = strLength(soal.kalimat[urutan]);
+        Lsalah.panjang = jumlahSalah;
+        Lbenar.panjang = soal.panjang;
+        point = LSoal.panjang;
+
+        TampilanGame(Lbenar, Lsalah, urutan, LSoal);
+        printf("Masukan Tebakanmu : ");
+        STARTCMD(true);
+        Word Uinput = currentCommand;
+        char input = Uinput.TabChar[0];
+        //scanf("%c", &input);
+        printf("\n");
+        //printf("%c", input);
+        while(!(input >= 'A' && input <= 'Z')){
+            printf("******************************************************************************************\n");
+            printf("Sori bro, coba situ input hurufnya di capslocskin dlu truss inputnya harus berupa huruf yakk!\n");
+            printf("******************************************************************************************\n");
+            printf("Masukan Tebakanmu : ");
+            STARTCMD(true);
+            Word Uinput = currentCommand;
+            char input = Uinput.TabChar[0];
+            printf("\n");
+        }
+        DigitBenar(&LSoal, input, &Lsalah, &Lbenar);
+        while(Lbenar.panjang != 0 || Lsalah.panjang<=KESEMPATAN){
+            TampilanGame(Lbenar, Lsalah, urutan, LSoal);
+            printf("Masukan Tebakanmu : ");
+            STARTCMD(true);
+            Word Uinput = currentCommand;
+            char input = Uinput.TabChar[0];
+            printf("\n");
+            while(!(input >= 'A' && input <= 'Z') || (isExist(input, Lsalah, Lbenar, LSoal))){
+                printf("******************************************************************************************\n");
+                if((isExist(input, Lsalah, Lbenar, LSoal))){
+                    printf("btw, inputnya jangan huruf yang udh pernah ditebak yakk!!!\n");
+                }
+                else{
+                    printf("Sori bro, coba situ input hurufnya di capslocsk dan tentu inputnya harus huruf yakk!\n");
+                }
+                printf("******************************************************************************************\n");
+                printf("Masukan Tebakanmu : ");
+                STARTCMD(true);
+                Word Uinput = currentCommand;
+                char input = Uinput.TabChar[0];
+                printf("\n");       
+            }
+            DigitBenar(&LSoal, input, &Lsalah, &Lbenar);
+        }
+
+		if(Lbenar.panjang == 0){
+			(*skorhangman) += point;
+			printf("Skor : %d\n", (*skorhangman));
+		} else if(Lsalah.panjang > KESEMPATAN){
+			selesai = true;
+		}
+		jumlahMain ++;
+	}
+	if(selesai == true){
+		printf("YAHAHHAA!!!\n");
+		printf("MAAF ANDA KURANG BERUNTUNG. SARAN KAMI SIH COBA LAGI (TAUN DPN YA!!)");
+		printf("btw skor gamem situ saat ini ada di %d point yaaa", (*skorhangman));
+	} else {
+		printf("WADAWWW.. SITU KEREN BANGET BISA MENANGIN NI GAME!!\n");
+		printf("Karena situ udh menang, aku kasi situ %d point dehhh yakk!!\n", (*skorhangman));
+	}
+
+int main(){
+    int skor = 10;
+    HangMan(&skor);
 }

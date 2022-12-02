@@ -1,9 +1,3 @@
-// NIM              : 18221171
-// Nama             : Hans Stephano E
-// Tanggal          : 21 Oktober 2022
-// Topik praktikum  : Pra-Praktikum 7 - #1
-// Deskripsi        : Implementasi "stack.h"
-
 /* File : stack.h */
 /* deklarasi stack yang diimplementasi dengan tabel kontigu dan ukuran sama */
 /* TOP adalah alamat elemen puncak */
@@ -22,7 +16,7 @@
 
 // /* Contoh deklarasi variabel bertype stack dengan ciri TOP : */
 // /* Versi I : dengan menyimpan tabel dan alamat top secara eksplisit*/
-// typedef struct { 
+// typedef struct {
 //   infostack T[MaxEl]; /* tabel penyimpan elemen */
 //   address TOP;  /* alamat TOP: elemen puncak */
 // } Stack;
@@ -56,11 +50,11 @@ boolean IsStackEmpty(Stack S)
 boolean IsStackFull(Stack S)
 /* Mengirim true jika tabel penampung nilai elemen stack penuh */
 {
-    return (Top(S) == (MaxEl-1));
+    return (Top(S) == (MaxEl - 1));
 }
 
 /* ************ Menambahkan sebuah elemen ke Stack ************ */
-void Push(Stack * S, infostack X)
+void Push(Stack *S, infostack X)
 /* Menambahkan X sebagai elemen Stack S. */
 /* I.S. S mungkin kosong, tabel penampung elemen stack TIDAK penuh */
 /* F.S. X menjadi TOP yang baru,TOP bertambah 1 */
@@ -78,14 +72,15 @@ void Push(Stack * S, infostack X)
             InfoTop(*S) = X;
         }
     }
-
+    // printf("\n(\%)\n");
+    // printWord(InfoTop(*S));
+    // printf("\n(\%69\%)\n");
     // Top(*S) += 1;
     // InfoTop(*S) = X;
-
 }
 
 /* ************ Menghapus sebuah elemen Stack ************ */
-void Pop(Stack * S, infostack* X)
+void Pop(Stack *S, infostack *X)
 /* Menghapus X dari Stack S. */
 /* I.S. S  tidak mungkin kosong */
 /* F.S. X adalah nilai elemen TOP yang lama, TOP berkurang 1 */

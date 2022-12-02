@@ -15,7 +15,7 @@ int acakAngka()
     return (BilRandom);
 }
 
-void RNG()
+void RNG(int *score)
 {
     int tebakan;
     int jawaban;
@@ -64,4 +64,6 @@ void RNG()
         printf("X adalah %d\n",jawaban);
         printf("Skor akhir Anda = %d\n",skor);
     }
+
+    (*score) = skor;
 }

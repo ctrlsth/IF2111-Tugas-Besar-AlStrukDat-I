@@ -395,7 +395,7 @@ void Ketahanan(ArrayPesanan *qDiserve)
     }
 }
 
-void dinerDASH()
+void dinerDASH(int *score)
 {
     time_t waktu;
     srand(time(&waktu));
@@ -485,4 +485,6 @@ void dinerDASH()
         }
         DeallocateTabWord(&Command);
     }
+
+    (*score) = saldo;
 }

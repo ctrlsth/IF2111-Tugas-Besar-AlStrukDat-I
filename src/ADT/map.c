@@ -151,21 +151,21 @@ void SortByVal(Map *M)
     Map sortedMap;
     CreateEmptyMap(&sortedMap);
 
-    int k;
-    printf("Before Update (M): \n");
-    for (k = 0; k < M->Count; k++)
-    {
-        printWord(M->Elements[k].Key);
-        printf(" - %d\n", M->Elements[k].Value);
-    }
-    printf("\n");
-    printf("Before Update (sortedMap): \n");
-    for (k = 0; k < sortedMap.Count; k++)
-    {
-        printWord(sortedMap.Elements[k].Key);
-        printf(" - %d\n", sortedMap.Elements[k].Value);
-    }
-    printf("\n");
+    // int k;
+    // printf("Before Update (M): \n");
+    // for (k = 0; k < M->Count; k++)
+    // {
+    //     printWord(M->Elements[k].Key);
+    //     printf(" - %d\n", M->Elements[k].Value);
+    // }
+    // printf("\n");
+    // printf("Before Update (sortedMap): \n");
+    // for (k = 0; k < sortedMap.Count; k++)
+    // {
+    //     printWord(sortedMap.Elements[k].Key);
+    //     printf(" - %d\n", sortedMap.Elements[k].Value);
+    // }
+    // printf("\n");
 
 
     while (!IsMapEmpty((*M)))
@@ -187,20 +187,20 @@ void SortByVal(Map *M)
         MapValDel(M, maxkey);
     }
 
-    printf("After Update (M): \n");
-    for (k = 0; k < M->Count; k++)
-    {
-        printWord(M->Elements[k].Key);
-        printf(" - %d\n", M->Elements[k].Value);
-    }
-    printf("\n");
-    printf("After Update (sortedMap): \n");
-    for (k = 0; k < sortedMap.Count; k++)
-    {
-        printWord(sortedMap.Elements[k].Key);
-        printf(" - %d\n", sortedMap.Elements[k].Value);
-    }
-    printf("\n");
+    // printf("After Update (M): \n");
+    // for (k = 0; k < M->Count; k++)
+    // {
+    //     printWord(M->Elements[k].Key);
+    //     printf(" - %d\n", M->Elements[k].Value);
+    // }
+    // printf("\n");
+    // printf("After Update (sortedMap): \n");
+    // for (k = 0; k < sortedMap.Count; k++)
+    // {
+    //     printWord(sortedMap.Elements[k].Key);
+    //     printf(" - %d\n", sortedMap.Elements[k].Value);
+    // }
+    // printf("\n");
 
     copyMap(sortedMap, M);
 }
