@@ -1,65 +1,38 @@
+#ifndef __HANGMAN__
+#define __HANGMAN__
 
-#ifndef HANGMAN_H
-#define HANGMAN_H
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
 #include "../boolean.h"
-#include "../ADT/mesinkata.h"
+#include "../ADT/array.h"
 
-#define IDX_UNDEF -1
-#define CLUE '_'
+#define LINE  '_'
 #define KESEMPATAN 10
 
-typedef struct {
-    Word kalimat[100];
-    int panjang;
-} ListH;
+void CreateWord (Word *LSoal, int digit, boolean mark);
 
-int LenghtList(ListH L);
-//mengukur panjang dari sebuah list, entah list yg berada didalam file .txt ataupun tidak.
+void ListofWord(TabWord* arrayWord, TabWord*arraySoal, boolean *openSuccess);
 
-int savefile(ListH guessword, Word fileName);
-//menyimpan sebuah Word kedalam List. Dipakai untuk menyimpan opsi jawaban/soal baru.
+void menuawal(TabWord*arrayWord,TabWord *arraySoal,boolean* game_started);
 
-// FILE *StartWord(Word source);
-//membaca 
+void savelist(TabWord arrayWord, TabWord arraySoal);
 
-// ListH loadfile(Word source);
+void TampilanGaris(int count_salah);
 
-void loadfile(ListH *SoalorJawaban);
+void SetElmt(Word *Lbenar , char huruf, int indeks);
 
-// void ADVFL();
+void DigitBenar(Word LSoal, char huruf, Word* Lsalah, Word* Lbenar, int *count_salah, int *point);
 
-// FILE* STARTF(char *source);
+void PrintList(Word L, boolean benar);
 
-void CreateClue(Word *WSoal);
-//untuk membuat sebuah list kosong dengan tampilan Mark sebanyak digit.
+void TampilanGame(Word Lbenar ,Word Lsalah, Word Lsoal,int urutan, int count_salah, int count_word_guessed);
 
-void CreateList(ListH *L);
+boolean isExist (char huruf, Word Lsalah);
 
-void InsertLastH(ListH *L, Word kata);
+boolean isMark(Word Lbenar);
 
-void CreateWord(Word *Wsalah);
-//prosedur untuk membuat sebuah list kosong dengan panjang IDX_UNDEF
+boolean IsFinished (int count_salah, TabWord array);
 
-void Ilustrasi(Word Wsalah);
+void TampilanKalah(int count_salah, int point, Word LJawaban);
 
-void DeleteHuruf(Word *Wbenar, Word WSoal, int indeks);
-
-void InsertHuruf(Word *Wbenar, Word WSoal, int indeks);
-
-void UbahHuruf(Word *WSoal, char huruf, Word *Wsalah, Word *Wbenar);
-
-void PrintKalimat(Word W);
-
-void TampilanGame(Word Wbenar , Word Wsalah, int urutan, Word WSoal);
-
-boolean IsOne();
-
-boolean Ada(char huruf, Word Wsalah, Word Wbenar, Word WSoal);
-
-void HangMan (int *skorhangman);
+void HangMan(int *score);
 
 #endif

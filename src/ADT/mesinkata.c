@@ -175,7 +175,7 @@ Word toWord(char *someString)
 
 char *toString(Word kata)
 {
-    char *str = (char *)malloc((kata.Length) * sizeof(char));
+    char *str = (char *)malloc((kata.Length + 1) * sizeof(char));
     // printf("Passed malloc!\n");
     // printf("Length: %d\n", kata.Length);
 
@@ -287,7 +287,7 @@ void printWord(Word Kata)
 void binSep(Word Kata, Word *Kata1, Word *Kata2, char separator)
 {
     int i, j = 0;
-    boolean passedSep;
+    boolean passedSep = false;
     for (i = 0; i < Kata.Length; i++)
     {
         if (passedSep)
@@ -361,11 +361,21 @@ boolean strcompare(char *kata1, char *kata2)
 
 void clear()
 {
-    #ifdef _WIN32
-        system("cls");
-    #else
-        system("clear");
-    #endif
+#ifdef _WIN32
+    system("cls");
+#else
+    system("clear");
+#endif
+}
+
+void wordCopy(Word *kata1, Word Kata2)
+{
+    int i;
+    for (i = 0; i < Kata2.Length; i++)
+    {
+        kata1->TabChar[i] = Kata2.TabChar[i];
+    }
+    kata1->Length = Kata2.Length;
 }
 
 // int main()
