@@ -692,46 +692,53 @@ void RESETSB(ListOfSet *listPlayer, ListOfMap *scoreBoard, TabWord listGame)
     else
     {
         int n = toInt(currentCommand);
-        printf("APAKAH KAMU YAKIN INGIN MELAKUKAN RESET SCOREBOARD ");
-        if (n == 0)
-        {
-            printf("ALL");
-        }
-        else
-        {
-            printWord(listGame.TW[n - 1]);
-        }
-
-        printf(" (YA/TIDAK)? ");
-        STARTCMD(false);
-        if (compareWord(currentCommand, "YA"))
-        {
+        // printf("%d",scoreBoard->Num);
+        if(n <= scoreBoard->Num){
+            printf("APAKAH KAMU YAKIN INGIN MELAKUKAN RESET SCOREBOARD ");
             if (n == 0)
             {
-                int El = scoreBoard->Num;
-                CreateEmptyMapList(scoreBoard);
-                CreateEmptySetList(listPlayer);
-                if (El > 6)
-                {
-                    scoreBoard->Num = El;
-                    listPlayer->Num = El;
-                }
+                printf("ALL");
             }
             else
             {
-                CreateEmptyMap(&(scoreBoard->board[n - 1]));
-                CreateEmptySet(&(listPlayer->GameSet[n - 1]));
+                printWord(listGame.TW[n - 1]);
             }
 
-            printf("\nSCOREBOARD BERHASIL DI RESET!\n");
+            printf(" (YA/TIDAK)? ");
+            STARTCMD(false);
+            if (compareWord(currentCommand, "YA"))
+            {
+                if (n == 0)
+                {
+                    int El = scoreBoard->Num;
+                    CreateEmptyMapList(scoreBoard);
+                    CreateEmptySetList(listPlayer);
+                    if (El > 6)
+                    {
+                        scoreBoard->Num = El;
+                        listPlayer->Num = El;
+                    }
+                }
+                else
+                {
+                    CreateEmptyMap(&(scoreBoard->board[n - 1]));
+                    CreateEmptySet(&(listPlayer->GameSet[n - 1]));
+                }
+
+                printf("\nSCOREBOARD BERHASIL DI RESET!\n");
+            }
+            else if (compareWord(currentCommand, "TIDAK"))
+            {
+                printf("RESET SCOREBOARD DIBATALKAN.\n");
+            }
+            else
+            {
+                printf("MASUKAN TIDAK VALID.\n");
+                printf("RESET SCOREBOARD DIBATALKAN.\n");
+            }
         }
-        else if (compareWord(currentCommand, "TIDAK"))
-        {
-            printf("RESET SCOREBOARD DIBATALKAN.\n");
-        }
-        else
-        {
-            printf("MASUKAN TIDAK VALID.\n");
+        else{
+            printf("MASUKAN TIDAK VALID (BERADA DILUAR RANGE)\n");
             printf("RESET SCOREBOARD DIBATALKAN.\n");
         }
     }
